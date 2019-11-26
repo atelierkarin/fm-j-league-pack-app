@@ -28,6 +28,7 @@ export interface PlayerUpdatePlayer {
 }
 
 export interface PlayerUpdate {
+  id?: string,
   fmVersion: string,
   player: PlayerUpdatePlayer,
   updateType: PlayerUpdateType,

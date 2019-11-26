@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 
 import { NgSelectModule } from '@ng-select/ng-select';
-import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -28,7 +27,6 @@ import { DisplayCommentsComponent } from './database-player/discuss-area/display
     CommonModule,
     FormsModule,
     NgSelectModule,
-    NgxDatatableModule, 
     RouterModule.forChild([{ path: '', component: DatabaseComponent }]),
     SharedModule,
     DatabaseRoutingModule

@@ -1,0 +1,146 @@
+<ngx-datatable
+  #playerUpdateTable
+  class="bootstrap fullscreen player-table"
+  [rows]="data"
+  [columnMode]="'flex'"
+  [rowHeight]="'auto'"
+  [sorts]="[
+    {
+      prop: 'activeDate',
+      dir: 'desc'
+    }
+  ]"
+  [footerHeight]="50"
+  [limit]="10"
+>
+  <!-- Row Detail Template -->
+  <ngx-datatable-row-detail rowHeight="80" #myDetailRow>
+    <ng-template
+      let-row="row"
+      let-expanded="expanded"
+      ngx-datatable-row-detail-template
+    >
+      <div *ngIf="row.remarks" class="pt-1">
+        <div
+          class="alert alert-secondary"
+          [innerHtml]="formattedRemarks(row.remarks)"
+        ></div>
+      </div>
+    </ng-template>
+  </ngx-datatable-row-detail>
+
+  <ngx-datatable-column
+    [width]="50"
+    [resizeable]="false"
+    [sortable]="false"
+    [draggable]="false"
+    [canAutoResize]="false"
+  >
+    <ng-template
+      let-row="row"
+      let-expanded="expanded"
+      ngx-datatable-cell-template
+    >
+      <a
+        href="javascript:void(0)"
+        [class.datatable-icon-right]="!expanded"
+        [class.datatable-icon-down]="expanded"
+        title="備考"
+        (click)="onToggleExpandRow(row)"
+      >
+      </a>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column
+    name="登録時間"
+    prop="activeDate"
+    [flexGrow]="1"
+  ></ngx-datatable-column>
+  <ngx-datatable-column name="種類" prop="updateType" [flexGrow]="1">
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      <h6>{{ getPlayerUpdateType(value) }}</h6>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="名前" prop="player.name" [flexGrow]="2">
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      <h6>
+        <span [class]="getFlag(row.player.nationality)"></span>&nbsp;
+        <a
+          [routerLink]="['/database/player']"
+          [queryParams]="{ name: row.player.name }"
+          >{{ row.player.name }}</a
+        >
+      </h6>
+      <small>{{ row.player.nameEng }}</small>
+    </ng-template>
+  </ngx-datatable-column>
+  <ngx-datatable-column name="役職" prop="updateType" [flexGrow]="1">
+    <ng-template let-row="row" ngx-datatable-cell-template>
+      <h6>
+        <span
+          class="badge badge-info mx-1"
+          *ngFor="let pt of row.player.playerType"
+          >{{ getPlayerType(pt) }}</span
+        >
+      </h6>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column name="クラブ" prop="club.name" [flexGrow]="2">
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      <h6 *ngIf="row.club">
+        <span [class]="getFlag(row.club.nationality)"></span>&nbsp;{{ value }}
+      </h6>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column name="元のクラブ" prop="previousClub.name" [flexGrow]="2">
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      <h6 *ngIf="row.previousClub">
+        <span [class]="getFlag(row.previousClub.nationality)"></span>&nbsp;{{ value }}
+      </h6>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column name="将来の移籍" prop="futureTransfer" [flexGrow]="2">
+    <ng-template let-value="value" ngx-datatable-cell-template>
+      <h6 *ngIf="value">
+        <div>
+          <span [class]="getFlag(value.club.nationality)"></span>&nbsp;{{
+            value.club.name
+          }}
+        </div>
+        <div>
+          <small class="badge badge-secondary mx-1"
+            ><i class="fas fa-calendar-check fa-fw"></i>
+            {{ value.transferDate }}</small
+          >
+        </div>
+      </h6>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column name="ファイル" prop="filetype" [flexGrow]="1">
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      <span *ngIf="row.previousFiletype">
+        {{ getDatapackFiletype(row.previousFiletype) }}
+        <i class="fas fa-arrow-right"></i>
+      </span>
+      {{ getDatapackFiletype(value) }}
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column name="更新時間" prop="updateDate" [flexGrow]="1">
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      <span class="player-update-record-update-date" *ngIf="value">{{ value }}</span>
+      <button
+        class="btn btn-success"
+        type="submit"
+        *ngIf="!value && isAdmin"
+        (click)="onConfirmUpdate(row)"
+      >
+        確定更新
+      </button>
+    </ng-template>
+  </ngx-datatable-column>
+</ngx-datatable>

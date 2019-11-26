@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { switchMap, map, catchError, take } from 'rxjs/operators';
 import { from, of, throwError } from "rxjs";
+import { Router } from '@angular/router';
 
 import { AngularFirestore } from '@angular/fire/firestore';
 
@@ -14,6 +15,17 @@ export class PlayerUpdateEffects {
 
   private useServer: boolean;
   private payload: string;
+
+  private formatDate(date: Date, format: string) {
+    format = format.replace(/yyyy/g, '' + date.getFullYear());
+    format = format.replace(/MM/g, ('0' + (date.getMonth() + 1)).slice(-2));
+    format = format.replace(/dd/g, ('0' + date.getDate()).slice(-2));
+    format = format.replace(/HH/g, ('0' + date.getHours()).slice(-2));
+    format = format.replace(/mm/g, ('0' + date.getMinutes()).slice(-2));
+    format = format.replace(/ss/g, ('0' + date.getSeconds()).slice(-2));
+    format = format.replace(/SSS/g, ('00' + date.getMilliseconds()).slice(-3));
+    return format;
+  };
 
   @Effect()
   fetchPlayerUpdate = this.actions$.pipe(
@@ -28,7 +40,10 @@ export class PlayerUpdateEffects {
     map((docs: firebase.firestore.QuerySnapshot) => {
       let playerUpdate = [];
       docs.forEach(doc => {
-        playerUpdate.push(doc.data())
+        playerUpdate.push({
+          id: doc.id,
+          ...doc.data()
+        })
       })
       return new PlayerUpdateActions.SetPlayerUpdate(playerUpdate);
     }),
@@ -54,25 +69,30 @@ export class PlayerUpdateEffects {
     })
   )
 
-  // @Effect()
-  // confirmPlayerUpdate = this.actions$.pipe(
-  //   ofType(PlayerUpdateActions.CONFIRM_PLAYER_UPDATE),
-  //   switchMap((confirmPlayerHistory: PlayerUpdateActions.ConfirmPlayerHistory) => {     
-  //     const updateRecord = confirmPlayerHistory.payload;
-  //     updateRecord.
-  //     return from(this.db.collection<PlayerUpdateModel.PlayerUpdate>('playerUpdates').add(newData))
-  //   }),
-  //   map(() => {
-  //     return new PlayerUpdateActions.UpdateSuccess()
-  //   }),
-  //   catchError(() => {
-  //     return of(new PlayerUpdateActions.UpdateFail("SERVER FAIL"))
-  //   })
-  // )
+  @Effect()
+  confirmPlayerUpdate = this.actions$.pipe(
+    ofType(PlayerUpdateActions.CONFIRM_PLAYER_UPDATE),
+    switchMap((confirmPlayerHistory: PlayerUpdateActions.ConfirmPlayerHistory) => {     
+      const originalRecord = confirmPlayerHistory.payload;
+      const id = originalRecord.id;
+      const updateRecord = {
+        ...originalRecord,
+        updateDate: this.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss")
+      }
+      return from(this.db.collection<PlayerUpdateModel.PlayerUpdate>('playerUpdates').doc(id).set(updateRecord))
+    }),
+    map(() => {
+      return new PlayerUpdateActions.UpdateSuccess()
+    }),
+    catchError(() => {
+      return of(new PlayerUpdateActions.UpdateFail("SERVER FAIL"))
+    })
+  )
 
   constructor(
     private actions$: Actions,
-    private db: AngularFirestore
+    private db: AngularFirestore,
+    private router: Router
   ) {}
 
 }

@@ -33,6 +33,7 @@ import { AdminEffects } from './admin/store/admin.effects';
 import { PlayerUpdateEffects } from './player-update/store/player-update.effects';
 import { DatabaseEffects } from './database/store/database.effects';
 import { DiscussAreaEffects } from './database/database-player/discuss-area/store/discuss-area.effects';
+import { RecordTableComponent } from './player-update/record-table/record-table.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { DiscussAreaEffects } from './database/database-player/discuss-area/stor
     GuideComponent,
     HistoryItemComponent,
     PlayerUpdateComponent,
-    PlayerUpdateCardComponent
+    PlayerUpdateCardComponent,
+    RecordTableComponent
   ],
   imports: [
     BrowserModule,
