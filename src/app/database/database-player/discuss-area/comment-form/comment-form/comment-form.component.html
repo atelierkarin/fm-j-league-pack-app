@@ -1,0 +1,24 @@
+<div class="container-fluid" *ngIf="user; else elseTemplate">
+  <div class="alert alert-danger" *ngIf="errString">
+    おっと、何かのエラーです。もう一度試してください。
+  </div>
+  <div class="row mb-2">
+    <div class="col">
+      <input type="text" class="form-control"  [(ngModel)]="displayName" placeholder="名前">
+    </div>
+  </div>
+  <div class="row mb-2">
+    <div class="col">
+      <textarea class="form-control" [(ngModel)]="comment" placeholder="コメント"></textarea>
+    </div>
+  </div>
+  <div class="row text-right">
+    <div class="col">
+      <button class="btn btn-outline-secondary mr-2" [disabled]="!comment || loading" (click)="onReset()">リセット</button>
+      <button class="btn btn-outline-primary" [disabled]="!displayName || !comment || !user || loading" (click)="onComment()">コメント</button>
+    </div>
+  </div>
+</div>
+<ng-template #elseTemplate>
+  <h6>コメントするにはGoogleアカウントで<a href="javascript:;" (click)="onLogin()">ログイン</a>するが必要です</h6>
+</ng-template>

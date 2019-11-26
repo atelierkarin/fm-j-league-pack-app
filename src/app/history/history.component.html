@@ -1,0 +1,11 @@
+<div class="fm-j-league-pack-history-card">
+  <ng-container *ngIf="getCurrentHistory().length > 0; else elseTemplate">
+    <app-history-item *ngFor="let historyEl of getCurrentHistory(); let i = index" [history]="historyEl"></app-history-item>
+  </ng-container>
+  <ng-template #elseTemplate>
+    <div class="fm-j-league-pack-no-history text-center">
+      <h1>(·.·)</h1>
+      <p class="error-text">すみません、更新履歴はありません…</p>
+    </div>
+  </ng-template>
+</div>

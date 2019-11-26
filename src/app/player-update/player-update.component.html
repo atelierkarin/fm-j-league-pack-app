@@ -1,0 +1,70 @@
+<div class="container-fluid" *ngIf="!loadingData; else elseTemplate">
+  <div class="alert alert-secondary">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col"></div>
+        <div class="col-auto">
+          <ng-select
+            [items]="playerUpdateTypeList"
+            bindLabel="val"
+            bindValue="key"
+            [(ngModel)]="filterPlayerUpdateType"
+            [multiple]="true"
+            (change)="onChangeFilterPlayerUpdateType()"
+            placeholder="更新種類フィルター"
+          >
+          </ng-select>
+        </div>
+        <div class="col-auto">
+          <input
+            type="text"
+            ngxDaterangepickerMd
+            [(ngModel)]="dateSelected"
+            [locale]="datepickerLocale"
+            [autoApply]="true"
+            (datesUpdated)="refreshDisplayRecords()"
+            class="form-control"/>
+          <!-- <div ngbDropdown class="d-inline-block" #activeDateDrop="ngbDropdown">
+            <button
+              class="btn btn-outline-secondary"
+              id="dropdownActivedate"
+              ngbDropdownToggle
+            >
+              <i class="fas fa-calendar-alt"></i>
+              確認時間：{{ getSelectedDay() }}
+            </button>
+            <div ngbDropdownMenu aria-labelledby="dropdownActivedate">
+              <ngb-datepicker
+                [(ngModel)]="dateModel"
+                (select)="onSelectDate($event); activeDateDrop.close()"
+              ></ngb-datepicker>
+            </div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div class="text-muted">
+    <b>{{ displayRecords.length }}</b> 件見つかりました
+  </div>
+  <hr />
+  <div class="fm-j-league-player-updates">
+    <div class="container-fluid">
+      <div class="row">
+        <app-player-update-card
+          class="col-md-6 col-sm-12 col-xs-12"
+          *ngFor="let r of displayRecords"
+          [data]="r"
+        ></app-player-update-card>
+      </div>
+    </div>
+  </div>
+</div>
+<ng-template #elseTemplate>
+  <div class="d-flex justify-content-center">
+    <div class="spinner-border m-5" role="status">
+      <span class="sr-only">データ読み込み中</span>
+    </div>
+  </div>
+</ng-template>

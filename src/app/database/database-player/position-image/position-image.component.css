@@ -1,0 +1,36 @@
+.pos {
+  height: 50px;
+  width: 50px;
+  border-radius: 100px;
+  text-align: center;
+  border: 1px solid #CCC;
+  margin: 4px 4px;
+  font-size: 0.8rem;
+  font-family: 'Nova Mono', monospace;
+}
+
+.position-data {
+  border: 1px solid #CCC;
+}
+
+.pos-superb {
+  background-color: #3FE125;
+}
+
+.pos-good {
+  background-color: #45950F;
+  color: #FFF;
+}
+
+.pos-normal {
+  background-color: #A0CF23;
+}
+
+.pos-average {
+  background-color: #E9DB00;
+}
+
+.pos-poor {
+  background-color: #ED7500;
+  color: #FFF;
+}

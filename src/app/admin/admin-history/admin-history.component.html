@@ -1,0 +1,52 @@
+<div class="container p-2">
+  <div class="card">
+    <div class="card-header">
+      リリースノートを追加する
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="onSubmitCreate(f)" #f="ngForm">
+        <div class="form-group">
+          <label for="fmVersion">FMバージョン</label>
+          <select id="fmVersion" name="fmVersion" ngModel class="form-control" required>
+            <option *ngFor="let fmVersion of fmVersionList">{{ fmVersion }}</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="version">バージョン</label>
+          <input
+            id="version"
+            class="form-control"
+            ngModel
+            name="version"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="updateDate">更新時間</label>
+          <input
+            type="date"
+            id="updateDate"
+            class="form-control"
+            ngModel
+            name="updateDate"
+            required
+          />
+        </div>
+        <hr />
+        <h4>履歴内容 <button class="btn btn-outline-secondary" type="button" (click)="onAddDescription()">＋</button></h4>
+        <div class="form-group" *ngFor="let description of descriptionList; let i = index">
+          <input
+            [id]="'description_' + i"
+            class="form-control"
+            ngModel
+            [name]="'description_' + i"
+          />
+        </div>
+        <div class="text-center my-2">
+          <button class="btn btn-primary" type="submit" [disabled]="!f.valid" *ngIf="!loading">追加</button>
+          <span *ngIf="loading">更新中…</span>
+        </div>        
+      </form>
+    </div>    
+  </div>
+</div>

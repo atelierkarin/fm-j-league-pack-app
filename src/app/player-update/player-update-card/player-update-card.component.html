@@ -1,0 +1,136 @@
+<div class="player-update-card card mb-5">
+  <div class="media">
+    <div class="player-update-type">
+      <div class="content">
+        <small>{{ data.activeDate }}</small>
+        <h5 class="m-0">{{ getPlayerUpdateType(data.updateType) }}</h5>
+      </div>
+    </div>
+    <div class="media-body">
+      <div class="card">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-12 col-md">
+              <h4 class="m-0 text-light">
+                <span [class]="getFlag(data.player.nationality)"></span>&nbsp;
+                <a class="text-light" [routerLink]="['/database/player']" [queryParams]="{name: data.player.name}">{{ data.player.name }}</a>&nbsp;
+                <small>{{ data.player.nameEng }}</small>
+                <small
+                  ><span
+                    class="badge badge-info mx-1"
+                    *ngFor="let pt of data.player.playerType"
+                    >{{ getPlayerType(pt) }}</span
+                  ></small
+                >
+              </h4>
+            </div>
+            <div
+              class="col-12 col-md-auto text-light text-right"
+              *ngIf="data.updateDate"
+            >
+              <small class="mx-1">{{ data.updateDate }}</small>
+              <span class="badge badge-success">更新済み</span>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="container-fluid">
+            <div class="row">
+              <div
+                *ngIf="getPlayerUpdateTypeContentStyle(data.updateType) === 0"
+              >
+                <h4>
+                  <small class="badge badge-info mx-1"
+                    ><i class="fas fa-plus-circle fa-fw"></i></small
+                  ><span [class]="getFlag(data.club.nationality)"></span
+                  >{{ data.club.name }}
+                </h4>
+              </div>
+
+              <div
+                *ngIf="getPlayerUpdateTypeContentStyle(data.updateType) === 1"
+              >
+                <h4>
+                  <small class="badge badge-info mx-1"
+                    ><i class="fas fa-arrow-circle-right fa-fw"></i></small
+                  ><span [class]="getFlag(data.club.nationality)"></span
+                  >{{ data.club.name }}
+                </h4>
+                <h6 class="text-muted" v-if="data.previousClub">
+                  <small class="badge badge-info mx-1"
+                    ><i class="fas fa-arrow-circle-left fa-fw"></i></small
+                  ><span
+                    [class]="getFlag(data.previousClub.nationality)"
+                  ></span>
+                  {{ data.previousClub.name }}
+                </h6>
+              </div>
+
+              <div
+                *ngIf="getPlayerUpdateTypeContentStyle(data.updateType) === 2"
+              >
+                <h4>
+                  <small class="badge badge-info mx-1"
+                    ><i class="fas fa-sync-alt fa-fw"></i></small
+                  ><span [class]="getFlag(data.club.nationality)"></span
+                  >{{ data.club.name }}
+                </h4>
+              </div>
+
+              <div
+                *ngIf="getPlayerUpdateTypeContentStyle(data.updateType) === 3"
+              >
+                <h4>
+                  <small class="badge badge-info mx-1"
+                    ><i class="fas fa-arrow-circle-right fa-fw"></i></small
+                  ><span [class]="getFlag(data.club.nationality)"></span
+                  >{{ data.club.name }}
+                </h4>
+                <h6 class="text-muted">
+                  <small class="badge badge-info mx-1"
+                    ><i class="fas fa-arrow-circle-left fa-fw"></i></small
+                  ><span
+                    [class]="getFlag(data.previousClub.nationality)"
+                  ></span>
+                  {{ data.previousClub.name }}
+                </h6>
+              </div>
+
+              <div
+                *ngIf="getPlayerUpdateTypeContentStyle(data.updateType) === 4"
+              >
+                <small class="badge badge-secondary mx-1"
+                  ><i class="fas fa-calendar-check fa-fw"></i>
+                  {{ data.futureTransfer.transferDate }}</small
+                >
+                <h4>
+                  <small class="badge badge-info mx-1"
+                    ><i class="fas fa-arrow-circle-right fa-fw"></i></small
+                  ><span
+                    [class]="getFlag(data.futureTransfer.club.nationality)"
+                  ></span>
+                  {{ data.futureTransfer.club.name }}
+                </h4>
+                <h6 class="text-muted">
+                  <small class="badge badge-info mx-1"
+                    ><i class="fas fa-arrow-circle-left fa-fw"></i></small
+                  ><span [class]="getFlag(data.club.nationality)"></span
+                  >{{ data.club.name }}
+                </h6>
+              </div>
+            </div>
+
+            <div class="alert alert-info" *ngIf="data.remarks" [innerHtml]="formattedRemarks(data.remarks)"></div>
+          </div>
+        </div>
+        <div class="card-footer text-muted text-right">
+          <span *ngIf="data.previousFiletype">
+            {{ getDatapackFiletype(data.previousFiletype) }}
+            <i class="fas fa-arrow-right"></i>
+          </span>
+          {{ getDatapackFiletype(data.filetype) }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

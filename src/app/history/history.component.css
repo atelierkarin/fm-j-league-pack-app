@@ -1,0 +1,24 @@
+.fm-j-league-pack-history-card {
+  margin: 10px;
+}
+
+.fm-j-league-pack-history-viewport {
+  height: calc(100vh - 200px);
+  width: 100%;
+}
+
+.fm-j-league-pack-no-history {
+  padding-top: 83px;
+}
+
+.fm-j-league-pack-no-history h1 {
+  color: rgba(0,0,0,.4);
+  font-size: 150px;
+}
+
+.fm-j-league-pack-no-history .error-text {
+  color: rgba(0,0,0,.4);
+  line-height: 21px;
+  margin-top: 60px;
+  white-space: pre-wrap;
+}

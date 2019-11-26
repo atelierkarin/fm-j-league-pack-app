@@ -1,0 +1,15 @@
+<div class="fm-j-league-pack-guide container-fluid p-2">  
+  <ngb-tabset *ngIf="currentGuide; else elseTemplate">
+    <ngb-tab *ngFor="let guideContent of currentGuide" [title]="guideContent.title">
+      <ng-template ngbTabContent>
+        <div class="p-2" [innerHTML]="guideContent.content"></div>
+      </ng-template>
+    </ngb-tab>
+  </ngb-tabset>
+  <ng-template #elseTemplate>
+    <div class="fm-j-league-pack-no-guide text-center">
+      <h1>(·.·)</h1>
+      <p class="error-text">すみません、ガイドはありません…</p>
+    </div>
+  </ng-template>  
+</div>

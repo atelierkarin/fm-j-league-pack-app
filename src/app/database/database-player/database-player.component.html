@@ -1,0 +1,252 @@
+<ng-container *ngIf="loading; else elseLoadedTemplate">
+  <div class="d-flex justify-content-center">
+    <div class="spinner-border" role="status">
+      <span class="sr-only">読込中…</span>
+    </div>
+  </div>
+</ng-container>
+<ng-template #elseLoadedTemplate>
+  <div class="container-fluid" *ngIf="player; else elsePlayerTemplate">
+    <div class="row">
+      <div class="col-12">
+        <h3 class="player-name-col" [ngStyle]="getClubStyle()">
+          <span
+            *ngIf="
+              loanClub && loanClubContract && loanClubContract.squardNumber;
+              else elseSquardNumberTemplate
+            "
+          >
+            <b>{{ loanClubContract.squardNumber }}. </b>
+          </span>
+          <ng-template #elseSquardNumberTemplate>
+            <span *ngIf="club && clubContract && clubContract.squardNumber">
+              <b>{{ clubContract.squardNumber }}. </b>
+            </span>
+          </ng-template>
+          {{ player.basicInfo.name }}
+          <span class="h6">{{ player.basicInfo.nameEng }}</span>
+        </h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <small
+          ><span *ngIf="isPlayer">{{ getPlayerPosition() }} - </span>
+          <span *ngIf="loanClub; else elseClubNameTemplate">
+            <a [routerLink]="['/database/club/' + loanClub.id]">{{
+              loanClub.name
+            }}</a>
+          </span>
+          <ng-template #elseClubNameTemplate>
+            <span *ngIf="club"
+              ><a [routerLink]="['/database/club/' + club.id]">{{
+                club.name
+              }}</a></span
+            >
+            <span *ngIf="!club && clubContract && clubContract.id">登録されてないクラブ</span>
+            <span *ngIf="!club">フリー／クラブデータ無し</span>
+          </ng-template>
+          <span
+            >&nbsp;(ID: {{ player.location.id }}
+            {{ getDatapackFiletype(player.location.file) }})</span
+          >
+        </small>
+      </div>
+    </div>
+    <hr />
+    <div class="row my-2">
+      <div class="col-5 col-md-4">
+        <h6 *ngIf="player.basicInfo.nationality">
+          <span [class]="getFlag(player.basicInfo.nationality)"></span>
+          {{ getNationalityName(player.basicInfo.nationality) }}
+        </h6>
+        <h6 *ngIf="player.basicInfo.dob">
+          <span class="h5"
+            ><b>{{ getAge() }}</b
+            >歳</span
+          >
+          ( {{ player.basicInfo.dob }} )
+        </h6>
+      </div>
+      <div class="col-5 col-md-4">
+        <div *ngIf="loanClub; else elseContractTemplate">
+          <div *ngIf="club"><a [routerLink]="['/database/club/' + club.id]">{{ club.name }}</a> から期間付移籍中</div>
+          <div *ngIf="!club">期間付移籍中</div>
+          <div class="small">
+            <span>{{ loanClubContract.dateStart }} から {{ loanClubContract.dateEnd }} まで</span>
+          </div>
+        </div>
+        <ng-template #elseContractTemplate>
+          <div *ngIf="club && clubContract">
+            <div><a [routerLink]="['/database/club/' + club.id]">{{ club.name }}</a> と契約中</div>
+            <div class="small">
+              <span>{{ clubContract.dateJoined }} 加入</span>
+              <span *ngIf="clubContract.dateRenew">、{{ clubContract.dateRenew }} 契約更新</span>
+            </div>
+            <div class="small" *ngIf="clubContract.salaryPerYear">
+              <span>年俸 ¥ {{ clubContract.salaryPerYear }}</span>
+            </div>
+          </div>
+          <span *ngIf="!club">フリー／クラブデータ無し</span>
+        </ng-template>
+      </div>
+      <div class="col-12 col-md-4 text-right" *ngIf="player.location.jleagueId">
+        <a class="btn btn-sm btn-outline-secondary mx-1" [href]="'https://www.jleague.jp/player/'+ player.location.jleagueId +'/'" target="_blank" rel="noreferrer">Jリーグ公式サイト</a>
+        <a class="btn btn-sm btn-outline-secondary mx-1" [href]="'https://www.football-lab.jp/player/'+ player.location.jleagueId +'/'" target="_blank" rel="noreferrer">Football LAB</a>
+      </div>
+    </div>
+    <hr />
+    <div class="row" *ngIf="player.basicInfo.isPlayer">      
+      <div class="col-12 col-md-4">
+        <div class="m-2">
+          <h6 class="text-muted">ポジション</h6>
+          <app-position-image
+            *ngIf="player.playerData.positions; else elsePositionsTemplate"
+            [position]="player.playerData.positions"
+          ></app-position-image>
+          <ng-template #elsePositionsTemplate>
+            ポジションデータが登録されていません
+          </ng-template>
+        </div>
+        <hr />
+        <app-personal-data [personal]="player.personalData"></app-personal-data>
+      </div>
+      <div class="col-12 col-md-6">
+        <app-player-detail-status
+          [position]="player.playerData.positions"
+          [mental]="player.playerData.mental"
+          [physical]="player.playerData.physical"
+          [technical]="player.playerData.technical"
+          [goalkeeping]="player.playerData.goalkeeping"
+        ></app-player-detail-status>
+      </div>
+      <div class="col-12 col-md-2">
+        <div *ngIf="player.playerData.general && player.playerData.general.ca">
+          <small class="text-secondary">現在能力</small>
+          <h5>
+            <span class="badge player-ability-badge" [ngClass]="getCAClass()">{{
+              player.playerData.general.ca
+            }}</span>
+          </h5>
+        </div>
+        <div *ngIf="player.playerData.general && player.playerData.general.pa">
+          <small class="text-secondary">潜在能力</small>
+          <h5>
+            <span class="badge player-ability-badge avereage-ca">{{
+              player.playerData.general.pa
+            }}</span>
+          </h5>
+        </div>
+        <div
+          *ngIf="
+            player.playerData.general &&
+            (player.playerData.general.leftFoot ||
+              player.playerData.general.rightFoot)
+          "
+        >
+          <small class="text-secondary">左足／右足</small>
+          <h5>
+            <span
+              class="badge player-ability-badge"
+              [ngClass]="getNormalValueClass(player.playerData.general.leftFoot)"
+              >{{ player.playerData.general.leftFoot ? player.playerData.general.leftFoot : '-' }}</span
+            >
+            /
+            <span
+              class="badge player-ability-badge"
+              [ngClass]="getNormalValueClass(player.playerData.general.rightFoot)"
+              >{{ player.playerData.general.rightFoot ? player.playerData.general.rightFoot : '-' }}</span
+            >
+          </h5>
+        </div>
+        <div
+          *ngIf="player.playerData.general && player.playerData.general.height"
+        >
+          <small class="text-secondary">身長</small>
+          <h5>
+            <span class="badge player-ability-badge avereage-ca"
+              >{{ player.playerData.general.height }} cm</span
+            >
+          </h5>
+        </div>
+        <div
+          *ngIf="player.playerData.general && player.playerData.general.weight"
+        >
+          <small class="text-secondary">体重</small>
+          <h5>
+            <span class="badge player-ability-badge avereage-ca"
+              >{{ player.playerData.general.weight }} kg</span
+            >
+          </h5>
+        </div>
+        <div
+          *ngIf="player.playerData.general && player.playerData.general.currentReputation"
+        >
+          <small class="text-secondary">現在の知名度</small>
+          <h5>
+            <span class="badge player-ability-badge avereage-ca"
+              >{{ player.playerData.general.currentReputation }}</span
+            >
+          </h5>
+        </div>
+        <div
+          *ngIf="player.playerData.general && player.playerData.general.homeReputation"
+        >
+          <small class="text-secondary">ホームでの知名度</small>
+          <h5>
+            <span class="badge player-ability-badge avereage-ca"
+              >{{ player.playerData.general.homeReputation }}</span
+            >
+          </h5>
+        </div>
+        <div
+          *ngIf="player.playerData.general && player.playerData.general.worldReputation"
+        >
+          <small class="text-secondary">世界での知名度</small>
+          <h5>
+            <span class="badge player-ability-badge avereage-ca"
+              >{{ player.playerData.general.worldReputation }}</span
+            >
+          </h5>
+        </div>
+      </div>
+    </div>
+    <div class="row" *ngIf="player.basicInfo.isNonPlayer">
+      <div class="col-4">
+        <app-personal-data [personal]="player.personalData"></app-personal-data>
+      </div>
+      <div class="col-2">
+        <div *ngIf="player.nonPlayerData.ca">
+          <small class="text-secondary">現在能力</small>
+          <h5>
+            <span class="badge player-ability-badge avereage-ca">{{
+              player.nonPlayerData.ca
+            }}</span>
+          </h5>
+        </div>
+        <div *ngIf="player.nonPlayerData.pa">
+          <small class="text-secondary">潜在能力</small>
+          <h5>
+            <span class="badge player-ability-badge avereage-ca">{{
+              player.nonPlayerData.pa
+            }}</span>
+          </h5>
+        </div>
+      </div>
+    </div>
+    <hr />
+
+    <app-discuss-area-main [playerId]="playerId"></app-discuss-area-main>
+
+  </div>
+  <ng-template #elsePlayerTemplate>
+    <div class="text-center">
+      データは登録されていません
+    </div>
+  </ng-template>      
+</ng-template>
+
+
+
+
+

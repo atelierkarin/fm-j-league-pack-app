@@ -1,0 +1,95 @@
+.player-update-card {
+  position: relative;
+  background: #e2e2e2; /* Old browsers */
+  background: -moz-linear-gradient(
+    top,
+    #e2e2e2 0%,
+    #dbdbdb 50%,
+    #d1d1d1 51%,
+    #fefefe 100%
+  ); /* FF3.6-15 */
+  background: -webkit-linear-gradient(
+    top,
+    #e2e2e2 0%,
+    #dbdbdb 50%,
+    #d1d1d1 51%,
+    #fefefe 100%
+  ); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    #e2e2e2 0%,
+    #dbdbdb 50%,
+    #d1d1d1 51%,
+    #fefefe 100%
+  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe',GradientType=0 ); /* IE6-9 */
+  border: 2px #ffffff solid;
+  box-shadow: 0 0 1px #babbbc, 0px 0px 1px 1px #333;
+}
+
+.player-update-card .media .player-update-type {
+  z-index: 2;
+  position: absolute;
+  width: 180px;
+  height: 55px;
+  border-radius: 5px;
+  top: -25px;
+  left: 0px;
+  background: white;
+  transform: rotate(-2deg);
+
+  /* Permalink - use to edit and share this gradient: https://colorzilla.com/gradient-editor/#b0d4e3+0,88bacf+100;Grey+3D+%233 */
+  background: #ffffff; /* Old browsers */
+  background: -moz-linear-gradient(
+    top,
+    #ffffff 0%,
+    #e5e5e5 100%
+  ); /* FF3.6-15 */
+  background: -webkit-linear-gradient(
+    top,
+    #ffffff 0%,
+    #e5e5e5 100%
+  ); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    #ffffff 0%,
+    #e5e5e5 100%
+  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+
+  border: 2px #ffffff solid;
+  box-shadow: 0 0 1px #555, 1px 1px 2px #333;
+}
+
+.player-update-card .media .player-update-type .content {
+  text-align: center;
+}
+
+.player-update-card .media .media-body {
+  margin-top: 20px;
+  color: #333;
+}
+
+.player-update-card .media .media-body .card-header {
+  background: #7d7e7d; /* Old browsers */
+  background: -moz-linear-gradient(
+    top,
+    #7d7e7d 0%,
+    #0e0e0e 100%
+  ); /* FF3.6-15 */
+  background: -webkit-linear-gradient(
+    top,
+    #7d7e7d 0%,
+    #0e0e0e 100%
+  ); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    #7d7e7d 0%,
+    #0e0e0e 100%
+  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7d7e7d', endColorstr='#0e0e0e',GradientType=0 ); /* IE6-9 */
+}
+
+.player-update-card .media .media-body .badge {
+  text-shadow: none;
+}

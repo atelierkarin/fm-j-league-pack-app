@@ -1,0 +1,281 @@
+<div class="container p-2">
+  <div class="card">
+    <div class="card-header">
+      選手更新履歴を追加する
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="onSubmitCreate(f)" #f="ngForm">
+        <div class="form-group">
+          <label for="fmVersion">FMバージョン</label>
+          <select
+            id="fmVersion"
+            name="fmVersion"
+            [(ngModel)]="selectedFmVersion"
+            class="form-control"
+            required
+          >
+            <option *ngFor="let fmVersion of fmVersionList">{{
+              fmVersion
+            }}</option>
+          </select>
+        </div>
+        <hr />
+        <h4>プレイヤーデータ</h4>
+        <div class="form-row align-items-center">
+          <div class="col-auto">
+            <label for="playerFmID">FM ID</label>
+            <input
+              id="playerFmID"
+              name="playerFmID"
+              ngModel
+              class="form-control"
+              type="number"
+            />
+          </div>
+          <div class="col-auto">
+            <label for="playerName">名前</label>
+            <input
+              id="playerName"
+              name="playerName"
+              ngModel
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="col-auto">
+            <label for="playerNameEng">名前（ローマ字）</label>
+            <input
+              id="playerNameEng"
+              name="playerNameEng"
+              ngModel
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="col">
+            <label for="playerNationality">国籍</label>
+            <ng-select
+              [items]="nationalityList"
+              bindLabel="name"
+              bindValue="code"
+              [(ngModel)]="playerNationality"
+              [ngModelOptions]="{ standalone: true }"
+            >
+            </ng-select>
+          </div>
+        </div>
+        <div class="form-group">
+          <p>役職</p>
+          <div
+            class="form-check form-check-inline"
+            *ngFor="let playerType of playerTypeList"
+          >
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="playerType-{{ playerType.key }}"
+              name="playerType-{{ playerType.key }}"
+              [(ngModel)]="playerType.selected"
+              [value]="playerType.val"
+            />
+            <label
+              class="form-check-label"
+              for="playerType-{{ playerType.key }}"
+              >{{ playerType.val }}</label
+            >
+          </div>
+        </div>
+        <hr />
+
+        <div class="form-row align-items-center">
+          <div class="col-auto">
+            <label for="playerUpdateType">更新種類</label>
+            <select
+              id="playerUpdateType"
+              name="playerUpdateType"
+              class="form-control"
+              required
+              ngModel
+            >
+              <option
+                *ngFor="let puType of playerUpdateTypeList"
+                [value]="puType.key"
+                >{{ puType.val }}</option
+              >
+            </select>
+          </div>
+
+          <div class="col-auto">
+            <label for="activeDate">確認時間</label>
+            <input
+              type="date"
+              id="activeDate"
+              class="form-control"
+              [(ngModel)]="activeDate"
+              name="activeDate"
+              required
+            />
+          </div>
+
+          <div class="col-auto">
+            <div class="form-check form-check-inline">
+              <input
+                type="checkbox"
+                id="updateDate"
+                class="form-check-input"
+                ngModel
+                name="updateDate"
+              />
+              <label class="form-check-label" for="updateDate">更新？</label>
+            </div>
+          </div>
+          <div class="col-auto">
+            <label for="filetype">今のファイル</label>
+            <select
+              id="filetype"
+              name="filetype"
+              class="form-control"
+              ngModel
+              required
+            >
+              <option
+                *ngFor="let dfType of datepackFileTypeList"
+                [value]="dfType.key"
+                >{{ dfType.val }}</option
+              >
+            </select>
+          </div>
+
+          <div class="col-auto">
+            <label for="previousFiletype">元のファイル</label>
+            <select
+              id="previousFiletype"
+              name="previousFiletype"
+              class="form-control"
+              ngModel
+            >
+              <option></option>
+              <option
+                *ngFor="let dfType of datepackFileTypeList"
+                [value]="dfType.key"
+                >{{ dfType.val }}</option
+              >
+            </select>
+          </div>
+        </div>
+
+        <hr />
+        <h4>今のクラブデータ</h4>
+        <div class="form-row align-items-center">
+          <div class="col-auto">
+            <label for="clubName">クラブ名前</label>
+            <input
+              id="clubName"
+              name="clubName"
+              ngModel
+              class="form-control"
+              required
+              [ngbTypeahead]="onSearch"
+            />
+          </div>
+          <div class="col">
+            <label for="clubNationality">クラブ国籍</label>
+            <ng-select
+              [items]="nationalityListWithFree"
+              bindLabel="name"
+              bindValue="code"
+              [(ngModel)]="clubNationality"
+              [ngModelOptions]="{ standalone: true }"
+            >
+            </ng-select>
+          </div>
+        </div>
+
+        <hr />
+        <h4>元のクラブデータ</h4>
+        <div class="form-row align-items-center">
+          <div class="col-auto">
+            <label for="previousClubName">元のクラブ名前</label>
+            <input
+              id="previousClubName"
+              name="previousClubName"
+              ngModel
+              class="form-control"
+              [ngbTypeahead]="onSearch"
+            />
+          </div>
+          <div class="col">
+            <label for="previousClubNationality">元のクラブ国籍</label>
+            <ng-select
+              [items]="nationalityListWithFree"
+              bindLabel="name"
+              bindValue="code"
+              [(ngModel)]="previousClubNationality"
+              [ngModelOptions]="{ standalone: true }"
+            >
+            </ng-select>
+          </div>
+        </div>
+
+        <hr />
+
+        <hr />
+        <h4>将来の移籍</h4>
+        <div class="form-row align-items-center">
+          <div class="col-auto">
+            <label for="futureTransferClubName">移籍クラブ名前</label>
+            <input
+              id="futureTransferClubName"
+              name="futureTransferClubName"
+              ngModel
+              class="form-control"
+              [ngbTypeahead]="onSearch"
+            />
+          </div>
+          <div class="col">
+            <label for="futureTransferClubNationality">移籍クラブ国籍</label>
+            <ng-select
+              [items]="nationalityList"
+              bindLabel="name"
+              bindValue="code"
+              [(ngModel)]="futureTransferClubNationality"
+              [ngModelOptions]="{ standalone: true }"
+            >
+            </ng-select>
+          </div>
+          <div class="col-auto">
+            <label for="futureTransferDate">移籍時間</label>
+            <input
+              type="date"
+              id="futureTransferDate"
+              class="form-control"
+              ngModel
+              name="futureTransferDate"
+            />
+          </div>
+        </div>
+
+        <hr />
+
+        <div class="form-group">
+          <p>備考</p>
+          <textarea name="remarks" class="form-control" ngModel></textarea>
+        </div>
+
+        <hr />
+
+        <div class="text-center my-2">
+          <button
+            class="btn btn-primary"
+            type="submit"
+            [disabled]="!f.valid"
+            *ngIf="!loading"
+          >
+            追加
+          </button>
+          <span *ngIf="loading">更新中…</span>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

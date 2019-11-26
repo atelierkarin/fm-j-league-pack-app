@@ -1,0 +1,26 @@
+<div class="container position-data">
+  <div class="row">
+    <div class="col-2">&nbsp;</div>
+    <div class="col-2"><div [ngClass]="getPositionClass(position.defenderLeft)">DL<br />{{ position.defenderLeft }}</div></div>
+    <div class="col-2"><div [ngClass]="getPositionClass(position.wingBackLeft)">WBL<br />{{ position.wingBackLeft }}</div></div>
+    <div class="col-2"><div [ngClass]="getPositionClass(position.midfielderLeft)">ML<br />{{ position.midfielderLeft }}</div></div>
+    <div class="col-2"><div [ngClass]="getPositionClass(position.attackingMidfielderLeft)">AML<br />{{ position.attackingMidfielderLeft }}</div></div>
+    <div class="col-2">&nbsp;</div>
+  </div>
+  <div class="row">
+    <div class="col-2"><div [ngClass]="getPositionClass(position.goalkeeper)">GK<br />{{ position.goalkeeper }}</div></div>
+    <div class="col-2"><div [ngClass]="getPositionClass(position.defenderCentral)">DC<br />{{ position.defenderCentral }}</div></div>
+    <div class="col-2"><div [ngClass]="getPositionClass(position.defensiveMidfielder)">DM<br />{{ position.defensiveMidfielder }}</div></div>
+    <div class="col-2"><div [ngClass]="getPositionClass(position.midfielderCentral)">MC<br />{{ position.midfielderCentral }}</div></div>
+    <div class="col-2"><div [ngClass]="getPositionClass(position.attackingMidfielderCentral)">AMC<br />{{ position.attackingMidfielderCentral }}</div></div>
+    <div class="col-2"><div [ngClass]="getPositionClass(position.striker)">STC<br />{{ position.striker }}</div></div>
+  </div>
+  <div class="row">
+    <div class="col-2">&nbsp;</div>
+    <div class="col-2"><div [ngClass]="getPositionClass(position.defenderRight)">DR<br />{{ position.defenderRight }}</div></div>
+    <div class="col-2"><div [ngClass]="getPositionClass(position.wingBackRight)">WBR<br />{{ position.wingBackRight }}</div></div>
+    <div class="col-2"><div [ngClass]="getPositionClass(position.midfielderRight)">MR<br />{{ position.midfielderRight }}</div></div>
+    <div class="col-2"><div [ngClass]="getPositionClass(position.attackingMidfielderRight)">AMR<br />{{ position.attackingMidfielderRight }}</div></div>
+    <div class="col-2">&nbsp;</div>
+  </div>
+</div>

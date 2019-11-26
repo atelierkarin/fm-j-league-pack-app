@@ -1,0 +1,12 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@ng-select/ng-select/themes/default.theme.css";
+
+@import '~@swimlane/ngx-datatable/index.css';
+@import '~@swimlane/ngx-datatable/themes/bootstrap.css';
+@import '~@swimlane/ngx-datatable/assets/icons.css';
+
+html, body { height: 100%; }
+body {
+  margin: 0;
+  font-family: "Cabin", "Noto Sans JP", "Helvetica Neue", sans-serif !important;
+}

@@ -1,0 +1,51 @@
+<header class="navbar navbar-dark bg-dark navbar-fixed-top navbar-expand-lg">
+  <a class="navbar-brand" routerLink="/">FM Jリーグパック</a>
+
+  <button class="navbar-toggler navbar-toggler-right" type="button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="fmjleagueNavbar" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="navbar-collapse" [ngbCollapse]="isCollapsed" id="fmjleagueNavbar">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" *ngIf="currentVersionData">
+        <a class="nav-link" (click)="onResetCollapse()" routerLink="/">ホーム</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" *ngIf="currentVersionData">
+        <a class="nav-link" (click)="onResetCollapse()" routerLink="/guide">初心者ガイド</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active" *ngIf="currentVersionData">
+        <a class="nav-link" (click)="onResetCollapse()" routerLink="/history">リリースノート</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" (click)="onResetCollapse()" routerLink="/playerUpdate">選手更新履歴</a>
+      </li>
+      <li class="nav-item" routerLinkActive="active">
+        <a class="nav-link" (click)="onResetCollapse()" routerLink="/database">選手データベース（実験中）</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav">
+      <li *ngIf="isAdmin" class="nav-item" routerLinkActive="active">
+        <a class="nav-link" (click)="onResetCollapse()" routerLink="/admin">管理ページ</a>
+      </li>
+      <li *ngIf="user !== null" class="nav-item" routerLinkActive="active">
+          <a class="nav-link" href="#" (click)="onLogout()">ログアウト</a>
+        </li>
+      <li class="nav-item" *ngIf="currentVersionData && currentVersionData.fmBlogUrl">
+        <a class="nav-link" (click)="onResetCollapse()" href="#" (click)="onGotoBlog()">ブログバージョン（旧）</a>
+      </li>
+      <li class="nav-item" ngbDropdown>
+        <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="fmVersionDropdown" role="button">
+          {{ fmVersion }}
+        </a>
+        <div ngbDropdownMenu aria-labelledby="fmVersionDropdown" class="dropdown-menu dropdown-menu-right">
+          <button ngbDropdownItem
+            [class]="fmVersionListValue === fmVersion ? 'dropdown-item active' : 'dropdown-item'"
+            *ngFor="let fmVersionListValue of fmVersionList"
+            (click)="onSetFMVersion(fmVersionListValue)">
+            {{ fmVersionListValue }}
+          </button>
+        </div>
+      </li>
+    </ul>
+  </div>
+</header>

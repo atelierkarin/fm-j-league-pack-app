@@ -1,0 +1,10 @@
+<div class="col-12 col-md-6">
+  <small class="text-secondary">性格</small>
+  <ul class="list-group list-status">
+    <li class="p-1 list-group-item d-flex justify-content-between align-items-center" *ngFor="let personalData of personalDataList">
+      {{ personalData.name }}
+      <span class="badge player-ability-badge avereage-status">{{ getStatusValue(personalData) }}</span>
+    </li>
+  </ul>
+  <hr class="d-block d-md-none" />
+</div>
