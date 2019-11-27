@@ -19,26 +19,19 @@ export class HistoryEffects {
     switchMap(() => {
       this.useServer = false;
       return this.db.collection<History>('history')
-        .get({ source: "cache" })
-        .pipe(
-          catchError(err => {
-            this.useServer = true;
-            return this.db.collection<History>('history')
-              .get({ source: "server" })
-          })
-        )
+        .get({ source: "server" })
     }),
-    switchMap((docs: firebase.firestore.QuerySnapshot) => {
-      if (!docs.empty) {
-        return of(docs);
-      } else if (this.useServer === false) {
-        this.useServer = true;
-        return this.db.collection<History>('history')
-          .get({ source: "server" })
-      } else {
-        throwError("Internal Error")
-      }
-    }),
+    // switchMap((docs: firebase.firestore.QuerySnapshot) => {
+    //   if (!docs.empty) {
+    //     return of(docs);
+    //   } else if (this.useServer === false) {
+    //     this.useServer = true;
+    //     return this.db.collection<History>('history')
+    //       .get({ source: "server" })
+    //   } else {
+    //     throwError("Internal Error")
+    //   }
+    // }),
     map((docs: firebase.firestore.QuerySnapshot) => {
       let history = [];
       docs.forEach(doc => {
