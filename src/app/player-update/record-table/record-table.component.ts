@@ -22,6 +22,11 @@ export class RecordTableComponent implements OnInit, OnDestroy {
   public isAdmin: boolean;
   private adminAuthSubscription: Subscription;
 
+  public tableMessage = {
+    emptyMessage: '記録がありません',
+    totalMessage: '選手を見つかりました'
+  }
+
   constructor(private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
