@@ -23,13 +23,21 @@
             [locale]="datepickerLocale"
             [autoApply]="true"
             (datesUpdated)="refreshDisplayRecords()"
-            class="form-control"/>
+            class="form-control"
+          />
         </div>
       </div>
     </div>
   </div>
-  <div class="fm-j-league-player-updates" *ngIf="displayRecords && displayRecords.length > 0">
-    <app-record-table [data]="displayRecords"></app-record-table>
+  <div
+    class="fm-j-league-player-updates container-fluid"
+    *ngIf="displayRecords && displayRecords.length > 0"
+  >
+    <div class="row">
+      <div class="col">
+        <app-record-table [data]="displayRecords"></app-record-table>
+      </div>
+    </div>
   </div>
 </div>
 <ng-template #elseTemplate>

@@ -8,6 +8,18 @@
     {
       prop: 'activeDate',
       dir: 'desc'
+    },
+    {
+      prop: 'filetype',
+      dir: 'asc'
+    },
+    {
+      prop: 'club.name',
+      dir: 'asc'
+    },
+    {
+      prop: 'player.name',
+      dir: 'asc'
     }
   ]"
   [footerHeight]="50"
@@ -32,7 +44,7 @@
   </ngx-datatable-row-detail>
 
   <ngx-datatable-column
-    [width]="50"
+    [width]="20"
     [resizeable]="false"
     [sortable]="false"
     [draggable]="false"
