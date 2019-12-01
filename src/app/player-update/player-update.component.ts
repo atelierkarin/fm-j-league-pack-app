@@ -93,7 +93,8 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
   refreshDisplayRecords() {
     this.displayRecords = this.records.filter(r => {
       const activeDateValue = moment(r.activeDate + " 00:00:01", "YYYY-MM-DD HH:mm:ss").valueOf();
-      return activeDateValue >= this.dateSelected.startDate.valueOf() && activeDateValue <= this.dateSelected.endDate.valueOf()
+      const endDateLimit = this.dateSelected.endDate.add(1, "days");
+      return activeDateValue >= this.dateSelected.startDate.valueOf() && activeDateValue <= endDateLimit.valueOf();
     }).filter(r => {
       if (!this.filterPlayerUpdateType || this.filterPlayerUpdateType.length <= 0) return true;
       return this.filterPlayerUpdateType.includes(r.updateType)
