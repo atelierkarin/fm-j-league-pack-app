@@ -11,10 +11,12 @@ const resolvers = {
 
 const server = new ApolloServer({
   typeDefs,
-  resolvers,
-  cors: {
-    origin: 'fm-j-league-pack.firebaseapp.com'
-  }
+  resolvers
 });
 
-exports.api = functions.https.onRequest(server.createHandler());
+exports.api = functions.https.onRequest(server.createHandler({
+  cors: {
+    origin: ['https://fm-j-league-pack.firebaseapp.com/', 'http://localhost:4200'],
+    credentials: true
+  }
+}));

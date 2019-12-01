@@ -19,7 +19,9 @@ export class SetPlayerUpdate implements Action {
 export class FetchPlayerUpdate implements Action {
   readonly type = FETCH_PLAYER_UPDATE;
 
-  constructor(public payload: string) {}
+  constructor(public payload: {
+    fmVersion: string, startDate: string, endDate: string
+  }) {}
 }
 
 export class AddPlayerHistory implements Action {

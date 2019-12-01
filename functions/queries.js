@@ -10,7 +10,10 @@ const playerUpdates = (parent, args, context, info) => {
     .then((snapshot) => {
       let result = [];
       snapshot.forEach((doc) => {
-        result.push(doc.data());
+        result.push({
+          id: doc.id,
+          ...doc.data()
+        });
       });
       return result;
     })
@@ -31,7 +34,10 @@ const playerUpdatesByDate = (parent, args, context, info) => {
     .then((snapshot) => {
       let result = [];
       snapshot.forEach((doc) => {
-        result.push(doc.data());
+        result.push({
+          id: doc.id,
+          ...doc.data()
+        });
       });
       return result;
     })

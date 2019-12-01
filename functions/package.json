@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "apollo-server-cloud-functions": "^2.9.12",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "firebase-admin": "^8.6.0",
     "firebase-functions": "^3.3.0",
     "graphql": "^14.5.8",

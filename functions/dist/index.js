@@ -18,10 +18,12 @@ var resolvers = {
 
 var server = new _apolloServerCloudFunctions.ApolloServer({
   typeDefs: _typeDefs.typeDefs,
-  resolvers: resolvers,
-  cors: {
-    origin: 'fm-j-league-pack.firebaseapp.com'
-  }
+  resolvers: resolvers
 });
 
-exports.api = functions.https.onRequest(server.createHandler());
+exports.api = functions.https.onRequest(server.createHandler({
+  cors: {
+    origin: ['https://fm-j-league-pack.firebaseapp.com/', 'http://localhost:4200'],
+    credentials: true
+  }
+}));

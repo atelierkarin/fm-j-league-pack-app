@@ -1,0 +1,21 @@
+[debug] [2019-12-01T15:45:03.354Z] ----------------------------------------------------------------------
+[debug] [2019-12-01T15:45:03.356Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\ussdr\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve --only functions
+[debug] [2019-12-01T15:45:03.357Z] CLI Version:   7.8.1
+[debug] [2019-12-01T15:45:03.357Z] Platform:      win32
+[debug] [2019-12-01T15:45:03.357Z] Node Version:  v12.7.0
+[debug] [2019-12-01T15:45:03.358Z] Time:          Sun Dec 01 2019 23:45:03 GMT+0800 (GMT+08:00)
+[debug] [2019-12-01T15:45:03.358Z] ----------------------------------------------------------------------
+[debug] [2019-12-01T15:45:03.358Z] 
+[debug] [2019-12-01T15:45:03.366Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-12-01T15:45:03.367Z] > authorizing via signed-in user
+[debug] [2019-12-01T15:45:03.367Z] [iam] checking project fm-j-league-pack for permissions ["firebase.projects.get"]
+[debug] [2019-12-01T15:45:03.368Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-12-01T15:45:03.368Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-12-01T15:45:03.481Z] <<< HTTP RESPONSE 200
+[debug] [2019-12-01T15:45:03.507Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/fm-j-league-pack:testIamPermissions  
+
+[debug] [2019-12-01T15:45:04.558Z] <<< HTTP RESPONSE 200
+[debug] [2019-12-01T15:45:04.559Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/fm-j-league-pack  
+ 
+[debug] [2019-12-01T15:45:05.148Z] <<< HTTP RESPONSE 200

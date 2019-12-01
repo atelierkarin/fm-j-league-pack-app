@@ -22,7 +22,7 @@
             [(ngModel)]="dateSelected"
             [locale]="datepickerLocale"
             [autoApply]="true"
-            (datesUpdated)="refreshDisplayRecords()"
+            (datesUpdated)="onChangeDate()"
             class="form-control"
           />
         </div>
