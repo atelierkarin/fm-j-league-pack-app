@@ -33,6 +33,9 @@
       <li class="nav-item" *ngIf="currentVersionData && currentVersionData.fmBlogUrl">
         <a class="nav-link" (click)="onResetCollapse()" href="#" (click)="onGotoBlog()">ブログバージョン（旧）</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#" (click)="onGotoDiscuss()">掲示板</a>
+      </li>
       <li class="nav-item" ngbDropdown>
         <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="fmVersionDropdown" role="button">
           {{ fmVersion }}

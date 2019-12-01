@@ -76,6 +76,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
+  onGotoDiscuss() {
+    this.openUrl("https://zawazawa.jp/fm-j-league-pack/");
+  }
+
   onResetCollapse() {
     if (this.isCollapsed === false) this.isCollapsed = true;
   }
