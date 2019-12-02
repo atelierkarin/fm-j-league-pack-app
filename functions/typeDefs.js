@@ -34,8 +34,18 @@ export const typeDefs = gql`
     remarks: String
   }
 
+  type PlayerBasicInfo {
+    id: String!
+    name: String!
+    dob: String
+  }
+
   type Query {
     playerUpdates: [PlayerUpdate]
     playerUpdatesByDate(fmVersion: String!, startDate: String!, endDate: String!): [PlayerUpdate]
+
+    clientInfo: String
+
+    latestDatabaseUpdate: [PlayerBasicInfo]
   }
 `;

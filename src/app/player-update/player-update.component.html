@@ -30,14 +30,10 @@
     </div>
   </div>
   <div
-    class="fm-j-league-player-updates container-fluid"
+    class="fm-j-league-player-updates"
     *ngIf="displayRecords && displayRecords.length > 0"
   >
-    <div class="row">
-      <div class="col">
-        <app-record-table [data]="displayRecords"></app-record-table>
-      </div>
-    </div>
+    <app-record-table [data]="displayRecords"></app-record-table>
   </div>
 </div>
 <ng-template #elseTemplate>

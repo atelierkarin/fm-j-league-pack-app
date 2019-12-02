@@ -52,7 +52,37 @@ var playerUpdatesByDate = function playerUpdatesByDate(parent, args, context, in
   });
 };
 
+var latestDatabaseUpdate = function latestDatabaseUpdate(parent, args, context, info) {
+  return db.collection('playerDbChangelog').orderBy('updateDate', 'desc').limit(10).get().then(function (snapshot) {
+    var latestDatabaseUpdateId = [];
+    snapshot.forEach(function (doc) {
+      var updateRecords = doc.data();
+      latestDatabaseUpdateId.push(updateRecords.id);
+    });
+    return db.collection('playerDb').where('id', 'in', latestDatabaseUpdateId).get();
+  }).then(function (snapshot) {
+    var dbItems = [];
+    snapshot.forEach(function (doc) {
+      var dbItem = doc.data();
+      dbItems.push({
+        id: doc.id,
+        name: dbItem.player.basicInfo.name,
+        dob: dbItem.player.basicInfo.dob
+      });
+    });
+    return dbItems;
+  }).catch(function (err) {
+    console.log('Error getting documents', err);
+  });
+};
+
+var clientInfo = function clientInfo(parent, args, context, info) {
+  return context.userIp;
+};
+
 var Query = exports.Query = {
   playerUpdates: playerUpdates,
-  playerUpdatesByDate: playerUpdatesByDate
+  playerUpdatesByDate: playerUpdatesByDate,
+  latestDatabaseUpdate: latestDatabaseUpdate,
+  clientInfo: clientInfo
 };

@@ -73,7 +73,6 @@ export class PlayerUpdateEffects {
   fetchPlayerUpdate = this.actions$.pipe(
     ofType(PlayerUpdateActions.FETCH_PLAYER_UPDATE),
     switchMap((fetchPlayerUpdate: PlayerUpdateActions.FetchPlayerUpdate) => {
-      console.log("fetchPlayerUpdate")
       return this.apollo.watchQuery<any>({
         query: getPlayerUpdatesByDate,
         variables: {
@@ -86,7 +85,6 @@ export class PlayerUpdateEffects {
       if (result && result.data && result.data.playerUpdatesByDate) {
         playerUpdates = result.data.playerUpdatesByDate.map(v => v)
       }
-      console.log(result, result.data, playerUpdates);
       return new PlayerUpdateActions.SetPlayerUpdate(playerUpdates);
     }),
     catchError(() => {
