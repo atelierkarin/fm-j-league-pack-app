@@ -15,6 +15,9 @@ export const SET_SEARCH_PLAYERS = '[Database] Set Search Players';
 export const LOAD_PLAYER = '[Database] Load Player';
 export const SET_LOAD_PLAYER = '[Database] Set Load Player';
 
+export const LOAD_LATEST_UPDATE_PLAYERS = '[Database] Load Latest Update Players';
+export const SET_LATEST_UPDATE_PLAYERS = '[Database] Set Latest Update Players';
+
 export const UPDATE_SUCCESS = '[Database] Update Success';
 export const UPDATE_FAIL = '[Database] Update Fail';
 
@@ -68,6 +71,15 @@ export class UpdatePlayer implements Action {
   constructor(public payload: {player: PlayerData, id?: string, changeLog?: any}) {}
 }
 
+export class LoadLatestUpdatePlayers implements Action {
+  readonly type = LOAD_LATEST_UPDATE_PLAYERS;
+}
+export class SetLatestUpdatePlayers implements Action {
+  readonly type = SET_LATEST_UPDATE_PLAYERS;
+
+  constructor(public payload: {id: string, name: string, dob?: string}[]) {}
+}
+
 export class UpdateSuccess implements Action {
   readonly type = UPDATE_SUCCESS;
 }
@@ -90,6 +102,8 @@ export type DatabaseActions =
   | SetSearchPlayers
   | LoadPlayer
   | SetLoadPlayer
+  | LoadLatestUpdatePlayers
+  | SetLatestUpdatePlayers
   | UpdateSuccess
   | UpdateFail
   | ResetSearch;

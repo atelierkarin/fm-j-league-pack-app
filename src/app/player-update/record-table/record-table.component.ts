@@ -22,6 +22,8 @@ export class RecordTableComponent implements OnInit, OnDestroy {
   public isAdmin: boolean;
   private adminAuthSubscription: Subscription;
 
+  public updatedIds: string[];
+
   public tableMessage = {
     emptyMessage: '記録がありません',
     totalMessage: '選手を見つかりました'
@@ -30,6 +32,7 @@ export class RecordTableComponent implements OnInit, OnDestroy {
   constructor(private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
+    this.updatedIds = [];
     this.adminAuthSubscription = this.store.select('admin').subscribe(adminState => {
       this.isAdmin = adminState.isAdmin;
     });
@@ -47,8 +50,16 @@ export class RecordTableComponent implements OnInit, OnDestroy {
 
   onConfirmUpdate(targetRecord: PlayerUpdateModel.PlayerUpdate) {
     if (targetRecord && targetRecord.id && this.isAdmin) {
+      this.updatedIds.push(targetRecord.id);
       this.store.dispatch(new PlayerUpdateActions.ConfirmPlayerHistory(targetRecord));
     }
+  }
+
+  getDisplayConfirmUpdateBtn(updateValue: string, targetRecord: PlayerUpdateModel.PlayerUpdate) {
+    if (!this.isAdmin) return false;
+    if (updateValue) return false;
+    if (this.updatedIds.includes(targetRecord.id)) return false;
+    return true;
   }
 
   getPlayerUpdateType(type) {

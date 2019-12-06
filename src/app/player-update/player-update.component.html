@@ -1,8 +1,25 @@
-<div class="container-fluid" *ngIf="!loadingData; else elseTemplate">
+<div class="container-fluid">
   <div class="alert alert-secondary">
     <div class="container-fluid">
       <div class="row">
-        <div class="col"></div>
+        <div class="col-auto">
+          <ng-select
+            [items]="clubList"
+            [(ngModel)]="filterClubname"
+            bindLabel="name"
+            bindValue="name"
+            (change)="onChangeFilters()"
+            placeholder="クラブフィルター"></ng-select>
+        </div>
+        <div class="col">
+          <input
+            type="text"
+            [(ngModel)]="filterPlayerName"
+            (input)="onChangeFilters()"
+            class="form-control"
+            placeholder="選手・スタッフの名前"
+          />
+        </div>
         <div class="col-auto">
           <ng-select
             [items]="playerUpdateTypeList"
@@ -10,7 +27,7 @@
             bindValue="key"
             [(ngModel)]="filterPlayerUpdateType"
             [multiple]="true"
-            (change)="onChangeFilterPlayerUpdateType()"
+            (change)="onChangeFilters()"
             placeholder="更新種類フィルター"
           >
           </ng-select>
@@ -31,15 +48,15 @@
   </div>
   <div
     class="fm-j-league-player-updates"
-    *ngIf="displayRecords && displayRecords.length > 0"
-  >
-    <app-record-table [data]="displayRecords"></app-record-table>
+    *ngIf="!loadingData; else elseTemplate">
+    <app-record-table *ngIf="displayRecords && displayRecords.length > 0" [data]="displayRecords"></app-record-table>
   </div>
-</div>
-<ng-template #elseTemplate>
-  <div class="d-flex justify-content-center">
-    <div class="spinner-border m-5" role="status">
-      <span class="sr-only">データ読み込み中</span>
+  <ng-template #elseTemplate>
+    <div class="d-flex justify-content-center">
+      <div class="spinner-border m-5" role="status">
+        <span class="sr-only">データ読み込み中</span>
+      </div>
     </div>
-  </div>
-</ng-template>
+  </ng-template>
+</div>
+

@@ -10,6 +10,7 @@ export interface State {
   players: PlayerData[];
 
   searchPlayers: {player: PlayerData, id: string}[];
+  latestPlayers: {id: string, name: string, dob?: string}[];
 
   editPlayer: {player: PlayerData, id: string};
 
@@ -23,6 +24,7 @@ const initialState: State = {
   players: null,
 
   searchPlayers: null,
+  latestPlayers: null,
 
   editPlayer: null,
 
@@ -87,7 +89,19 @@ export function databaseReducer(
       return {
         ...state,
         loading: true,
-      };    
+      };  
+      
+    case DatabaseActions.LOAD_LATEST_UPDATE_PLAYERS:
+      return {
+        ...state,
+        loading: true,
+      };
+    case DatabaseActions.SET_LATEST_UPDATE_PLAYERS:
+      return {
+        ...state,
+        latestPlayers: [...action.payload],
+        loading: false,
+      };
 
     case DatabaseActions.UPDATE_SUCCESS:
       return {

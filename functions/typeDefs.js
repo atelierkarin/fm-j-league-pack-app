@@ -25,7 +25,7 @@ export const typeDefs = gql`
     player: PlayerUpdatePlayer!
     updateType: Int!
     activeDate: String!
-    updateDate: String!
+    updateDate: String
     club: PlayerUpdateClub!
     previousClub: PlayerUpdateClub
     filetype: Int!

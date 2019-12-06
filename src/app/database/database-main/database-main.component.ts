@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Subscription } from "rxjs";
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 
@@ -13,13 +14,29 @@ import * as moment from 'moment';
   templateUrl: './database-main.component.html',
   styleUrls: ['./database-main.component.css']
 })
-export class DatabaseMainComponent implements OnInit {
+export class DatabaseMainComponent implements OnInit, OnDestroy {
 
   public leagues: Leagues.LeagueData[] = Leagues.Leagues;
 
+  public latestUpdatePlayers: {id: string, name: string, dob?: string}[];
+
+  private databaseSubscription: Subscription;
+
   constructor(private store: Store<fromApp.AppState>, private router: Router) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.databaseSubscription = this.store
+      .select("database")
+      .subscribe(databaseState => {
+        this.latestUpdatePlayers = databaseState.latestPlayers;
+      });
+  }
+
+  ngOnDestroy() {
+    if (this.databaseSubscription) {
+      this.databaseSubscription.unsubscribe();
+    }
+  }
 
   getTeamCounts(leagueId) {
     try {
@@ -32,5 +49,9 @@ export class DatabaseMainComponent implements OnInit {
 
   onClickLeague(leagueId) {
     this.router.navigate(['/database/league/' + leagueId]);
+  }
+
+  onNavigateToPlayers(player: {id: string, name: string, dob?: string}) {
+    this.router.navigate(['/database/player/'], { queryParams: {name: player.name, id: player.id, dob: player.dob} });
   }
 }

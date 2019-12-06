@@ -150,7 +150,7 @@
       <button
         class="btn btn-success"
         type="submit"
-        *ngIf="!value && isAdmin"
+        *ngIf="getDisplayConfirmUpdateBtn(value, row)"
         (click)="onConfirmUpdate(row)"
       >
         確定更新

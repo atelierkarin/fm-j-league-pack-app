@@ -57,6 +57,7 @@
               >&nbsp;
               <span class="badge badge-info badge-pill" *ngIf="row.loanIn">期間付移籍中</span>
               <span class="badge badge-info badge-pill" *ngIf="row.loanOut">期間付移籍中</span>
+              <span class="badge badge-warning badge-pill" *ngIf="row.updateThisWeek">更新</span>
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column

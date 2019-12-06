@@ -4,10 +4,22 @@
     <p>J3 富山と鳥取を補完した。</p>
   </div>
   <hr />
-  <div class="list-group">
-    <button type="button" (click)="onClickLeague(league.id)" class="list-group-item list-group-item-action d-flex  justify-content-between align-items-center" *ngFor="let league of leagues">
-      {{ league.name }}
-      <span class="badge badge-primary badge-pill">{{ getTeamCounts(league.id) }}</span>
-    </button>
+  <div class="row">
+    <div class="col-md-8 col-12">
+      <div class="list-group">
+        <button type="button" (click)="onClickLeague(league.id)" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" *ngFor="let league of leagues">
+          {{ league.name }}
+          <span class="badge badge-primary badge-pill">{{ getTeamCounts(league.id) }}</span>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-4 col-12">
+      <h5>最新更新された選手・スタッフ</h5>
+      <div class="list-group">
+        <button type="button" (click)="onNavigateToPlayers(players)" class="list-group-item list-group-item-action d-flex justify-content-between align-items-center" *ngFor="let players of latestUpdatePlayers">
+          {{ players.name }}
+        </button>
+      </div>
+    </div>
   </div>
 </div>

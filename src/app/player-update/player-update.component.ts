@@ -12,6 +12,8 @@ import * as PlayerUpdateActions from './store/player-update.actions';
 
 import * as PlayerUpdateModel from './player-update.model';
 
+import * as ClubData from '../data/fmJDatabase/Clubs.data';
+
 import { LocaleConfig } from 'ngx-daterangepicker-material';
 
 @Component({
@@ -37,6 +39,11 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
   public filterPlayerUpdateType: number[];
   public playerUpdateTypeList: { key: number, val: string }[];
 
+  public filterClubname: string;
+  public clubList: ClubData.ClubData[] = ClubData.Clubs;
+
+  public filterPlayerName: string;
+
   public dateSelected: {startDate: moment.Moment, endDate: moment.Moment};
 
   public loadingData: boolean = true;
@@ -61,7 +68,7 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
 
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
       this.fmVersion = coreState.fmVersion;
-      this.onReloadPlayerUpdateRecords();   
+      this.onReloadPlayerUpdateRecords();
     })
     this.playerUpdateSubscription = this.store
       .select('playerUpdate')
@@ -78,7 +85,7 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
             return dateB - dateA;
           }
         });
-        this.loadingData = false;
+        setTimeout(() => this.loadingData = false);
         this.refreshDisplayRecords();
       });
   }
@@ -94,6 +101,12 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
     this.displayRecords = this.records.filter(r => {
       if (!this.filterPlayerUpdateType || this.filterPlayerUpdateType.length <= 0) return true;
       return this.filterPlayerUpdateType.includes(r.updateType)
+    }).filter(r => {
+      if (!this.filterClubname) return true;
+      return this.filterClubname === r.club.name;
+    }).filter(r => {
+      if (!this.filterPlayerName) return true;
+      return r.player.name.includes(this.filterPlayerName);
     })
   }
 
@@ -110,7 +123,7 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
     this.onReloadPlayerUpdateRecords();
   }
 
-  onChangeFilterPlayerUpdateType() {
+  onChangeFilters() {
     this.refreshDisplayRecords();
   }
 

@@ -56,6 +56,7 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
     loanIn?: boolean;
     ca?: number;
     pa?: number;
+    updateThisWeek: boolean;
   }[];
 
   private databaseSubscription: Subscription;
@@ -118,7 +119,13 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
 
             let squardNo = null;
             if (loanIn && currentLoan.squardNumber) squardNo = currentLoan.squardNumber;
-            if (!currentLoan && currentClub.squardNumber) squardNo = currentClub.squardNumber
+            if (!currentLoan && currentClub.squardNumber) squardNo = currentClub.squardNumber;
+
+            let updateThisWeek = false;
+            if (player.basicInfo.updateDate) {
+              const updateFrom = moment().diff(moment(player.basicInfo.updateDate), 'days');
+              updateThisWeek = updateFrom < 7;
+            }
 
             return {
               id,
@@ -131,7 +138,8 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
               loanOut,
               loanIn,
               ca,
-              pa
+              pa,
+              updateThisWeek
             };
           } else return null
         }).filter(v => v)

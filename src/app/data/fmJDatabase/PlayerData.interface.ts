@@ -101,6 +101,7 @@ export interface PlayerData {
     };
     isPlayer: boolean;
     isNonPlayer: boolean;
+    updateDate?: string;
   };
   clubInfo?: {
     id: number;

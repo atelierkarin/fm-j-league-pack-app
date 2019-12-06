@@ -38,8 +38,8 @@ var userIpAddress = function userIpAddress(request) {
 
 exports.api = functions.https.onRequest(server.createHandler({
   cors: {
-    //origin: ['https://fm-j-league-pack.firebaseapp.com', 'http://localhost:4200'],
-    origin: ['https://fm-j-league-pack.firebaseapp.com'],
+    origin: ['https://fm-j-league-pack.firebaseapp.com', 'http://localhost:4200'],
+    //origin: ['https://fm-j-league-pack.firebaseapp.com'],
     credentials: true
   }
 }));
