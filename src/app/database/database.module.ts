@@ -20,9 +20,10 @@ import { PersonalDataComponent } from './database-player/personal-data/personal-
 import { DiscussAreaMainComponent } from './database-player/discuss-area/discuss-area-main/discuss-area-main.component';
 import { CommentFormComponent } from './database-player/discuss-area/comment-form/comment-form/comment-form.component';
 import { DisplayCommentsComponent } from './database-player/discuss-area/display-comments/display-comments/display-comments.component';
+import { ChangelogComponent } from './database-player/changelog/changelog.component';
 
 @NgModule({
-  declarations: [DatabaseComponent, DatabaseMainComponent, DatabaseLeagueComponent, DatabaseClubComponent, DatabasePlayerComponent, PositionImageComponent, PlayerDetailStatusComponent, PersonalDataComponent, DiscussAreaMainComponent, CommentFormComponent, DisplayCommentsComponent],
+  declarations: [DatabaseComponent, DatabaseMainComponent, DatabaseLeagueComponent, DatabaseClubComponent, DatabasePlayerComponent, PositionImageComponent, PlayerDetailStatusComponent, PersonalDataComponent, DiscussAreaMainComponent, CommentFormComponent, DisplayCommentsComponent, ChangelogComponent],
   imports: [
     CommonModule,
     FormsModule,

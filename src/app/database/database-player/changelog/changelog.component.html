@@ -1,0 +1,26 @@
+<div class="card my-1" *ngFor="let changelogItem of changelog">
+  <div class="card-header">
+    {{ formatDateString(changelogItem.updateDate) }}
+  </div>
+  <div class="card-body">
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let item of analyzeChangelog(changelogItem.changelog)">
+        <h5>{{ item.updateName }}</h5>        
+        <h6>
+          <span class="text-secondary">{{ item.type }}</span>
+          <span class="badge badge-pill badge-secondary mx-1">{{ item.before }}</span>
+          <span *ngIf="item.after">
+            <ng-container *ngIf="item.isNumeric; else elseTemplate">
+              <i class="fas fa-level-up-alt text-success" *ngIf="item.after > item.before && item.before >= 0 && item.after >= 0"></i>
+              <i class="fas fa-level-down-alt text-danger" *ngIf="item.after < item.before && item.before >= 0 && item.after >= 0"></i>
+            </ng-container>
+            <ng-template #elseTemplate>
+              <i class="fas fa-arrow-right text-secondary"></i>
+            </ng-template>
+            <span class="badge badge-pill badge-secondary mx-1">{{ item.after }}</span>
+          </span>
+        </h6>
+      </li>
+    </ul>
+  </div>
+</div>

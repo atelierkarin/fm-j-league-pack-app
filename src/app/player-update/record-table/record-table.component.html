@@ -25,7 +25,6 @@
   [footerHeight]="50"
   [limit]="10"
   [messages]="tableMessage"
-  [scrollbarH]="true"
 >
   <!-- Row Detail Template -->
   <ngx-datatable-row-detail rowHeight="80" #myDetailRow>
@@ -108,7 +107,7 @@
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column name="元のクラブ" prop="previousClub.name" [flexGrow]="2">
+  <ngx-datatable-column name="元のクラブ" prop="previousClub.name" [flexGrow]="2" *ngIf="innerWidth > 768">
     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
       <h6 *ngIf="row.previousClub">
         <span [class]="getFlag(row.previousClub.nationality)"></span>&nbsp;{{ value }}
@@ -134,7 +133,7 @@
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column name="ファイル" prop="filetype" [flexGrow]="1">
+  <ngx-datatable-column name="ファイル" prop="filetype" [flexGrow]="1" *ngIf="innerWidth > 768">
     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
       <span *ngIf="row.previousFiletype">
         {{ getDatapackFiletype(row.previousFiletype) }}
@@ -144,7 +143,7 @@
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column name="更新時間" prop="updateDate" [flexGrow]="1">
+  <ngx-datatable-column name="更新時間" prop="updateDate" [flexGrow]="1" *ngIf="innerWidth > 768">
     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
       <span class="player-update-record-update-date" *ngIf="value">{{ value }}</span>
       <button

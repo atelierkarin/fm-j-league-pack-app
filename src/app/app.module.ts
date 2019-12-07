@@ -37,6 +37,7 @@ import { AdminEffects } from "./admin/store/admin.effects";
 import { PlayerUpdateEffects } from "./player-update/store/player-update.effects";
 import { DatabaseEffects } from "./database/store/database.effects";
 import { DiscussAreaEffects } from "./database/database-player/discuss-area/store/discuss-area.effects";
+import { ChangelogEffects } from "./database/database-player/changelog/store/changelog.effects";
 import { RecordTableComponent } from "./player-update/record-table/record-table.component";
 
 @NgModule({
@@ -67,7 +68,8 @@ import { RecordTableComponent } from "./player-update/record-table/record-table.
       AdminEffects,
       PlayerUpdateEffects,
       DatabaseEffects,
-      DiscussAreaEffects
+      DiscussAreaEffects,
+      ChangelogEffects
     ]),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,

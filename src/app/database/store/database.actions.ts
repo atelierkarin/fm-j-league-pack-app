@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { PlayerData } from "../../data/fmJDatabase/PlayerData.interface";
+import { PlayerDataChangelog } from "../../data/fmJDatabase/PlayerDataChangelog.interface";
 
 export const SET_SEASON = '[Database] Set Season';
 

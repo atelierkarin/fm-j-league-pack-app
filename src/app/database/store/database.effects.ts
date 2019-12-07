@@ -5,7 +5,6 @@ import { from, of, throwError, Observable } from "rxjs";
 
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
-import { QueryRef } from 'apollo-angular/QueryRef';
 import gql from 'graphql-tag';
 
 import { AngularFirestore, QueryFn } from '@angular/fire/firestore';

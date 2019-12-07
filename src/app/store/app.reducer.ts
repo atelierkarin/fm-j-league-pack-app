@@ -5,6 +5,7 @@ import * as fromPlayerUpdate from '../player-update/store/player-update.reducer'
 import * as fromAdmin from '../admin/store/admin.reducer';
 import * as fromDatabase from '../database/store/database.reducer';
 import * as fromDiscussArea from '../database/database-player/discuss-area/store/discuss-area.reducer';
+import * as fromChangelog from '../database/database-player/changelog/store/changelog.reducer';
 import * as fromCore from '../core/store/core.reducer';
 
 export interface AppState {
@@ -14,6 +15,7 @@ export interface AppState {
   playerUpdate: fromPlayerUpdate.State;
   database: fromDatabase.State;
   discussArea: fromDiscussArea.State;
+  changelog: fromChangelog.State;
 }
 
 export const appReducer: ActionReducerMap<AppState> = {
@@ -22,5 +24,6 @@ export const appReducer: ActionReducerMap<AppState> = {
   core: fromCore.coreReducer,
   playerUpdate: fromPlayerUpdate.playerUpdateReducer,
   database: fromDatabase.databaseReducer,
-  discussArea: fromDiscussArea.discussAreaReducer
+  discussArea: fromDiscussArea.discussAreaReducer,
+  changelog: fromChangelog.changelogReducer
 };

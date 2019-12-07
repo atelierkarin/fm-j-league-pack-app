@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, ViewChild, HostListener } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
@@ -22,6 +22,8 @@ export class RecordTableComponent implements OnInit, OnDestroy {
   public isAdmin: boolean;
   private adminAuthSubscription: Subscription;
 
+  public innerWidth: any;
+
   public updatedIds: string[];
 
   public tableMessage = {
@@ -36,6 +38,7 @@ export class RecordTableComponent implements OnInit, OnDestroy {
     this.adminAuthSubscription = this.store.select('admin').subscribe(adminState => {
       this.isAdmin = adminState.isAdmin;
     });
+    this.innerWidth = window.innerWidth;
   }
 
   ngOnDestroy() {
@@ -115,4 +118,8 @@ export class RecordTableComponent implements OnInit, OnDestroy {
     return replacedText;
   }
 
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.innerWidth = window.innerWidth;
+  }
 }

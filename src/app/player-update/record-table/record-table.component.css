@@ -5,3 +5,8 @@
 .datatable-body-cell-label span {
   font-size: 13px;
 }
+
+
+  .hide-when-mobile {
+    display: none !important;
+  }
