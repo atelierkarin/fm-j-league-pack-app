@@ -16,10 +16,11 @@ export interface State {
 
   errMsg: string;
   loading: boolean;
+  loadingPlayer: boolean;
 }
 
 const initialState: State = {
-  season: moment().year(),
+  season: 2020,
 
   players: null,
 
@@ -30,6 +31,7 @@ const initialState: State = {
 
   errMsg: null,
   loading: false,
+  loadingPlayer: false,
 };
 
 export function databaseReducer(
@@ -77,12 +79,14 @@ export function databaseReducer(
         ...state,
         editPlayer: null,
         loading: true,
+        loadingPlayer: true,
       };
     case DatabaseActions.SET_LOAD_PLAYER:
       return {
         ...state,
         editPlayer: {...action.payload},
         loading: false,
+        loadingPlayer: false,
       };
 
     case DatabaseActions.UPDATE_PLAYER:
@@ -122,7 +126,8 @@ export function databaseReducer(
         searchPlayers: null,
         editPlayer: null,
         updateError: null,
-        loading: false
+        loading: false,
+        loadingPlayer: false,
       };
     default:
       return state;

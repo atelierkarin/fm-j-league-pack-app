@@ -3,11 +3,11 @@
     {{ formatDateString(changelogItem.updateDate) }}
   </div>
   <div class="card-body">
-    <ul class="list-group">
-      <li class="list-group-item" *ngFor="let item of analyzeChangelog(changelogItem.changelog)">
-        <h5>{{ item.updateName }}</h5>        
+    <div class="row">
+      <div class="col-12 col-sm-6 col-md-4" *ngFor="let item of analyzeChangelog(changelogItem.changelog)">
+        <small class="text-muted">{{ item.type }}</small>        
         <h6>
-          <span class="text-secondary">{{ item.type }}</span>
+          <span class="text-secondary">{{ item.updateName }}</span>
           <span class="badge badge-pill badge-secondary mx-1">{{ item.before }}</span>
           <span *ngIf="item.after">
             <ng-container *ngIf="item.isNumeric; else elseTemplate">
@@ -20,7 +20,7 @@
             <span class="badge badge-pill badge-secondary mx-1">{{ item.after }}</span>
           </span>
         </h6>
-      </li>
-    </ul>
+      </div>
+    </div>
   </div>
 </div>

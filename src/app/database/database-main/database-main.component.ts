@@ -22,6 +22,8 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
 
   private databaseSubscription: Subscription;
 
+  private season: number;
+
   constructor(private store: Store<fromApp.AppState>, private router: Router) { }
 
   ngOnInit() {
@@ -29,6 +31,7 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
       .select("database")
       .subscribe(databaseState => {
         this.latestUpdatePlayers = databaseState.latestPlayers;
+        this.season = databaseState.season;
       });
   }
 
@@ -41,7 +44,7 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
   getTeamCounts(leagueId) {
     try {
       const targetLeague = this.leagues.find(l => l.id === leagueId);
-      const targetLeagueSeason = targetLeague.seasons.find(s => s.year === moment().year());
+      const targetLeagueSeason = targetLeague.seasons.find(s => s.year === this.season);
       return targetLeagueSeason.teams.length;
     } catch (err) {}
     return 0;    

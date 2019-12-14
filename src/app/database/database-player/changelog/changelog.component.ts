@@ -5,11 +5,29 @@ import { Store } from "@ngrx/store";
 import * as fromApp from "../../../store/app.reducer";
 import * as ChangelogActions from "./store/changelog.actions";
 
+import * as ClubData from '../../../data/fmJDatabase/Clubs.data';
+import { nationality } from '../../../shared/nationality';
+
 import { PlayerDataChangelog } from "../../../data/fmJDatabase/PlayerDataChangelog.interface";
 
-import { playerDataGeneralForm } from "../../../admin/admin-player-db/form.data";
+import { playerDataGeneralForm, nonPlayerDataGeneralForm, personalDataForm, playerDataMentalForm, playerDataPhysicalForm, playerDataTechnicalForm, playerDataGoalkeepingForm, playerDataPositionForm } from "../../../admin/admin-player-db/form.data";
 
 import * as moment from 'moment';
+
+const defaultChangelogData = [
+  {
+    tag: ["basicInfo","isPlayer"],
+    name: "プレイヤー？"
+  },
+  {
+    tag: ["basicInfo","isNonPlayer"],
+    name: "ノンプレイヤー？"
+  },
+  {
+    tag: ["clubInfo"],
+    name: "クラブデータ"
+  },
+]
 
 @Component({
   selector: 'app-changelog',
@@ -40,10 +58,39 @@ export class ChangelogComponent implements OnInit, OnDestroy {
       });
 
     this.changelogData = [
+      ...defaultChangelogData,
       ...playerDataGeneralForm.map(d => ({
         tag: ["playerData","general",d.key],
         name: "基本能力 " + d.name
-      }))
+      })),
+      ...nonPlayerDataGeneralForm.map(d => ({
+        tag: ["playerData","general",d.key],
+        name: "基本能力 " + d.name
+      })),
+      ...personalDataForm.map(d => ({
+        tag: ["personalData",d.key],
+        name: "性格 " + d.name
+      })),
+      ...playerDataMentalForm.map(d => ({
+        tag: ["playerData","mental",d.key],
+        name: "メンタル " + d.name
+      })),
+      ...playerDataPhysicalForm.map(d => ({
+        tag: ["playerData","physical",d.key],
+        name: "フィジカル " + d.name
+      })),
+      ...playerDataTechnicalForm.map(d => ({
+        tag: ["playerData","technical",d.key],
+        name: "スキル " + d.name
+      })),
+      ...playerDataGoalkeepingForm.map(d => ({
+        tag: ["playerData","goalkeeping",d.key],
+        name: "ゴールキーピング " + d.name
+      })),
+      ...playerDataPositionForm.map(d => ({
+        tag: ["playerData","positions",d.key],
+        name: "ポジション " + d.name
+      })),      
     ]
   }
 
@@ -62,14 +109,28 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   analyzeChangelog(changelogString: string) {
     try {
       const changelogObj = JSON.parse(changelogString);
-      return changelogObj.map(cl => {
+      let realChangelog = [];
+      changelogObj.forEach(cl => {
+        if (cl.kind === "N" && typeof cl.rhs === "object") {
+          for(let k of Object.keys(cl.rhs)) {
+            realChangelog.push({
+              ...cl,
+              path: [...cl.path, k],
+              rhs: cl.rhs[k]
+            });
+          }
+        } else {
+          realChangelog.push(cl);
+        }
+      })
+      return realChangelog.map(cl => {
         const type = this.getChangelogType(cl.kind);
         const updateName = this.getChangelogPathName(cl.path);
         return {
           type,
           updateName,
-          before: cl.lhs,
-          after: cl.rhs,
+          before: this.getStatus(cl.path, cl.lhs),
+          after: cl.kind !== "D" ? this.getStatus(cl.path, cl.rhs) : null,
           isNumeric: (typeof cl.lhs == 'number' || typeof cl.rhs == 'number')
         }
       }).filter(v => v.updateName)
@@ -89,6 +150,22 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     const pathString = JSON.stringify(path);
     const findPathStringObj = this.changelogData.find(d => JSON.stringify(d.tag) === pathString);
     return findPathStringObj ? findPathStringObj.name : null;
+  }
+
+  getStatus(path, value) {
+    const pathString = JSON.stringify(path);
+    if (pathString === JSON.stringify(["clubInfo"])) {
+      if (value === {}) return "なし";
+      else {
+        const targetClub = ClubData.Clubs.find(c => c.id === value.id);
+        return targetClub ? targetClub.name : "クラブデータ無し";
+      }
+    }
+    if (typeof value === "boolean") {
+      if (value) return "はい";
+      else return "いいえ";
+    }
+    return value;
   }
 
 }

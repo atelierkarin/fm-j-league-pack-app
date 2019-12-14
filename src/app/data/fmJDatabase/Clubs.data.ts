@@ -6,9 +6,11 @@ export interface ClubData {
 }
 
 export const getClubByAlias = (alias: number | string) => {
-  const aliasString = alias + '';
-  return Clubs.find(club => club.id === parseInt(aliasString) || club.name === aliasString);
-}
+  const aliasString = alias + "";
+  return Clubs.find(
+    club => club.id === parseInt(aliasString) || club.name === aliasString
+  );
+};
 
 export const Clubs: ClubData[] = [
   {
@@ -896,5 +898,40 @@ export const Clubs: ClubData[] = [
     id: 45005147,
     name: "仙台大学",
     shortname: "仙台大"
+  },
+  {
+    id: 45004431,
+    name: "大宮クラブ",
+    shortname: "大宮クラブ"
+  },
+  {
+    id: 45108299,
+    name: "FC.SENDAI.UNIV",
+    shortname: "FC.SENDAI.UNIV"
+  },
+  {
+    id: 792320,
+    name: "Criacao Shinjuku",
+    shortname: "Criacao"
+  },
+  {
+    id: 45052511,
+    name: "新潟医療福祉大学FC",
+    shortname: "新潟医療福祉大学FC"
+  },
+  {
+    id: 45052518,
+    name: "Chukyo univ.FC",
+    shortname: "Chukyo univ.FC"
+  },
+  {
+    id: 45076938,
+    name: "常葉大学浜松キャンパスFC",
+    shortname: "常葉大学浜松キャンパスFC"
+  },
+  {
+    id: 792351,
+    name: "FC柳町",
+    shortname: "FC柳町"
   }
 ];

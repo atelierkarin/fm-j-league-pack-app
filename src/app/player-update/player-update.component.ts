@@ -50,6 +50,7 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
 
   private playerUpdateSubscription: Subscription;
   private coreSubscription: Subscription;
+  private loadingSubscription: Subscription;
 
   constructor(private store: Store<fromApp.AppState>) {}
 
@@ -57,8 +58,8 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
     this.loadingData = true;
     
     this.dateSelected = {
-      startDate: moment().set('date', 1).set('hour', 0).set('minute', 0).set('second', 0),
-      endDate: moment().add(1, 'month').set('date', 0).set('hour', 0).set('minute', 0).set('second', 0),
+      startDate: moment().subtract(7, 'days').set('hour', 0).set('minute', 0).set('second', 0),
+      endDate: moment().set('hour', 0).set('minute', 0).set('second', 0),
     }
 
     this.playerUpdateTypeList = Object.keys(PlayerUpdateModel.PlayerUpdateType)
@@ -68,7 +69,6 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
 
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
       this.fmVersion = coreState.fmVersion;
-      this.onReloadPlayerUpdateRecords();
     })
     this.playerUpdateSubscription = this.store
       .select('playerUpdate')
@@ -85,8 +85,13 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
             return dateB - dateA;
           }
         });
-        setTimeout(() => this.loadingData = false);
         this.refreshDisplayRecords();
+      });
+    this.loadingSubscription = this.store
+      .select('playerUpdate')
+      .pipe(map(playerUpdateState => playerUpdateState.loading))
+      .subscribe((loading: boolean) => {
+        this.loadingData = loading;
       });
   }
 
@@ -95,6 +100,8 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
       this.playerUpdateSubscription.unsubscribe();
     if (this.coreSubscription)
       this.coreSubscription.unsubscribe();
+    if (this.loadingSubscription)
+      this.loadingSubscription.unsubscribe();
   }
 
   refreshDisplayRecords() {

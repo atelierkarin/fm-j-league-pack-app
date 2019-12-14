@@ -65,7 +65,7 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
       .select("database")
       .subscribe(databaseState => {
         this.player = databaseState.editPlayer ? databaseState.editPlayer.player : null;
-        this.loading = databaseState.loading;
+        this.loading = databaseState.loadingPlayer;
         if (this.player) {
           this.playerId = databaseState.editPlayer.id;
           this.clubContract = this.player.clubInfo;

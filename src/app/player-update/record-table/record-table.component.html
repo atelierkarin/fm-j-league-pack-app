@@ -115,7 +115,7 @@
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column name="将来の移籍" prop="futureTransfer" [flexGrow]="2">
+  <ngx-datatable-column name="将来の移籍" prop="futureTransfer" [flexGrow]="2" *ngIf="innerWidth > 768">
     <ng-template let-value="value" ngx-datatable-cell-template>
       <h6 *ngIf="value">
         <div>
@@ -135,7 +135,7 @@
 
   <ngx-datatable-column name="ファイル" prop="filetype" [flexGrow]="1" *ngIf="innerWidth > 768">
     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
-      <span *ngIf="row.previousFiletype">
+      <span *ngIf="row.previousFiletype !== null && row.previousFiletype !== undefined">
         {{ getDatapackFiletype(row.previousFiletype) }}
         <i class="fas fa-arrow-right"></i>
       </span>

@@ -24,7 +24,8 @@ export function playerUpdateReducer(
     case PlayerUpdateActions.SET_PLAYER_UPDATE:
       return {
         ...state,
-        playerUpdateRecords: [...action.payload]
+        playerUpdateRecords: [...action.payload],
+        loading: false
       };
     case PlayerUpdateActions.ADD_PLAYER_UPDATE:
       return {
@@ -33,6 +34,12 @@ export function playerUpdateReducer(
         loading: true
       };
     case PlayerUpdateActions.CONFIRM_PLAYER_UPDATE:
+      return {
+        ...state,
+        updateError: null,
+        loading: true
+      };
+    case PlayerUpdateActions.FETCH_PLAYER_UPDATE:
       return {
         ...state,
         updateError: null,

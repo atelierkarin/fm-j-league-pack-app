@@ -175,7 +175,7 @@ export const nationality: {
   { name: "スコットランド", code: "SCO", iso: "gb-sct" },
   { name: "セネガル", code: "SEN" },
   { name: "セーシェル", code: "SEY" },
-  { name: "シンガポール", code: "SIN" },
+  { name: "シンガポール", code: "SIN", iso: "sg" },
   { name: "セントクリストファー・ネイビス", code: "SKN" },
   { name: "シエラレオネ", code: "SLE" },
   { name: "エルサルバドル", code: "SLV" },
