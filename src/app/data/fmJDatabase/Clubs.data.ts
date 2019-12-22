@@ -310,12 +310,14 @@ export const Clubs: ClubData[] = [
   {
     id: 788854,
     name: "藤枝MYFC",
-    shortname: "藤枝"
+    shortname: "藤枝",
+    color: ["#FAFAFA", "#AC89F3"]
   },
   {
     id: 788933,
     name: "アスルクラロ沼津",
-    shortname: "沼津"
+    shortname: "沼津",
+    color: ["#FAFAFA", "#3C72DE"]
   },
   {
     id: 107354,
@@ -326,47 +328,56 @@ export const Clubs: ClubData[] = [
   {
     id: 775160,
     name: "カマタマーレ讃岐",
-    shortname: "讃岐"
+    shortname: "讃岐",
+    color: ["#26488B", "#8CD1F3"]
   },
   {
     id: 788847,
     name: "ギラヴァンツ北九州",
-    shortname: "北九州"
+    shortname: "北九州",
+    color: ["#F26549", "#FFE252"]
   },
   {
     id: 786558,
     name: "ロアッソ熊本",
-    shortname: "熊本"
+    shortname: "熊本",
+    color: ["#FAFAFA", "#CF1C2C"]
   },
   {
     id: 107291,
     name: "Honda FC",
-    shortname: "ホンダ"
+    shortname: "ホンダ",
+    color: ["#FAFAFA", "#CF1C2C"]
   },
   {
     id: 107352,
     name: "FC大阪",
-    shortname: "FC大阪"
+    shortname: "FC大阪",
+    color: ["#1E2021", "#53BAED"]
   },
   {
     id: 107311,
     name: "ソニー仙台FC",
-    shortname: "S仙台"
+    shortname: "S仙台",
+    color: ["#26488B", "#4A99E8"]
   },
   {
     id: 788904,
     name: "FC今治",
-    shortname: "今治"
+    shortname: "今治",
+    color: ["#FFE252", "#2F55B5"]
   },
   {
     id: 792330,
     name: "東京武蔵野シティFC",
-    shortname: "武蔵野"
+    shortname: "武蔵野",
+    color: ["#FFE252", "#2F55B5"]
   },
   {
     id: 775268,
     name: "MIOびわこ滋賀",
-    shortname: "B滋賀"
+    shortname: "B滋賀",
+    color: ["#82C453", "#4FB591"]
   },
   {
     id: 788910,
