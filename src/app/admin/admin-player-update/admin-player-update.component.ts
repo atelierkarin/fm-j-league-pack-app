@@ -42,7 +42,10 @@ export class AdminPlayerUpdateComponent implements OnInit {
 
   public fmVersionList: string[] = VersionData.fmVersionList;
 
-  public playerTypeList: { key: number, val: string, selected: boolean }[];
+  public playerTypeList: { key: number, val: string }[] = Object.keys(PlayerType)
+    .map(Number)
+    .filter(Number.isInteger)
+    .map(k => ({ key: k, val: PlayerType[k] }));
   public playerUpdateTypeList: { key: number, val: string }[];
   public datepackFileTypeList: { key: number, val: string }[];
   public nationalityList: {
@@ -73,6 +76,9 @@ export class AdminPlayerUpdateComponent implements OnInit {
   public futureTransferClubNationality: string;
   public selectedFmVersion: string;
   public activeDate: string;
+  public selectedPlayerType: number[] = [0];
+
+  public keepData: boolean = false;
 
   private coreSubscription: Subscription;
   private playerUpdateSubscription: Subscription;
@@ -108,13 +114,11 @@ export class AdminPlayerUpdateComponent implements OnInit {
   onSubmitCreate(form: NgForm) {
     const fmVersion = form.value.fmVersion;
 
-    const playerFmID = form.value.playerFmID;
     const playerName = form.value.playerName;
     const playerNameEng = form.value.playerNameEng;
-    const selectedPlayerType: PlayerType[] = this.playerTypeList.filter(pt => pt.selected).map(pt => PlayerType[pt.val])
+    const selectedPlayerType: PlayerType[] = this.selectedPlayerType.map(v => v);
     const playerNationality = this.playerNationality;
     const player: PlayerUpdateModel.PlayerUpdatePlayer = {
-      fmID: playerFmID,
       name: playerName,
       nameEng: playerNameEng,
       playerType: selectedPlayerType,
@@ -199,10 +203,7 @@ export class AdminPlayerUpdateComponent implements OnInit {
   };
 
   private resetPlayerType() {
-    this.playerTypeList = Object.keys(PlayerType)
-      .map(Number)
-      .filter(Number.isInteger)
-      .map(k => ({ key: k, val: PlayerType[k], selected: false }));
+    this.selectedPlayerType = [0];
   }
 
   private setPlayerUpdateType() {
@@ -220,17 +221,25 @@ export class AdminPlayerUpdateComponent implements OnInit {
   }
 
   private initForm() {
-    this.form.reset();
-    this.resetPlayerType();
+    if (!this.keepData) {
+      this.form.reset();
+      this.resetPlayerType();
 
-    setTimeout(() => {
-      this.selectedFmVersion = this.fmVersion;
-      this.playerNationality = "JPN";
-      this.clubNationality = "JPN";
-      this.previousClubNationality = "JPN";
-      this.futureTransferClubNationality = "JPN";
-      this.activeDate = this.formatDate(new Date(), "yyyy-MM-dd");
-    }, );
+      setTimeout(() => {
+        this.selectedFmVersion = this.fmVersion;
+        this.playerNationality = "JPN";
+        this.clubNationality = "JPN";
+        this.previousClubNationality = "JPN";
+        this.futureTransferClubNationality = "JPN";
+        this.activeDate = this.formatDate(new Date(), "yyyy-MM-dd");
+      }, );
+    } else {
+      setTimeout(() => {
+        this.form.controls['playerName'].reset();
+        this.form.controls['playerNameEng'].reset();
+        this.activeDate = this.formatDate(new Date(), "yyyy-MM-dd");
+      }, );
+    }
   }
 
 }
