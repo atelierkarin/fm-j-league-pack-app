@@ -53,21 +53,45 @@ var playerUpdatesByDate = function playerUpdatesByDate(parent, args, context, in
 };
 
 var latestDatabaseUpdate = function latestDatabaseUpdate(parent, args, context, info) {
-  return db.collection('playerDbChangelog').orderBy('updateDate', 'desc').limit(10).get().then(function (snapshot) {
-    var latestDatabaseUpdateId = [];
-    snapshot.forEach(function (doc) {
-      var updateRecords = doc.data();
-      latestDatabaseUpdateId.push(updateRecords.id);
-    });
-    return db.collection('playerDb').where('id', 'in', latestDatabaseUpdateId).get();
-  }).then(function (snapshot) {
+  // return db.collection('playerDbChangelog')
+  //   .orderBy('updateDate', 'desc')
+  //   .limit(10)
+  //   .get()
+  //   .then((snapshot) => {
+  //     let latestDatabaseUpdateId = [];
+  //     snapshot.forEach((doc) => {
+  //       const updateRecords = doc.data();
+  //       latestDatabaseUpdateId.push(updateRecords.id);
+  //     });
+  //     return db.collection('playerDb')
+  //       .where('id', 'in', latestDatabaseUpdateId)
+  //       .get();
+  //   })
+  //   .then((snapshot) => {
+  //     let dbItems = [];
+  //     snapshot.forEach((doc) => {
+  //       const dbItem = doc.data();
+  //       dbItems.push({
+  //         id: doc.id,
+  //         name: dbItem.player.basicInfo.name,
+  //         dob: dbItem.player.basicInfo.dob
+  //       });
+  //     });
+  //     return dbItems;
+  //   })
+  //   .catch((err) => {
+  //     console.log('Error getting documents', err);
+  //   })
+  return db.collection('playerDb').orderBy('player.basicInfo.updateDate', 'desc').limit(15).get().then(function (snapshot) {
     var dbItems = [];
     snapshot.forEach(function (doc) {
       var dbItem = doc.data();
       dbItems.push({
         id: doc.id,
         name: dbItem.player.basicInfo.name,
-        dob: dbItem.player.basicInfo.dob
+        dob: dbItem.player.basicInfo.dob,
+        updateDate: dbItem.player.basicInfo.updateDate,
+        club: dbItem.player.clubInfo ? dbItem.player.clubInfo.id : null
       });
     });
     return dbItems;

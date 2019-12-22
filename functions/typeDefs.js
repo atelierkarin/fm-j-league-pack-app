@@ -14,7 +14,7 @@ export const typeDefs = gql`
   type PlayerUpdatePlayer {
     fmID: ID
     name: String!
-    nameEng: String!
+    nameEng: String
     playerType: [Int]
     nationality: String!
   }
@@ -38,6 +38,8 @@ export const typeDefs = gql`
     id: String!
     name: String!
     dob: String
+    updateDate: String
+    club: Int
   }
 
   type Query {
