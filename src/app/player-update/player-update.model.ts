@@ -22,7 +22,7 @@ export interface PlayerUpdateClub {
 export interface PlayerUpdatePlayer {
   fmID?: number,
   name: string,
-  nameEng: string,
+  nameEng?: string,
   playerType: PlayerType[],
   nationality: string
 }

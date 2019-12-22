@@ -78,7 +78,7 @@ export class LoadLatestUpdatePlayers implements Action {
 export class SetLatestUpdatePlayers implements Action {
   readonly type = SET_LATEST_UPDATE_PLAYERS;
 
-  constructor(public payload: {id: string, name: string, dob?: string}[]) {}
+  constructor(public payload: {id: string, name: string, dob?: string, updateDate: string, club?: number}[]) {}
 }
 
 export class UpdateSuccess implements Action {

@@ -36,8 +36,7 @@ export function playerUpdateReducer(
     case PlayerUpdateActions.CONFIRM_PLAYER_UPDATE:
       return {
         ...state,
-        updateError: null,
-        loading: true
+        updateError: null
       };
     case PlayerUpdateActions.FETCH_PLAYER_UPDATE:
       return {

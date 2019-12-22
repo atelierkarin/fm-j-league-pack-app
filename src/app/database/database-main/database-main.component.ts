@@ -9,6 +9,8 @@ import * as Leagues from '../../data/fmJDatabase/Leagues.data'
 
 import * as moment from 'moment';
 
+import * as Clubs from "../../data/fmJDatabase/Clubs.data";
+
 @Component({
   selector: 'app-database-main',
   templateUrl: './database-main.component.html',
@@ -48,6 +50,14 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
       return targetLeagueSeason.teams.length;
     } catch (err) {}
     return 0;    
+  }
+
+  getClub(clubId) {
+    if (clubId) {
+      const club = Clubs.getClubByAlias(clubId);
+      return club ? club.name : "所属クラブ未登録";
+    }
+    return "フリー";
   }
 
   onClickLeague(leagueId) {

@@ -10,7 +10,7 @@ export interface State {
   players: PlayerData[];
 
   searchPlayers: {player: PlayerData, id: string}[];
-  latestPlayers: {id: string, name: string, dob?: string}[];
+  latestPlayers: {id: string, name: string, dob?: string, updateDate: string, club?: number}[];
 
   editPlayer: {player: PlayerData, id: string};
 

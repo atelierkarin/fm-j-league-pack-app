@@ -22,6 +22,8 @@ query {
     id
     name
     dob
+    updateDate
+    club
   }
 }`;
 
@@ -142,7 +144,7 @@ export class DatabaseEffects {
       if (players.length > 0)
         return new DatabaseActions.SetLoadPlayer(players[0]);
       else
-        return new DatabaseActions.UpdateFail("SERVER FAIL");
+        return new DatabaseActions.SetLoadPlayer(null);
     }),
     
     catchError(() => {

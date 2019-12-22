@@ -84,7 +84,7 @@
           >{{ row.player.name }}</a
         >
       </h6>
-      <small>{{ row.player.nameEng }}</small>
+      <small *ngIf="row.player.nameEng">{{ row.player.nameEng }}</small>
     </ng-template>
   </ngx-datatable-column>
   <ngx-datatable-column name="役職" prop="updateType" [flexGrow]="1">

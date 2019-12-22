@@ -392,7 +392,6 @@ export const getCurrentLeague = (
     const currentLeagueSeason = currentLeague.seasons.find(
       s => s.year === 2020
     );
-    console.log(currentLeagueSeason)
     if (currentLeagueSeason && currentLeagueSeason.teams.includes(clubId)) {
       returnLeague = currentLeague;
       break;
