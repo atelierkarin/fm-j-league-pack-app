@@ -1,0 +1,10 @@
+User-agent: *
+Disallow: /admin/*
+Allow: /*
+User-agent: Mediapartners-Google*
+Disallow: /admin/*
+Allow: /*
+User-agent: Twitterbot
+Disallow: /admin/*
+Allow: /*
+Sitemap: https://fm-j-league-pack.firebaseapp.com/sitemap.xml
