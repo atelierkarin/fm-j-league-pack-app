@@ -23,6 +23,7 @@ import { HistoryItemComponent } from "./history/history-item/history-item.compon
 import { GuideComponent } from "./guide/guide.component";
 import { PlayerUpdateComponent } from "./player-update/player-update.component";
 import { PlayerUpdateCardComponent } from "./player-update/player-update-card/player-update-card.component";
+import { RecordTableComponent } from "./player-update/record-table/record-table.component";
 
 import { AngularFireModule } from "@angular/fire";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
@@ -38,7 +39,6 @@ import { PlayerUpdateEffects } from "./player-update/store/player-update.effects
 import { DatabaseEffects } from "./database/store/database.effects";
 import { DiscussAreaEffects } from "./database/database-player/discuss-area/store/discuss-area.effects";
 import { ChangelogEffects } from "./database/database-player/changelog/store/changelog.effects";
-import { RecordTableComponent } from "./player-update/record-table/record-table.component";
 
 @NgModule({
   declarations: [
