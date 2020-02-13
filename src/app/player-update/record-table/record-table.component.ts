@@ -17,7 +17,7 @@ import * as PlayerUpdateActions from '../store/player-update.actions';
 })
 export class RecordTableComponent implements OnInit, OnDestroy {
   @Input() data: PlayerUpdateModel.PlayerUpdate[];
-  @ViewChild('playerUpdateTable', { static: false }) table: any;
+  @ViewChild('playerUpdateTable') table: any;
 
   public isAdmin: boolean;
   private adminAuthSubscription: Subscription;
