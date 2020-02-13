@@ -48,6 +48,8 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
 
   public loadingData: boolean = true;
 
+  private defaultDisplayDay: number = moment().month() > 10 ? 2 : 5;
+
   private playerUpdateSubscription: Subscription;
   private coreSubscription: Subscription;
   private loadingSubscription: Subscription;
@@ -58,7 +60,7 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
     this.loadingData = true;
     
     this.dateSelected = {
-      startDate: moment().subtract(7, 'days').set('hour', 0).set('minute', 0).set('second', 0),
+      startDate: moment().subtract(this.defaultDisplayDay, 'days').set('hour', 0).set('minute', 0).set('second', 0),
       endDate: moment().set('hour', 0).set('minute', 0).set('second', 0),
     }
 
@@ -127,6 +129,9 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
   }
 
   onChangeDate() {
+    if (this.dateSelected.endDate.diff(this.dateSelected.startDate, 'days') > this.defaultDisplayDay) {
+      this.dateSelected.startDate = this.dateSelected.endDate.subtract(this.defaultDisplayDay + 1, 'days').set('hour', 0).set('minute', 0).set('second', 0);
+    }
     this.onReloadPlayerUpdateRecords();
   }
 
