@@ -119,7 +119,7 @@ export const Leagues: LeagueData[] = [
           792295,
           781042,
           788871,
-          788966,
+          792398,
           792341,
           792248
         ]
@@ -284,7 +284,7 @@ export const Leagues: LeagueData[] = [
       {
         year: 2020,
         teams: [
-          786542,
+          792399,
           788994,
           792274,
           107351,

@@ -430,6 +430,11 @@ export const Clubs: ClubData[] = [
     shortname: "鈴鹿"
   },
   {
+    id: 792398,
+    name: "鈴鹿ポイントゲッターズ",
+    shortname: "鈴鹿"
+  },
+  {
     id: 107326,
     name: "北海道十勝スカイアース",
     shortname: "十勝"
@@ -672,6 +677,11 @@ export const Clubs: ClubData[] = [
     id: 786542,
     name: "バンディオンセ加古川",
     shortname: "加古川"
+  },
+  {
+    id: 792399,
+    name: "チェントクオーレハリマ",
+    shortname: "播磨"
   },
   {
     id: 788994,
