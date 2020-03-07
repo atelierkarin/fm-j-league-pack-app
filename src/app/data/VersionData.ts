@@ -40,9 +40,9 @@ export const fmVersionDataList: VersionData[] = [
         title: "Football Manager 2020 Jリーグデータパック",
         subtitle: "Football Manager 2020向け、J1から地域リーグまでのデータパック",
         latest: {
-          url: "https://firebasestorage.googleapis.com/v0/b/fm-j-league-pack.appspot.com/o/v2.0.0-beta.1.zip?alt=media&token=72e62542-8652-4946-b6eb-59101099d6d5",
-          version: "v2.0.0-beta.1",
-          updateDate: "2020/02/21",
+          url: "https://firebasestorage.googleapis.com/v0/b/fm-j-league-pack.appspot.com/o/v2.0.0-beta.3.zip?alt=media&token=fda8db67-b79a-46c0-ac6f-6aa44b8f8f63",
+          version: "v2.0.0-beta.3",
+          updateDate: "2020/03/07",
         },
         otherVersion: {
           url: "https://drive.google.com/open?id=1le3vQy7HNwH-77Y4lIrGgyy7FafQEfGI"
@@ -51,8 +51,8 @@ export const fmVersionDataList: VersionData[] = [
           url: "https://drive.google.com/open?id=15ziJadXm9eCJFUM5mEQnArA0vU3eQwBr"
         },
         mainContent: `<p>FM2020向け、Jリーグパックです。J1から地域リーグまでのデータを収録しています。</p>
-        <p><strong>FM20.3向けのバージョンは現状ベータリリースです、もしなにか問題や不具合が発生した場合、どうぞ掲示板で報告してください。</strong></p>
-        <p><strong>また、FM20.0を利用する方は、<a target="_blank" href="https://firebasestorage.googleapis.com/v0/b/fm-j-league-pack.appspot.com/o/v1.0.3.zip?alt=media&token=965da9dd-0401-4b13-8bf1-362c9b2b4cea">v1.0.3</a>を利用してください</strong></p>
+        <p>v2.0.xはFM20.4向けの最新バージョンです。現在はベータリリースです。</p>
+        <p><strong>FM20.0を利用する方は、<a target="_blank" href="https://firebasestorage.googleapis.com/v0/b/fm-j-league-pack.appspot.com/o/v1.0.3.zip?alt=media&token=965da9dd-0401-4b13-8bf1-362c9b2b4cea">v1.0.3</a>を利用してください</strong></p>
         <p>基本、v1.0.xは初期バージョンで、FM2019から移植したものだけです。このバージョンはシーズン2019ベースとなっています。FMでは2月か3月では冬の移籍市場を対応した大型アップデートをリリースするので、その時期に合わせてシーズン2020のデータv2.0.xをリリースする予定です。これはFM2019でも同じやり方だったので、プレイするシーズンに合わせてバージョンデータを選択してください。</p>
         <p>ちなみに能力修正などのアップデートはv2.0.xのみで、v1.0.xは不具合やバグ修正だけのことです。</p>
         <p><span style="color: #ff0000;"><strong>同梱されたJリーグ構成は一応地域リーグ１部まではプレイ可能ですが、自分はアドバンスドルールが不得意なので、調整があまり良くない場合もあります。</strong></span>もし他のところに良いJリーグ構成があったら、本パックのデータだけを利用し、他の構成を使うのも構いません。</p>`,
