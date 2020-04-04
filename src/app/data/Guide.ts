@@ -19,8 +19,8 @@ export const fmGuide: Guide[] = [
       },
       {
         title: "適用する前に",
-        content: `<p>まずはFM 2019をインストールすることですが、インストールが終わったら、まずはFM公式が用意した偽データを削除する必要があります。これを削除しないと、クラブの名前は変な名前のままです。</p>
-        <p>インストールの場所によるが、デフォルトは<code>C:\\Program Files\\Steam\\steamapps\\common\\Football Manager 2020\\data\\db\\</code>を探してください。<br />または、ライブラリからFootball Manager 2019で右クリックし、プロパティを選択、「ローカルファイル」を選択、そして「ローカルファイルを閲覧」をクリックしてください。するとインストールフォルダが表示されますので、dataフォルダ→dbフォルダを探してください。</p>
+        content: `<p>まずはFM 2020をインストールすることですが、インストールが終わったら、まずはFM公式が用意した偽データを削除する必要があります。これを削除しないと、クラブの名前は変な名前のままです。</p>
+        <p>インストールの場所によるが、デフォルトは<code>C:\\Program Files\\Steam\\steamapps\\common\\Football Manager 2020\\data\\db\\</code>を探してください。<br />または、ライブラリからFootball Manager 2020で右クリックし、プロパティを選択、「ローカルファイル」を選択、そして「ローカルファイルを閲覧」をクリックしてください。するとインストールフォルダが表示されますので、dataフォルダ→dbフォルダを探してください。</p>
         <p><img class="hatena-fotolife" title="f:id:karinchan:20180113120833p:plain" src="https://cdn-ak.f.st-hatena.com/images/fotolife/k/karinchan/20180113/20180113120833.png" alt="f:id:karinchan:20180113120833p:plain" /></p>
         <p><img class="hatena-fotolife" title="f:id:karinchan:20180113121413p:plain" src="https://cdn-ak.f.st-hatena.com/images/fotolife/k/karinchan/20180113/20180113121413.png" alt="f:id:karinchan:20180113121413p:plain" /></p>
         <p>そこでは2000や2010などのフォルダがありますが、バージョン別のデータですが、念のために以下のものを全部削除してください：</p>
