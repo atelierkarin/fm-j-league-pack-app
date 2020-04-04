@@ -6,7 +6,6 @@
   </div>
 </ng-container>
 <ng-template #elseLoadedTemplate>
-
   <div class="container-fluid" *ngIf="club">
     <h3 class="club-name-col" [ngStyle]="getClubStyle()">{{ club.name }}</h3>
     <div class="card mb-2">
@@ -43,6 +42,7 @@
             name="背番号"
             prop="squardNo"
             [flexGrow]="1"
+            [comparator]="sortSquadNo"
           ></ngx-datatable-column>
           <ngx-datatable-column name="名前" prop="name" [flexGrow]="4">
             <ng-template
@@ -89,6 +89,12 @@
               </h5>
             </ng-template>
           </ngx-datatable-column>
+          <ngx-datatable-column
+            name="更新時間"
+            prop="updateDate"
+            [flexGrow]="1"
+            *ngIf="innerWidth > 768"
+          ></ngx-datatable-column>
         </ngx-datatable>
       </div>
     </div>

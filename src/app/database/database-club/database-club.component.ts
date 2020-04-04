@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -57,9 +57,12 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
     ca?: number;
     pa?: number;
     updateThisWeek: boolean;
+    updateDate: string;
   }[];
 
   private databaseSubscription: Subscription;
+
+  public innerWidth: any;
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -68,6 +71,8 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    this.innerWidth = window.innerWidth;
+
     this.staff = [];
     this.players = [];
     this.route.paramMap.subscribe(paramMap => {
@@ -139,7 +144,8 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
               loanIn,
               ca,
               pa,
-              updateThisWeek
+              updateThisWeek,
+              updateDate: player.basicInfo.updateDate
             };
           } else return null
         }).filter(v => v)
@@ -234,5 +240,18 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
     else if (ca >= leagueGuideline[2]) return "avereage-ca";
     else if (ca >= leagueGuideline[3]) return "poor-ca";
     else return "bad-ca"
+  }
+
+  sortSquadNo(valueA, valueB, rowA, rowB, sortDirection) {
+    let defaultEmptyValue = sortDirection === "asc" ? 99999 : 0;
+    let sortValueA = valueA ? valueA : defaultEmptyValue;
+    let sortValueB = valueB ? valueB : defaultEmptyValue;
+
+    return sortValueA > sortValueB ? 1 : sortValueA < sortValueB ? -1 : 0;
+  }
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event) {
+    this.innerWidth = window.innerWidth;
   }
 }
