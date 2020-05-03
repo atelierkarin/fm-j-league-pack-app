@@ -15,4 +15,4 @@ jobs:
       with:
         node-version: '10.x'
     - run: npm install
-    - run: ng build --prod
+    - run: npm run build
