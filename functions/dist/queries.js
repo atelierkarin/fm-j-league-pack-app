@@ -15,6 +15,8 @@ var _firebaseFunctions = require('firebase-functions');
 
 var functions = _interopRequireWildcard(_firebaseFunctions);
 
+var _tools = require('./tools.js');
+
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 admin.initializeApp(functions.config().firebase);
@@ -53,35 +55,6 @@ var playerUpdatesByDate = function playerUpdatesByDate(parent, args, context, in
 };
 
 var latestDatabaseUpdate = function latestDatabaseUpdate(parent, args, context, info) {
-  // return db.collection('playerDbChangelog')
-  //   .orderBy('updateDate', 'desc')
-  //   .limit(10)
-  //   .get()
-  //   .then((snapshot) => {
-  //     let latestDatabaseUpdateId = [];
-  //     snapshot.forEach((doc) => {
-  //       const updateRecords = doc.data();
-  //       latestDatabaseUpdateId.push(updateRecords.id);
-  //     });
-  //     return db.collection('playerDb')
-  //       .where('id', 'in', latestDatabaseUpdateId)
-  //       .get();
-  //   })
-  //   .then((snapshot) => {
-  //     let dbItems = [];
-  //     snapshot.forEach((doc) => {
-  //       const dbItem = doc.data();
-  //       dbItems.push({
-  //         id: doc.id,
-  //         name: dbItem.player.basicInfo.name,
-  //         dob: dbItem.player.basicInfo.dob
-  //       });
-  //     });
-  //     return dbItems;
-  //   })
-  //   .catch((err) => {
-  //     console.log('Error getting documents', err);
-  //   })
   return db.collection('playerDb').orderBy('player.basicInfo.updateDate', 'desc').limit(15).get().then(function (snapshot) {
     var dbItems = [];
     snapshot.forEach(function (doc) {
@@ -104,9 +77,23 @@ var clientInfo = function clientInfo(parent, args, context, info) {
   return context.userIp;
 };
 
+var queryCa = function queryCa(parent, args, context, info) {
+  var pos = args.pos;
+  var clubPoints = args.clubPoints;
+  var matches = args.matches;
+  var leagueRep = args.leagueRep;
+  var app = args.app;
+  var gls = args.gls;
+
+  console.log("queryCa");
+
+  return (0, _tools.queryRegionalLeagueCA)(pos, clubPoints, matches, leagueRep, app, gls);
+};
+
 var Query = exports.Query = {
   playerUpdates: playerUpdates,
   playerUpdatesByDate: playerUpdatesByDate,
   latestDatabaseUpdate: latestDatabaseUpdate,
-  clientInfo: clientInfo
+  clientInfo: clientInfo,
+  queryCa: queryCa
 };

@@ -41,6 +41,10 @@ export const typeDefs = gql`
     updateDate: String
     club: Int
   }
+  
+  type RegionalLeagueModelResponse {
+    ca: Int!
+  }
 
   type Query {
     playerUpdates: [PlayerUpdate]
@@ -49,5 +53,7 @@ export const typeDefs = gql`
     clientInfo: String
 
     latestDatabaseUpdate: [PlayerBasicInfo]
+
+    queryCa(pos: String!, clubPoints: Int!, matches: Int!, leagueRep: Int!, app: Int!, gls: Int!): RegionalLeagueModelResponse
   }
 `;

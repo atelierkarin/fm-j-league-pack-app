@@ -1,6 +1,8 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
+import { queryRegionalLeagueCA } from './tools.js'
+
 admin.initializeApp(functions.config().firebase);
 
 const db = admin.firestore();
@@ -47,35 +49,6 @@ const playerUpdatesByDate = (parent, args, context, info) => {
 }
 
 const latestDatabaseUpdate = (parent, args, context, info) => {
-  // return db.collection('playerDbChangelog')
-  //   .orderBy('updateDate', 'desc')
-  //   .limit(10)
-  //   .get()
-  //   .then((snapshot) => {
-  //     let latestDatabaseUpdateId = [];
-  //     snapshot.forEach((doc) => {
-  //       const updateRecords = doc.data();
-  //       latestDatabaseUpdateId.push(updateRecords.id);
-  //     });
-  //     return db.collection('playerDb')
-  //       .where('id', 'in', latestDatabaseUpdateId)
-  //       .get();
-  //   })
-  //   .then((snapshot) => {
-  //     let dbItems = [];
-  //     snapshot.forEach((doc) => {
-  //       const dbItem = doc.data();
-  //       dbItems.push({
-  //         id: doc.id,
-  //         name: dbItem.player.basicInfo.name,
-  //         dob: dbItem.player.basicInfo.dob
-  //       });
-  //     });
-  //     return dbItems;
-  //   })
-  //   .catch((err) => {
-  //     console.log('Error getting documents', err);
-  //   })
   return db.collection('playerDb')
       .orderBy('player.basicInfo.updateDate', 'desc')
       .limit(15)
@@ -103,9 +76,23 @@ const clientInfo = (parent, args, context, info) => {
   return context.userIp;
 }
 
+const queryCa = (parent, args, context, info) => {
+  const pos = args.pos;
+  const clubPoints = args.clubPoints;
+  const matches = args.matches;
+  const leagueRep = args.leagueRep;
+  const app = args.app;
+  const gls = args.gls;
+
+  console.log("queryCa")
+
+  return queryRegionalLeagueCA(pos, clubPoints, matches, leagueRep, app, gls);
+}
+
 export const Query = {
   playerUpdates,
   playerUpdatesByDate,
   latestDatabaseUpdate,
-  clientInfo
+  clientInfo,
+  queryCa
 }
