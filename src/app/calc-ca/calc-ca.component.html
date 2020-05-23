@@ -1,0 +1,89 @@
+<div class="container p-2">
+
+  <div class="alert alert-secondary">
+    実験用のため、APIにリクエスト上限が設定されています。
+  </div>
+
+  <div class="alert alert-danger" *ngIf="updateError">
+    エラーのようです
+  </div>
+
+  <div class="alert alert-success" *ngIf="calculatedCa">
+    計算された CA は <b>{{ calculatedCa }}</b> です
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      選手のCAの演算（地域リーグのみ）
+    </div>
+    <div class="card-body">
+      <form (ngSubmit)="onSubmitCreate(f)" #f="ngForm">
+        <div class="form-group">
+          <label for="pos">ポジション</label>
+          <ng-select id="pos" [items]="posList" bindLabel="name" bindValue="value" required [(ngModel)]="pos" [ngModelOptions]="{standalone: true}"></ng-select>
+        </div>
+        <div class="form-group">
+          <label for="version">クラブ勝点</label>
+          <input
+            id="clubPoints"
+            class="form-control"
+            ngModel
+            name="clubPoints"
+            type="number"
+            required
+            min="0"
+            max="100"
+          />
+        </div>
+        <div class="form-group">
+          <label for="version">試合数</label>
+          <input
+            id="matches"
+            class="form-control"
+            ngModel
+            name="matches"
+            type="number"
+            required
+            min="0"
+            max="50"
+          />
+        </div>
+        <div class="form-group">
+          <label for="leagueRep">リーグ</label>
+          <ng-select id="leagueRep" [items]="leagueList" bindLabel="name" bindValue="value" required [(ngModel)]="leagueRep" [ngModelOptions]="{standalone: true}"></ng-select>
+        </div>
+        <div class="form-group">
+          <label for="version">試合出場数</label>
+          <input
+            id="app"
+            class="form-control"
+            ngModel
+            name="app"
+            type="number"
+            required
+            min="0"
+            max="50"
+          />
+        </div>
+        <div class="form-group">
+          <label for="version">得点</label>
+          <input
+            id="gls"
+            class="form-control"
+            ngModel
+            name="gls"
+            type="number"
+            required
+            min="0"
+            max="100"
+          />
+        </div>
+        <div class="text-center my-2">
+          <button class="btn btn-primary mr-2" type="submit" [disabled]="!f.valid" *ngIf="!loading">計算</button>
+          <button class="btn btn-secondary" type="reset" [disabled]="!f.dirty" *ngIf="!loading">リセット</button>
+          <span *ngIf="loading">計算中</span>
+        </div>        
+      </form>
+    </div>    
+  </div>
+</div>
