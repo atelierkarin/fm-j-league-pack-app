@@ -1,7 +1,7 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
+**/dist
 /tmp
 /out-tsc
 # Only exists if Bazel was run
@@ -52,3 +52,6 @@ src/environments/*
 
 # Custom
 src/assets/*
+
+# Secret Keys
+**/fm-j-league-pack-*
