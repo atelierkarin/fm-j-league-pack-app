@@ -39,6 +39,7 @@ import { PlayerUpdateEffects } from "./player-update/store/player-update.effects
 import { DatabaseEffects } from "./database/store/database.effects";
 import { DiscussAreaEffects } from "./database/database-player/discuss-area/store/discuss-area.effects";
 import { ChangelogEffects } from "./database/database-player/changelog/store/changelog.effects";
+import { CalcCaEffects } from "./calc-ca/store/calc-ca.effects";
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import { ChangelogEffects } from "./database/database-player/changelog/store/cha
       PlayerUpdateEffects,
       DatabaseEffects,
       DiscussAreaEffects,
-      ChangelogEffects
+      ChangelogEffects,
+      CalcCaEffects
     ]),
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
