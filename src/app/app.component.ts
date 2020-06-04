@@ -8,8 +8,7 @@ import { filter } from 'rxjs/operators';
 
 import * as fromApp from './store/app.reducer';
 import * as AdminActions from './admin/store/admin.actions';
-
-import * as firebase from 'firebase/app';
+import * as DatabaseActions from '../database/store/database.actions';
 
 @Component({
   selector: 'app-root',
@@ -39,5 +38,7 @@ export class AppComponent {
       .subscribe((params: any) => {
         this.gaService.sendPageView(params.url);
       });
+
+    this.store.dispatch(new DatabaseActions.LoadLatestUpdatePlayers());
   }
 }
