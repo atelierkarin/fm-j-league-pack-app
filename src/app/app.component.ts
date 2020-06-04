@@ -8,7 +8,7 @@ import { filter } from 'rxjs/operators';
 
 import * as fromApp from './store/app.reducer';
 import * as AdminActions from './admin/store/admin.actions';
-import * as DatabaseActions from '../database/store/database.actions';
+import * as DatabaseActions from './database/store/database.actions';
 
 @Component({
   selector: 'app-root',
