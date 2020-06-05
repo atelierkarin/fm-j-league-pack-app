@@ -6,6 +6,8 @@ import * as fromApp from '../../store/app.reducer';
 
 import * as VersionData from '../../data/VersionData';
 
+import anime from 'animejs';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -25,7 +27,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private coreSubscription: Subscription;
 
-  constructor(private store: Store<fromApp.AppState>) { }
+  constructor(private store: Store<fromApp.AppState>) {}
 
   ngOnInit() {
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
@@ -41,6 +43,25 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.coreSubscription) {
       this.coreSubscription.unsubscribe();
     }
+  }
+
+  ngAfterViewInit(): void {
+    let tl = anime.timeline({
+      easing: 'easeOutExpo',
+      duration: 750
+    });
+
+    tl
+      .add({
+        targets: '.fm-j-league-pack-contents .basic',
+        translateX: [1000, 0],
+        opacity: [0, 1]
+      })
+      .add({
+        targets: '.fm-j-league-pack-contents .note',
+        translateX: [-1000, 0],
+        opacity: [0, 1]
+      })
   }
 
   getTitle() {

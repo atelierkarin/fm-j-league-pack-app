@@ -18,6 +18,8 @@ import * as Clubs from "../../data/fmJDatabase/Clubs.data";
 })
 export class DatabaseMainComponent implements OnInit, OnDestroy {
 
+  public loading: boolean;
+
   public leagues: Leagues.LeagueData[] = Leagues.Leagues;
 
   public latestUpdatePlayers: {id: string, name: string, dob?: string}[];
@@ -34,6 +36,7 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
       .subscribe(databaseState => {
         this.latestUpdatePlayers = databaseState.latestPlayers;
         this.season = databaseState.season;
+        this.loading = databaseState.loading;
       });
   }
 

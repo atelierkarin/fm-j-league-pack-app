@@ -1,15 +1,17 @@
 <div class="container-fluid" *ngIf="league">
-  <nav aria-label="breadcrumb">
+  <!-- <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       <li class="breadcrumb-item"><a [routerLink]="['/database']">データベース</a></li>
       <li class="breadcrumb-item active" aria-current="page">{{ league.name }}</li>
     </ol>
-  </nav>
-
+  </nav> -->
   <div class="container-fluid">
     <div class="row">
       <div class="col-12 col-md-6 col-lg-4 p-1" *ngFor="let clubId of clubs">
-        <button class="btn btn-block btn-outline-secondary" (click)="onClickClub(clubId)" [ngStyle]="getClubStyle(clubId) ? getClubStyle(clubId) : null">
+        <button class="btn btn-block btn-outline-secondary club-button"
+          [ngClass]="'club-button-of-league-' + leagueId"
+          (click)="onClickClub(clubId)"
+          [ngStyle]="getClubStyle(clubId) ? getClubStyle(clubId) : null">
           {{ getClubName(clubId) }}
         </button>        
       </div>

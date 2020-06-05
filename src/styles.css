@@ -10,3 +10,34 @@ body {
   margin: 0;
   font-family: "Cabin", "Noto Sans JP", "Helvetica Neue", sans-serif !important;
 }
+
+.fm-j-league-pack-guide .nav-tabs .nav-link {
+  border-top: 3px solid #fff;
+}
+.fm-j-league-pack-guide .nav-tabs .nav-link:hover {
+  border-top: 3px solid #ccc;
+}
+
+.fm-j-league-pack-guide .nav-tabs .nav-link.active {
+  border-top: 3px solid #28a745;
+}
+
+.fm-j-league-pack-guide img.full-image {
+  width: 100%;
+}
+
+.fm-j-league-pack-no-guide {
+  padding-top: 83px;
+}
+
+.fm-j-league-pack-no-guide h1 {
+  color: rgba(0,0,0,.4);
+  font-size: 150px;
+}
+
+.fm-j-league-pack-no-guide .error-text {
+  color: rgba(0,0,0,.4);
+  line-height: 21px;
+  margin-top: 60px;
+  white-space: pre-wrap;
+}

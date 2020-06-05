@@ -16,14 +16,22 @@
       <li class="nav-item" routerLinkActive="active" *ngIf="currentVersionData">
         <a class="nav-link" (click)="onResetCollapse()" routerLink="/history">リリースノート</a>
       </li>
-      <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" (click)="onResetCollapse()" routerLink="/playerUpdate">選手更新履歴</a>
-      </li>
-      <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" (click)="onResetCollapse()" routerLink="/database">選手データベース（実験中）</a>
-      </li>
-      <li class="nav-item" routerLinkActive="active">
-        <a class="nav-link" (click)="onResetCollapse()" routerLink="/calcCa">選手のCA計算（実験中）</a>
+      <li class="nav-item" ngbDropdown>
+        <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="navbarPlayerDropdown" role="button">
+          選手・スタッフ関連の情報
+        </a>
+        <div ngbDropdownMenu aria-labelledby="navbarPlayerDropdown" class="dropdown-menu">
+          <button ngbDropdownItem routerLinkActive="active" routerLink="/playerUpdate" (click)="onResetCollapse()">
+            選手更新履歴
+          </button>
+          <hr />
+          <button ngbDropdownItem routerLinkActive="active" routerLink="/database" (click)="onResetCollapse()">
+            選手データベース（実験中）
+          </button>
+          <button ngbDropdownItem routerLinkActive="active" routerLink="/calcCa" (click)="onResetCollapse()">
+            選手のCA計算（実験中）
+          </button>
+        </div>
       </li>
     </ul>
     <ul class="navbar-nav">

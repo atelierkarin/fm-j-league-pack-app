@@ -4,8 +4,8 @@ import { Subscription } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import * as moment from 'moment';
-import * as localization from 'moment/locale/ja';
-moment.locale('ja', localization);
+import 'moment/locale/ja'
+moment.locale('ja');
 
 import * as fromApp from '../store/app.reducer';
 import * as PlayerUpdateActions from './store/player-update.actions';
