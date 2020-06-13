@@ -2,8 +2,8 @@
   <div class="background"></div>
   <div class="background-overlay"></div>
   <div class="content">
-    <h1>{{ getTitle() }}</h1>
-    <h5 class="text-secondary">{{ getSubtitle() }}</h5>
+    <h1 class="page-title">{{ getTitle() }}</h1>
+    <h5 class="text-secondary page-subtitle">{{ getSubtitle() }}</h5>
     <div class="container">
       <div class="fm-j-league-buttons mt-5">
         <button type="button" class="btn btn-lg btn-outline-primary m-1" [disabled]="currentVersionData.content.home.latest.url === null" (click)="onDownload()">最新バージョンをダウンロード</button>
