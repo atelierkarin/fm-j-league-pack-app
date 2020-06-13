@@ -26,7 +26,9 @@ export class DatabaseLeagueComponent implements OnInit, OnDestroy {
 
   public getClubByAlias = Clubs.getClubByAlias;
 
-  private databaseSubscription: Subscription;  
+  private databaseSubscription: Subscription;
+
+  private animated: boolean = false;
 
   constructor(private store: Store<fromApp.AppState>, private route: ActivatedRoute, private router: Router) { }
 
@@ -76,18 +78,22 @@ export class DatabaseLeagueComponent implements OnInit, OnDestroy {
   }
 
   private animateTeamButtons() {
-    let tl = anime.timeline({
-      easing: 'easeOutExpo',
-      duration: 500
-    });
+    if (this.animated === false) {
+      this.animated = true;
+      
+      let tl = anime.timeline({
+        easing: 'easeOutExpo',
+        duration: 500
+      });
 
-    tl
-      .add({
-        targets: '.club-button-of-league-' + this.leagueId,
-        translateY: [500, 0],
-        opacity: [0, 1],
-        delay: anime.stagger(100)
-      })
+      tl
+        .add({
+          targets: '.club-button-of-league-' + this.leagueId,
+          translateY: [500, 0],
+          opacity: [0, 1],
+          delay: anime.stagger(100)
+        })
+    }
   }
 
 }
