@@ -244,8 +244,8 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
 
   sortSquadNo(valueA, valueB, rowA, rowB, sortDirection) {
     let defaultEmptyValue = sortDirection === "asc" ? 99999 : 0;
-    let sortValueA = valueA ? valueA : defaultEmptyValue;
-    let sortValueB = valueB ? valueB : defaultEmptyValue;
+    let sortValueA = valueA ? parseInt(valueA) : defaultEmptyValue;
+    let sortValueB = valueB ? parseInt(valueB) : defaultEmptyValue;
 
     return sortValueA > sortValueB ? 1 : sortValueA < sortValueB ? -1 : 0;
   }
