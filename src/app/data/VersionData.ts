@@ -40,9 +40,9 @@ export const fmVersionDataList: VersionData[] = [
         title: "Football Manager 2020 Jリーグデータパック",
         subtitle: "Football Manager 2020向け、J1から地域リーグまでのデータパック",
         latest: {
-          url: "https://drive.google.com/file/d/1ElvBUxd3aC6aqmV4pUbbOoEIJeZvy7h4/view?usp=sharing",
-          version: "v2.0.2",
-          updateDate: "2020/05/09",
+          url: "https://drive.google.com/file/d/18dpIC3F9CM7Z1ZkpwiB3_wzQGDgfDBGG/view?usp=sharing",
+          version: "v2.0.3",
+          updateDate: "2020/06/07",
         },
         otherVersion: {
           url: "https://drive.google.com/open?id=1le3vQy7HNwH-77Y4lIrGgyy7FafQEfGI"
