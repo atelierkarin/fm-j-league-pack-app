@@ -40,6 +40,7 @@ import { DatabaseEffects } from "./database/store/database.effects";
 import { DiscussAreaEffects } from "./database/database-player/discuss-area/store/discuss-area.effects";
 import { ChangelogEffects } from "./database/database-player/changelog/store/changelog.effects";
 import { CalcCaEffects } from "./calc-ca/store/calc-ca.effects";
+import { DiscussBoardComponent } from './discuss-board/discuss-board.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { CalcCaEffects } from "./calc-ca/store/calc-ca.effects";
     HistoryItemComponent,
     PlayerUpdateComponent,
     PlayerUpdateCardComponent,
-    RecordTableComponent
+    RecordTableComponent,
+    DiscussBoardComponent
   ],
   imports: [
     BrowserModule,

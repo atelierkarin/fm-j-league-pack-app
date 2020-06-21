@@ -1,4 +1,4 @@
-<header class="navbar navbar-dark bg-dark navbar-fixed-top navbar-expand-lg">
+<header class="navbar navbar-dark bg-dark navbar-fixed-top navbar-expand-lg sticky-top">
   <a class="navbar-brand" routerLink="/">FM Jリーグパック</a>
 
   <button class="navbar-toggler navbar-toggler-right" type="button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="fmjleagueNavbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@
         <a class="nav-link" (click)="onResetCollapse()" href="#" (click)="onGotoBlog()">ブログバージョン（旧）</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#" (click)="onGotoDiscuss()">掲示板</a>
+        <a class="nav-link" routerLinkActive="active" routerLink="/discuss" (click)="onResetCollapse()">掲示板</a>
       </li>
       <li class="nav-item" ngbDropdown>
         <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="fmVersionDropdown" role="button">

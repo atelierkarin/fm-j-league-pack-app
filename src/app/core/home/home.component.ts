@@ -7,6 +7,7 @@ import * as fromApp from '../../store/app.reducer';
 import * as VersionData from '../../data/VersionData';
 
 import anime from 'animejs';
+import { Meta } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-home',
@@ -27,7 +28,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private coreSubscription: Subscription;
 
-  constructor(private store: Store<fromApp.AppState>) {}
+  constructor(private store: Store<fromApp.AppState>, private meta: Meta) {}
 
   ngOnInit() {
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
@@ -36,6 +37,15 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.isOldVersion = this.currentVersionData ? this.currentVersionData.content.home.otherVersion !== undefined : false;
       this.isPreReleaseVersion = this.currentVersionData ? this.currentVersionData.content.home.betaVersion !== undefined : false;
       this.isBrowseUpdateHistory = this.currentVersionData ? this.currentVersionData.content.home.playerUpdateHistory !== undefined : false;
+
+      this.meta.addTag({name: "description", content: this.getSubtitle()});
+
+      // Twitter用メタタグ
+      this.meta.addTag({name: "twitter:card", content: "summary"});
+      this.meta.addTag({name: "twitter:site", content: "@karinshiratori"});
+      this.meta.addTag({name: "twitter:title", content: this.getTitle()});
+      this.meta.addTag({name: "twitter:description", content: this.getSubtitle()});
+      this.meta.addTag({name: "twitter:text:description", content: this.getSubtitle()});
     })
   }
 
@@ -59,7 +69,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         translateZ: 0,
         easing: "easeOutExpo",
         duration: 950,
-        delay: (el, i) => 70*i
+        delay: (el, i) => 40*i
       })
       .add({
         targets: '.page-subtitle .letter',
@@ -68,7 +78,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         translateZ: 0,
         easing: "easeOutExpo",
         duration: 950,
-        delay: (el, i) => 70*i
+        delay: (el, i) => 40*i
       })
 
     anime.timeline({
