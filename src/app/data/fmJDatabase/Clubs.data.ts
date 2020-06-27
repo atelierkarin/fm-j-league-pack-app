@@ -382,37 +382,44 @@ export const Clubs: ClubData[] = [
   {
     id: 788910,
     name: "奈良クラブ",
-    shortname: "奈良"
+    shortname: "奈良",
+    color: ["#FF73D0", "#3D7BB8"]
   },
   {
     id: 792290,
     name: "ヴェルスパ大分",
-    shortname: "V大分"
+    shortname: "V大分",
+    color: ["#1E2021", "#CF1C2C"]
   },
   {
     id: 788934,
     name: "ラインメール青森",
-    shortname: "青森"
+    shortname: "青森",
+    color: ["#FAFAFA", "#2F55B5"]
   },
   {
     id: 792266,
     name: "ヴィアティン三重",
-    shortname: "三重"
+    shortname: "三重",
+    color: ["#1E2021", "#F26549"]
   },
   {
     id: 792316,
     name: "テゲバジャーロ宮崎",
-    shortname: "T宮崎"
+    shortname: "T宮崎",
+    color: ["#1E2021", "#CF1C2C"]
   },
   {
     id: 792295,
     name: "FCマルヤス岡崎",
-    shortname: "岡崎"
+    shortname: "岡崎",
+    color: ["#2D68B5", "#CF1C2C"]
   },
   {
     id: 781042,
     name: "ホンダロックSC",
-    shortname: "ホンダロック"
+    shortname: "ホンダロック",
+    color: ["#1E2021", "#CF1C2C"]
   },
   {
     id: 792315,
@@ -422,7 +429,8 @@ export const Clubs: ClubData[] = [
   {
     id: 788871,
     name: "松江シティFC",
-    shortname: "松江"
+    shortname: "松江",
+    color: ["#8B2435", "#FFE252"]
   },
   {
     id: 788966,
@@ -432,7 +440,8 @@ export const Clubs: ClubData[] = [
   {
     id: 792398,
     name: "鈴鹿ポイントゲッターズ",
-    shortname: "鈴鹿"
+    shortname: "鈴鹿",
+    color: ["#ADDF7A", "#2F55B5"]
   },
   {
     id: 107326,
@@ -522,7 +531,8 @@ export const Clubs: ClubData[] = [
   {
     id: 792248,
     name: "いわきFC",
-    shortname: "いわき"
+    shortname: "いわき",
+    color: ["#293FAD", "#CF1C2C"]
   },
   {
     id: 792387,
@@ -808,7 +818,8 @@ export const Clubs: ClubData[] = [
   {
     id: 792341,
     name: "高知ユナイテッドSC",
-    shortname: "高知"
+    shortname: "高知",
+    color: ["#4FB591", "#CF1C2C"]
   },
   {
     id: 792385,
