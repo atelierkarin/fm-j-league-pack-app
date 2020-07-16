@@ -5,7 +5,6 @@ import { from, of, throwError } from "rxjs";
 
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
-import { QueryRef } from 'apollo-angular/QueryRef';
 import gql from 'graphql-tag';
 
 import * as CalcCaActions from './calc-ca.actions'

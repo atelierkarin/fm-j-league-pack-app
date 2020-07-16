@@ -6,7 +6,6 @@ import { Router } from '@angular/router';
 
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
-import { QueryRef } from 'apollo-angular/QueryRef';
 import gql from 'graphql-tag';
 
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -52,11 +51,6 @@ query ($fmVersion: String!, $startDate: String!, $endDate: String!) {
 
 @Injectable()
 export class PlayerUpdateEffects {
-
-  private useServer: boolean;
-  private payload: string;
-
-  private playerUpdatesByDateQueryRef: QueryRef<any>;
 
   private formatDate(date: Date, format: string) {
     format = format.replace(/yyyy/g, '' + date.getFullYear());
