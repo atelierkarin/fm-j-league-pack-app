@@ -144,7 +144,7 @@ export class AdminPlayerUpdateComponent implements OnInit {
     } : null;
 
     const filetype = parseInt(form.value.filetype);
-    const previousFiletype = form.value.previousFiletype !== undefined && form.value.previousFiletype !== null ? parseInt(form.value.previousFiletype) : null;
+    const previousFiletype = form.value.previousFiletype !== undefined && form.value.previousFiletype !== null && form.value.previousFiletype !== '' ? parseInt(form.value.previousFiletype) : null;
 
     const futureTransferClubName = form.value.futureTransferClubName;
     const futureTransferClubNationality = this.futureTransferClubNationality;
