@@ -33,6 +33,20 @@
           </button>
         </div>
       </li>
+      <li class="nav-item" ngbDropdown>
+        <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="navbarToolDropdown" role="button">
+          ツール
+        </a>
+        <div ngbDropdownMenu aria-labelledby="navbarPlayerDropdown" class="dropdown-menu">
+          <button ngbDropdownItem (click)="onJpNameRemoverTool()">
+            日本語表記削除
+          </button>
+          <hr />
+          <button ngbDropdownItem (click)="onFacepackTool()">
+            フェイスパック変換
+          </button>
+        </div>
+      </li>
     </ul>
     <ul class="navbar-nav">
       <li *ngIf="isAdmin" class="nav-item" routerLinkActive="active">

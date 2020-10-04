@@ -88,6 +88,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.store.dispatch(new AdminActions.Logout());
   }
 
+  onJpNameRemoverTool() {
+    this.openUrl("https://j-league-fm-tools.an.r.appspot.com/remover/");
+  }
+
+  onFacepackTool() {
+    this.openUrl("https://github.com/atelierkarin/fm-j-league-facepack-converter");
+  }
+
   // PRIVATE FUNCTIONS
 
   private openUrl(url: string) {

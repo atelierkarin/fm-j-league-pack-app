@@ -82,33 +82,9 @@ export class DatabaseEffects {
     switchMap((searchPlayers: DatabaseActions.SearchPlayersByClub) => {
       this.tempPlayers = [];
       this.tempSearchPlayers = searchPlayers;
-
-      // Check if localStorage have
-      if (window.localStorage) {
-        const storageDataString = window.localStorage.getItem("club_" + this.tempSearchPlayers.payload);
-        if (storageDataString) {
-          try {
-            const storageData = JSON.parse(storageDataString);
-            if (storageData.expire && moment().valueOf() < storageData.expire) {
-              return from([[...storageData.data]])
-            }
-          } catch (err) {}
-        }
-      }
-      window.localStorage.removeItem("club_" + this.tempSearchPlayers.payload);
       return this.searchPlayersByClubFromServer(this.tempSearchPlayers.payload);
     }),
     map((players: {player: PlayerData, id: string}[]) => {
-      if (window.localStorage) {
-        const storageDataString = window.localStorage.getItem("club_" + this.tempSearchPlayers.payload);
-          if (!storageDataString) {
-          const expireDate = moment().add(3, 'days').valueOf();
-          window.localStorage.setItem("club_" + this.tempSearchPlayers.payload, JSON.stringify({
-            data: players,
-            expire: expireDate
-          }));
-        }
-      }
       return new DatabaseActions.SetSearchPlayers(players);
     }),
     catchError(() => {
