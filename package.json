@@ -1,6 +1,6 @@
 {
   "name": "fm-j-league-pack",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -12,7 +12,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/cdk": "^10.0.2",
+    "@angular/cdk": "^10.2.3",
     "@angular/common": "^10.1.4",
     "@angular/compiler": "^10.1.4",
     "@angular/core": "^10.1.4",
@@ -24,8 +24,8 @@
     "@angular/router": "^10.1.4",
     "@ng-bootstrap/ng-bootstrap": "^7.0.0",
     "@ng-select/ng-select": "^4.0.4",
-    "@ngrx/effects": "^9.2.0",
-    "@ngrx/store": "^9.2.0",
+    "@ngrx/effects": "^10.0.0",
+    "@ngrx/store": "^10.0.0",
     "@swimlane/ngx-datatable": "^17.1.0",
     "animejs": "^3.2.0",
     "apollo-angular": "^1.10.0",
@@ -38,7 +38,7 @@
     "graphql-tag": "^2.10.4",
     "moment": "^2.27.0",
     "ngx-daterangepicker-material": "^2.3.0",
-    "rxjs": "^6.5.5",
+    "rxjs": "^6.6.3",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.3"
   },
