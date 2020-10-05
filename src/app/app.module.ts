@@ -42,6 +42,11 @@ import { ChangelogEffects } from "./database/database-player/changelog/store/cha
 import { CalcCaEffects } from "./calc-ca/store/calc-ca.effects";
 import { DiscussBoardComponent } from './discuss-board/discuss-board.component';
 
+let apiDomain = "127.0.0.1";
+if (environment.production) {
+  apiDomain = "https://fm-j-league-pack.uc.r.appspot.com";
+}
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -85,7 +90,7 @@ import { DiscussBoardComponent } from './discuss-board/discuss-board.component';
 export class AppModule {
   constructor(apollo: Apollo, httpLink: HttpLink) {
     apollo.create({
-      link: httpLink.create({ uri: "https://us-central1-fm-j-league-pack.cloudfunctions.net/api" }),
+      link: httpLink.create({ uri: apiDomain }),
       cache: new InMemoryCache()
     });
   }
