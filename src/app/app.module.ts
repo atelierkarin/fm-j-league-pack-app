@@ -42,7 +42,7 @@ import { ChangelogEffects } from "./database/database-player/changelog/store/cha
 import { CalcCaEffects } from "./calc-ca/store/calc-ca.effects";
 import { DiscussBoardComponent } from './discuss-board/discuss-board.component';
 
-let apiDomain = "127.0.0.1";
+let apiDomain = "http://127.0.0.1:4000/";
 if (environment.production) {
   apiDomain = "https://fm-j-league-pack.uc.r.appspot.com";
 }
@@ -91,7 +91,9 @@ export class AppModule {
   constructor(apollo: Apollo, httpLink: HttpLink) {
     apollo.create({
       link: httpLink.create({ uri: apiDomain }),
-      cache: new InMemoryCache()
+      cache: new InMemoryCache({
+        addTypename: false
+      }),
     });
   }
 }

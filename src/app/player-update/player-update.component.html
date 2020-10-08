@@ -39,6 +39,7 @@
             [(ngModel)]="dateSelected"
             [locale]="datepickerLocale"
             [autoApply]="true"
+            [dateLimit]="defaultDisplayDay"
             (datesUpdated)="onChangeDate()"
             class="form-control"
           />

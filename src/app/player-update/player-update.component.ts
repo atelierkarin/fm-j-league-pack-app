@@ -48,7 +48,7 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
 
   public loadingData: boolean = true;
 
-  private defaultDisplayDay: number = moment().month() > 10 ? 2 : 5;
+  public defaultDisplayDay: number = moment().month() > 10 ? 3 : 7;
 
   private playerUpdateSubscription: Subscription;
   private coreSubscription: Subscription;
@@ -76,7 +76,8 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
       .select('playerUpdate')
       .pipe(map(playerUpdateState => playerUpdateState.playerUpdateRecords))
       .subscribe((records: PlayerUpdateModel.PlayerUpdate[]) => {
-        this.records = records.sort((a,b) => {
+        const sortRecords = [...records]
+        this.records = sortRecords.sort((a,b) => {
           const dateA = moment(a.activeDate).valueOf();
           const dateB = moment(b.activeDate).valueOf();
           if (dateB === dateA) {

@@ -15,8 +15,8 @@ import * as PlayerUpdateActions from './player-update.actions';
 import * as PlayerUpdateModel from '../player-update.model';
 
 const getPlayerUpdatesByDate = gql`
-query ($fmVersion: String!, $startDate: String!, $endDate: String!) {
-  playerUpdatesByDate(fmVersion: $fmVersion, startDate: $startDate, endDate: $endDate) {
+query ($startDate: String!, $endDate: String!) {
+  playerUpdatesByDate(startDate: $startDate, endDate: $endDate) {
     id
     fmVersion
     player {
@@ -49,6 +49,18 @@ query ($fmVersion: String!, $startDate: String!, $endDate: String!) {
   }
 }`;
 
+const mutationConfirmPlayerUpdate = gql`
+mutation($id: Int!) {
+  setPlayerUpdatesUpdateDate(id: $id)
+}
+`
+
+const mutationAddPlayerUpdate = gql`
+mutation($data: PlayerUpdateInput!) {
+  insertPlayerUpdate(data: $data)
+}
+`
+
 @Injectable()
 export class PlayerUpdateEffects {
 
@@ -67,12 +79,12 @@ export class PlayerUpdateEffects {
   fetchPlayerUpdate = this.actions$.pipe(
     ofType(PlayerUpdateActions.FETCH_PLAYER_UPDATE),
     switchMap((fetchPlayerUpdate: PlayerUpdateActions.FetchPlayerUpdate) => {
-      return this.apollo.watchQuery<any>({
+      return this.apollo.query<any>({
         query: getPlayerUpdatesByDate,
         variables: {
           ...fetchPlayerUpdate.payload
         }
-      }).valueChanges;
+      });
     }),
     map((result: ApolloQueryResult<any>) => {
       let playerUpdates = [];
@@ -81,7 +93,8 @@ export class PlayerUpdateEffects {
       }
       return new PlayerUpdateActions.SetPlayerUpdate(playerUpdates);
     }),
-    catchError(() => {
+    catchError((error) => {
+      console.error(error)
       return of(new PlayerUpdateActions.UpdateFail("SERVER FAIL"))
     })
   )
@@ -89,11 +102,13 @@ export class PlayerUpdateEffects {
   @Effect()
   addPlayerUpdate = this.actions$.pipe(
     ofType(PlayerUpdateActions.ADD_PLAYER_UPDATE),
-    switchMap((addPlayerHistory: PlayerUpdateActions.AddPlayerHistory) => {     
-      const newData = {
-        ...addPlayerHistory.payload
-      }
-      return from(this.db.collection<PlayerUpdateModel.PlayerUpdate>('playerUpdates').add(newData))
+    switchMap((addPlayerHistory: PlayerUpdateActions.AddPlayerHistory) => {   
+      return this.apollo.mutate<any>({
+        mutation: mutationAddPlayerUpdate,
+        variables: {
+          data: {...addPlayerHistory.payload}
+        }
+      });
     }),
     map(() => {
       return new PlayerUpdateActions.UpdateSuccess()
@@ -108,12 +123,13 @@ export class PlayerUpdateEffects {
     ofType(PlayerUpdateActions.CONFIRM_PLAYER_UPDATE),
     switchMap((confirmPlayerHistory: PlayerUpdateActions.ConfirmPlayerHistory) => {
       const originalRecord = confirmPlayerHistory.payload;
-      const id = originalRecord.id;
-      const updateRecord = {
-        ...originalRecord,
-        updateDate: this.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss")
-      }
-      return from(this.db.collection<PlayerUpdateModel.PlayerUpdate>('playerUpdates').doc(id).set(updateRecord))
+      const id = parseInt(originalRecord.id);
+      return this.apollo.mutate<any>({
+        mutation: mutationConfirmPlayerUpdate,
+        variables: {
+          id
+        }
+      });
     }),
     map(() => {
       return new PlayerUpdateActions.UpdateSuccess()
