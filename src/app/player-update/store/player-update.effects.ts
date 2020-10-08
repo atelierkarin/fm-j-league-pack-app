@@ -84,26 +84,6 @@ export class PlayerUpdateEffects {
     catchError(() => {
       return of(new PlayerUpdateActions.UpdateFail("SERVER FAIL"))
     })
-
-  //     this.useServer = false;
-  //     this.payload = fetchPlayerUpdate.payload;
-  //     const playerUpdate$ = this.db.collection<PlayerUpdateModel.PlayerUpdate>('playerUpdates', ref => ref.where('fmVersion', '==', this.payload))
-  //       .get({ source: "server" })
-  //     return playerUpdate$;
-  //   }),
-  //   map((docs: firebase.firestore.QuerySnapshot) => {
-  //     let playerUpdate = [];
-  //     docs.forEach(doc => {
-  //       playerUpdate.push({
-  //         id: doc.id,
-  //         ...doc.data()
-  //       })
-  //     })
-  //     return new PlayerUpdateActions.SetPlayerUpdate(playerUpdate);
-  //   }),
-  //   catchError(err => {
-  //     return of(new PlayerUpdateActions.UpdateFail("SERVER FAIL"))
-  //   })
   )
 
   @Effect()
