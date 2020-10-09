@@ -8,7 +8,7 @@ import * as fromApp from "../../store/app.reducer";
 import * as DatabaseActions from "../store/database.actions";
 
 import * as Leagues from '../../data/fmJDatabase/Leagues.data'
-import * as Clubs from "../../data/fmJDatabase/Clubs.data";
+import { ClubData } from '../../shared/database-filetype'
 import * as Players from "../../data/fmJDatabase/Players.data";
 import { PlayerData } from "../../data/fmJDatabase/PlayerData.interface";
 
@@ -25,15 +25,13 @@ import * as moment from 'moment';
 })
 export class DatabaseClubComponent implements OnInit, OnDestroy {
   public clubAlias: string;
-  public club: Clubs.ClubData;
-  public clubs: Clubs.ClubData[] = Clubs.Clubs;
+  public club: ClubData;
+  public clubs: ClubData[];
   public league: Leagues.LeagueData;
 
   public loading: boolean = true;
 
   public dbPlayers: {player: PlayerData, id: string}[];
-
-  public getClubByAlias = Clubs.getClubByAlias;
 
   public staff: {
     id: string;
@@ -60,6 +58,7 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
     updateDate: string;
   }[];
 
+  private coreSubscription: Subscription;
   private databaseSubscription: Subscription;
 
   public innerWidth: any;
@@ -77,8 +76,11 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
     this.players = [];
     this.route.paramMap.subscribe(paramMap => {
       this.clubAlias = paramMap.get("alias");
-      this.loadSeasonInfo();
     });
+    this.coreSubscription = this.store.select('core').subscribe(coreState => {
+      this.clubs = coreState.clubs;
+      this.loadSeasonInfo();
+    })
     this.databaseSubscription = this.store
       .select("database")
       .subscribe(databaseState => {
@@ -93,6 +95,8 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.coreSubscription)
+      this.coreSubscription.unsubscribe();
     if (this.databaseSubscription) {
       this.databaseSubscription.unsubscribe();
     }
@@ -100,11 +104,11 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   }
 
   loadSeasonInfo() {
-    if (this.clubAlias) {
-      this.club = this.getClubByAlias(this.clubAlias);
+    if (this.clubs && this.clubAlias) {
+      this.club = this.clubs.find(c => (c.id === parseInt(this.clubAlias) || c.clubName === this.clubAlias || c.clubShortname === this.clubAlias));
       this.league = Leagues.getCurrentLeague(this.club.id, moment().year());
       this.store.dispatch(new DatabaseActions.SearchPlayersByClub(this.club.id));
-      this.titleService.setTitle(this.club.name + " - Football Manager Jリーグデータパック");
+      this.titleService.setTitle(this.club.clubName + " - Football Manager Jリーグデータパック");
     } 
   }
 
@@ -207,10 +211,10 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   }
 
   getClubStyle() {
-    return this.club.color
+    return this.club.clubColor1
       ? {
-          backgroundColor: this.club.color[1],
-          color: this.club.color[0]
+          backgroundColor: this.club.clubColor2,
+          color: this.club.clubColor1
         }
       : null;
   }

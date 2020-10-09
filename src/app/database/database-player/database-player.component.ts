@@ -8,7 +8,7 @@ import * as fromApp from "../../store/app.reducer";
 import * as DatabaseActions from "../store/database.actions";
 
 import * as Leagues from '../../data/fmJDatabase/Leagues.data'
-import * as Clubs from "../../data/fmJDatabase/Clubs.data";
+import { ClubData } from '../../shared/database-filetype'
 import * as Players from "../../data/fmJDatabase/Players.data";
 import { PlayerData } from "../../data/fmJDatabase/PlayerData.interface";
 
@@ -27,9 +27,9 @@ import * as moment from 'moment';
 export class DatabasePlayerComponent implements OnInit, OnDestroy {
 
   public clubContract;
-  public club: Clubs.ClubData;
+  public club: ClubData;
   public loanClubContract;
-  public loanClub: Clubs.ClubData;
+  public loanClub: ClubData;
   public league: Leagues.LeagueData;
 
   public jobs: PlayerType[];
@@ -41,7 +41,10 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
   public playerSecAlias: string;
 
   public loading: boolean = true;
+  
+  private clubs: ClubData[];
 
+  private coreSubscription: Subscription;
   private databaseSubscription: Subscription;
 
   constructor(
@@ -61,6 +64,9 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
         dob
       }))
     });
+    this.coreSubscription = this.store.select('core').subscribe(coreState => {
+      this.clubs = coreState.clubs;
+    })
     this.databaseSubscription = this.store
       .select("database")
       .subscribe(databaseState => {
@@ -71,11 +77,11 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
           this.clubContract = this.player.clubInfo;
           this.loanClubContract = this.player.loanInfo;
           if (this.clubContract) {
-            this.club = Clubs.getClubByAlias(this.clubContract.id);
+            this.club = this.clubs.find(c => c.id === this.clubContract.id);
             this.league = this.club ? Leagues.getCurrentLeague(this.club.id, moment().year()) : null;
           }
           if (this.loanClubContract) {
-            this.loanClub = Clubs.getClubByAlias(this.loanClubContract.id);
+            this.loanClub = this.clubs.find(c => c.id === this.loanClubContract.id);
             this.league = Leagues.getCurrentLeague(this.loanClub.id, moment().year());
           }
           this.titleService.setTitle(this.player.basicInfo.name + " - Football Manager Jリーグデータパック");
@@ -84,6 +90,8 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.coreSubscription)
+      this.coreSubscription.unsubscribe();
     if (this.databaseSubscription) {
       this.databaseSubscription.unsubscribe();
     }
@@ -123,17 +131,17 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
 
   getClubStyle() {
     if (this.loanClub) {
-      return this.loanClub.color
+      return this.loanClub.clubColor1
       ? {
-          backgroundColor: this.loanClub.color[1],
-          color: this.loanClub.color[0]
+          backgroundColor: this.loanClub.clubColor2,
+          color: this.loanClub.clubColor1
         }
       : null;
     } else if (this.club) {
-      return this.club.color
+      return this.club.clubColor1
       ? {
-          backgroundColor: this.club.color[1],
-          color: this.club.color[0]
+          backgroundColor: this.club.clubColor2,
+          color: this.club.clubColor1
         }
       : null;
     }

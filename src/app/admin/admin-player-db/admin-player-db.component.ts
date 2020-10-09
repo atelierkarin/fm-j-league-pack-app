@@ -11,7 +11,7 @@ import * as DatabaseActions from '../../database/store/database.actions';
 import { PlayerData } from "../../data/fmJDatabase/PlayerData.interface";
 
 import * as CitiesData from '../../data/fmJDatabase/Cities.data';
-import * as ClubData from '../../data/fmJDatabase/Clubs.data';
+import { ClubData } from '../../shared/database-filetype'
 import { nationality } from '../../shared/nationality';
 
 import { PlayerType } from "../../shared/player-type.enum";
@@ -222,7 +222,7 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
     code: string
   }[] = nationality;
   public cityList: CitiesData.CityData[] = CitiesData.Cities;
-  public clubList: ClubData.ClubData[] = ClubData.Clubs;
+  public clubList: ClubData[];
 
   public nationalityDropdownSettings = {
     singleSelection: true,
@@ -239,6 +239,7 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
   public editPlayerId: string;
   public editPlayer: PlayerData;
 
+  private coreSubscription: Subscription;
   private databaseSubscription: Subscription;
 
   constructor(private store: Store<fromApp.AppState>) { }
@@ -253,6 +254,9 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
       .filter(Number.isInteger)
       .map(k => ({ key: k, val: DatapackFiletype[k] }));
 
+    this.coreSubscription = this.store.select('core').subscribe(coreState => {
+      this.clubList = coreState.clubs;
+    })
     this.databaseSubscription = this.store.select('database').subscribe(databaseState => {
       this.loading = databaseState.loading;
       this.updateError = databaseState.errMsg;
@@ -268,7 +272,7 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
           if (!isClubIdExist) {
             this.clubList = [...this.clubList, {
               id: databaseState.editPlayer.player.clubInfo.id,
-              name: "" + databaseState.editPlayer.player.clubInfo.id
+              clubName: "" + databaseState.editPlayer.player.clubInfo.id
             }];
           }
         }
@@ -277,7 +281,7 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
           if (!isClubIdExist) {
             this.clubList = [...this.clubList, {
               id: databaseState.editPlayer.player.loanInfo.id,
-              name: "" + databaseState.editPlayer.player.loanInfo.id
+              clubName: "" + databaseState.editPlayer.player.loanInfo.id
             }];
           }
         }
@@ -296,6 +300,9 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.coreSubscription) {
+      this.coreSubscription.unsubscribe();
+    }
     if (this.databaseSubscription) {
       this.databaseSubscription.unsubscribe();
     }

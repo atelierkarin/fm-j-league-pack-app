@@ -15,7 +15,7 @@ import { nationality } from '../../shared/nationality';
 
 import * as VersionData from '../../data/VersionData';
 
-import * as ClubData from '../../data/fmJDatabase/Clubs.data';
+import { ClubData } from '../../shared/database-filetype'
 
 function removeEmpty(obj) {
   Object.keys(obj).forEach(function(key) {
@@ -23,8 +23,6 @@ function removeEmpty(obj) {
     else if (obj[key] == null) delete obj[key]
   });
 };
-
-const clubs = ClubData.Clubs.map(c => c.name);
 
 @Component({
   selector: 'app-admin-player-update',
@@ -41,6 +39,7 @@ export class AdminPlayerUpdateComponent implements OnInit {
   public updateError: string;
 
   public fmVersionList: string[] = VersionData.fmVersionList;
+  public clubs: string[];
 
   public playerTypeList: { key: number, val: string }[] = Object.keys(PlayerType)
     .map(Number)
@@ -91,6 +90,7 @@ export class AdminPlayerUpdateComponent implements OnInit {
 
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
       this.fmVersion = coreState.fmVersion;
+      this.clubs = coreState.clubs.map(c => c.clubName);
     })
     this.playerUpdateSubscription = this.store.select('playerUpdate').subscribe(playerUpdateState => {
       this.loading = playerUpdateState.loading;
@@ -179,15 +179,15 @@ export class AdminPlayerUpdateComponent implements OnInit {
 
     this.store.dispatch(new PlayerUpdateActions.AddPlayerHistory(newPlayerUpdate));
   }
-
+  
   public onSearch(text$: Observable<string>) {
     return text$.pipe(
       debounceTime(100),
       distinctUntilChanged(),
       map(term => term.length < 2 ? []
-        : clubs.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
+        : this.clubs.filter(v => v.toLowerCase().indexOf(term.toLowerCase()) > -1).slice(0, 10))
     )
-  }    
+  }
 
   // PRIVATE
 

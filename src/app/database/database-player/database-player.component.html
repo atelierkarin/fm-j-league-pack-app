@@ -34,13 +34,13 @@
           ><span *ngIf="isPlayer">{{ getPlayerPosition() }} - </span>
           <span *ngIf="loanClub; else elseClubNameTemplate">
             <a [routerLink]="['/database/club/' + loanClub.id]">{{
-              loanClub.name
+              loanClub.clubName
             }}</a>
           </span>
           <ng-template #elseClubNameTemplate>
             <span *ngIf="club"
               ><a [routerLink]="['/database/club/' + club.id]">{{
-                club.name
+                club.clubName
               }}</a></span
             >
             <span *ngIf="!club && clubContract && clubContract.id">登録されてないクラブ</span>
@@ -70,7 +70,7 @@
       </div>
       <div class="col-5 col-md-4">
         <div *ngIf="loanClub; else elseContractTemplate">
-          <div *ngIf="club"><a [routerLink]="['/database/club/' + club.id]">{{ club.name }}</a> から期間付移籍中</div>
+          <div *ngIf="club"><a [routerLink]="['/database/club/' + club.id]">{{ club.clubName }}</a> から期間付移籍中</div>
           <div *ngIf="!club">期間付移籍中</div>
           <div class="small">
             <span>{{ loanClubContract.dateStart }} から {{ loanClubContract.dateEnd }} まで</span>
@@ -78,7 +78,7 @@
         </div>
         <ng-template #elseContractTemplate>
           <div *ngIf="club && clubContract">
-            <div><a [routerLink]="['/database/club/' + club.id]">{{ club.name }}</a> と契約中</div>
+            <div><a [routerLink]="['/database/club/' + club.id]">{{ club.clubName }}</a> と契約中</div>
             <div class="small">
               <span>{{ clubContract.dateJoined }} 加入</span>
               <span *ngIf="clubContract.dateRenew">、{{ clubContract.dateRenew }} 契約更新</span>

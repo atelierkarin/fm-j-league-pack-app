@@ -24,6 +24,7 @@ import { GuideComponent } from "./guide/guide.component";
 import { PlayerUpdateComponent } from "./player-update/player-update.component";
 import { PlayerUpdateCardComponent } from "./player-update/player-update-card/player-update-card.component";
 import { RecordTableComponent } from "./player-update/record-table/record-table.component";
+import { DiscussBoardComponent } from './discuss-board/discuss-board.component';
 
 import { AngularFireModule } from "@angular/fire";
 import { AngularFirestoreModule } from "@angular/fire/firestore";
@@ -33,6 +34,7 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { environment } from "../environments/environment";
 
 import * as fromApp from "./store/app.reducer";
+import { CoreEffects } from "./core/store/core.effects";
 import { HistoryEffects } from "./history/store/history.effects";
 import { AdminEffects } from "./admin/store/admin.effects";
 import { PlayerUpdateEffects } from "./player-update/store/player-update.effects";
@@ -40,7 +42,7 @@ import { DatabaseEffects } from "./database/store/database.effects";
 import { DiscussAreaEffects } from "./database/database-player/discuss-area/store/discuss-area.effects";
 import { ChangelogEffects } from "./database/database-player/changelog/store/changelog.effects";
 import { CalcCaEffects } from "./calc-ca/store/calc-ca.effects";
-import { DiscussBoardComponent } from './discuss-board/discuss-board.component';
+
 
 let apiDomain = "http://127.0.0.1:4000/";
 if (environment.production) {
@@ -72,6 +74,7 @@ if (environment.production) {
     NgxDaterangepickerMd.forRoot(),
     StoreModule.forRoot(fromApp.appReducer),
     EffectsModule.forRoot([
+      CoreEffects,
       HistoryEffects,
       AdminEffects,
       PlayerUpdateEffects,

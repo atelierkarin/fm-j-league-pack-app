@@ -9,7 +9,7 @@ import * as Leagues from '../../data/fmJDatabase/Leagues.data'
 
 import * as moment from 'moment';
 
-import * as Clubs from "../../data/fmJDatabase/Clubs.data";
+import { ClubData } from '../../shared/database-filetype'
 
 @Component({
   selector: 'app-database-main',
@@ -24,6 +24,9 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
 
   public latestUpdatePlayers: {id: string, name: string, dob?: string}[];
 
+  private clubList: ClubData[];
+
+  private coreSubscription: Subscription;
   private databaseSubscription: Subscription;
 
   private season: number;
@@ -31,6 +34,9 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
   constructor(private store: Store<fromApp.AppState>, private router: Router) { }
 
   ngOnInit() {
+    this.coreSubscription = this.store.select('core').subscribe(coreState => {
+      this.clubList = coreState.clubs;
+    })
     this.databaseSubscription = this.store
       .select("database")
       .subscribe(databaseState => {
@@ -41,6 +47,9 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.coreSubscription) {
+      this.coreSubscription.unsubscribe();
+    }
     if (this.databaseSubscription) {
       this.databaseSubscription.unsubscribe();
     }
@@ -57,8 +66,8 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
 
   getClub(clubId) {
     if (clubId) {
-      const club = Clubs.getClubByAlias(clubId);
-      return club ? club.name : "所属クラブ未登録";
+      const club = this.clubList.find(c => c.id === clubId);
+      return club ? club.clubName : "所属クラブ未登録";
     }
     return "フリー";
   }

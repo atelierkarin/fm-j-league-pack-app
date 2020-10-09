@@ -12,7 +12,7 @@ import * as PlayerUpdateActions from './store/player-update.actions';
 
 import * as PlayerUpdateModel from './player-update.model';
 
-import * as ClubData from '../data/fmJDatabase/Clubs.data';
+import { ClubData } from '../shared/database-filetype'
 
 import { LocaleConfig } from 'ngx-daterangepicker-material';
 
@@ -40,7 +40,7 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
   public playerUpdateTypeList: { key: number, val: string }[];
 
   public filterClubname: string;
-  public clubList: ClubData.ClubData[] = ClubData.Clubs;
+  public clubList: ClubData[];
 
   public filterPlayerName: string;
 
@@ -50,8 +50,8 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
 
   public defaultDisplayDay: number = moment().month() > 10 ? 3 : 7;
 
-  private playerUpdateSubscription: Subscription;
   private coreSubscription: Subscription;
+  private playerUpdateSubscription: Subscription;
   private loadingSubscription: Subscription;
 
   constructor(private store: Store<fromApp.AppState>) {}
@@ -71,6 +71,7 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
 
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
       this.fmVersion = coreState.fmVersion;
+      this.clubList = coreState.clubs;
     })
     this.playerUpdateSubscription = this.store
       .select('playerUpdate')

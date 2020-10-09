@@ -6,7 +6,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import * as fromApp from '../../store/app.reducer';
 
 import * as Leagues from '../../data/fmJDatabase/Leagues.data'
-import * as Clubs from '../../data/fmJDatabase/Clubs.data'
+import { ClubData } from '../../shared/database-filetype'
 
 import anime from 'animejs';
 
@@ -24,8 +24,9 @@ export class DatabaseLeagueComponent implements OnInit, OnDestroy {
   public league: Leagues.LeagueData;
   public leagues: Leagues.LeagueData[] = Leagues.Leagues;
 
-  public getClubByAlias = Clubs.getClubByAlias;
+  private clubList: ClubData[];
 
+  private coreSubscription: Subscription;
   private databaseSubscription: Subscription;
 
   private animated: boolean = false;
@@ -33,10 +34,11 @@ export class DatabaseLeagueComponent implements OnInit, OnDestroy {
   constructor(private store: Store<fromApp.AppState>, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
-    // this.route.paramMap.subscribe(paramMap => {
-    //   this.leagueId = parseInt(paramMap.get('id'));
-    //   this.getLeagueTeam();
-    // })
+    this.coreSubscription = this.store.select('core').subscribe(coreState => {
+      
+      this.clubList = coreState.clubs;
+      console.log(this.clubList);
+    })
     this.databaseSubscription = this.store.select('database').subscribe(databaseState => {
       this.season = databaseState.season;
       this.getLeagueTeam();
@@ -44,6 +46,8 @@ export class DatabaseLeagueComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.coreSubscription)
+      this.coreSubscription.unsubscribe();
     if (this.databaseSubscription) {
       this.databaseSubscription.unsubscribe();
     }
@@ -65,15 +69,15 @@ export class DatabaseLeagueComponent implements OnInit, OnDestroy {
   }
 
   getClubName(clubId) {
-    const club = this.getClubByAlias(clubId);
-    return club.name;
+    const club = this.clubList.find(c => c.id === clubId)
+    return club && club.clubName ? club.clubName : "";    
   }
 
   getClubStyle(clubId) {
-    const club = this.getClubByAlias(clubId);
-    return club.color ? {
-      'backgroundColor': club.color[1],
-      'color': club.color[0],
+    const club = this.clubList.find(c => c.id === clubId);
+    return club && club.clubColor1 ? {
+      'backgroundColor': club.clubColor2,
+      'color': club.clubColor1,
     } : null;
   }
 

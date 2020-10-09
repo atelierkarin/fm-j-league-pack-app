@@ -5,7 +5,7 @@ import { Store } from "@ngrx/store";
 import * as fromApp from "../../../store/app.reducer";
 import * as ChangelogActions from "./store/changelog.actions";
 
-import * as ClubData from '../../../data/fmJDatabase/Clubs.data';
+import { ClubData } from '../../../shared/database-filetype'
 import { nationality } from '../../../shared/nationality';
 
 import { PlayerDataChangelog } from "../../../data/fmJDatabase/PlayerDataChangelog.interface";
@@ -43,6 +43,10 @@ export class ChangelogComponent implements OnInit, OnDestroy {
   private loadedPlayerId: string;
   private changelogSubscription: Subscription;
 
+  private clubs: ClubData[];
+
+  private coreSubscription: Subscription;
+
   private changelogData;
 
   constructor(private store: Store<fromApp.AppState>) { }
@@ -51,6 +55,9 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     if (this.playerId && this.playerId !== this.loadedPlayerId) {
       this.store.dispatch(new ChangelogActions.LoadPlayerChangelog(this.playerId))
     }
+    this.coreSubscription = this.store.select('core').subscribe(coreState => {
+      this.clubs = coreState.clubs;
+    })
     this.changelogSubscription = this.store
       .select("changelog")
       .subscribe(changelogState => {
@@ -96,6 +103,8 @@ export class ChangelogComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.store.dispatch(new ChangelogActions.ResetSearch());
+    if (this.coreSubscription)
+      this.coreSubscription.unsubscribe();
     if (this.changelogSubscription) {
       this.changelogSubscription.unsubscribe();
     }
@@ -157,8 +166,8 @@ export class ChangelogComponent implements OnInit, OnDestroy {
     if (pathString === JSON.stringify(["clubInfo"])) {
       if (value === {}) return "なし";
       else {
-        const targetClub = ClubData.Clubs.find(c => c.id === value.id);
-        return targetClub ? targetClub.name : "クラブデータ無し";
+        const targetClub = this.clubs.find(c => c.id === value.id);
+        return targetClub ? targetClub.clubName : "クラブデータ無し";
       }
     }
     if (typeof value === "boolean") {

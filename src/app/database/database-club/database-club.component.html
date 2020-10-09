@@ -7,7 +7,7 @@
 </ng-container>
 <ng-template #elseLoadedTemplate>
   <div class="container-fluid" *ngIf="club">
-    <h3 class="club-name-col" [ngStyle]="getClubStyle()">{{ club.name }}</h3>
+    <h3 class="club-name-col" [ngStyle]="getClubStyle()">{{ club.clubName }}</h3>
     <div class="card mb-2">
       <div class="card-header">スタッフ</div>
       <div class="card-body" *ngIf="staff && staff.length > 0">

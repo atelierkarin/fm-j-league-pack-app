@@ -7,6 +7,7 @@ import { GaService } from './shared/ga.service';
 import { filter } from 'rxjs/operators';
 
 import * as fromApp from './store/app.reducer';
+import * as CoreActions from './core/store/core.actions';
 import * as AdminActions from './admin/store/admin.actions';
 import * as DatabaseActions from './database/store/database.actions';
 
@@ -38,7 +39,7 @@ export class AppComponent {
       .subscribe((params: any) => {
         this.gaService.sendPageView(params.url);
       });
-
+    this.store.dispatch(new CoreActions.LoadClubs());
     this.store.dispatch(new DatabaseActions.LoadLatestUpdatePlayers());
   }
 }
