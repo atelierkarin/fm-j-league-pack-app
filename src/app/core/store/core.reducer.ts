@@ -1,11 +1,12 @@
 import * as CoreActions from './core.actions';
 
-import { ClubData } from '../../shared/database-filetype'
+import { ClubData, LeagueData } from '../../shared/database-filetype'
 
 export interface State {
   fmVersion: string
 
   clubs: ClubData[]
+  leagues: LeagueData[]
 
   loading: boolean
   errorMsg: string
@@ -15,6 +16,7 @@ const initialState: State = {
   fmVersion: "FM2020",
 
   clubs: [],
+  leagues: [],
 
   loading: false,
   errorMsg: null
@@ -30,10 +32,11 @@ export function coreReducer(
         ...state,
         fmVersion: action.payload
       };
-    case CoreActions.LOAD_CLUBS:
+    case CoreActions.LOAD_BASIC_DATA:
       return {
         ...state,
         clubs: [],
+        leagues: [],
         loading: true,
         errorMsg: null
       };
@@ -41,6 +44,11 @@ export function coreReducer(
       return {
         ...state,
         clubs: action.payload
+      };
+    case CoreActions.SET_LEAGUES:
+      return {
+        ...state,
+        leagues: action.payload
       };
     case CoreActions.API_SUCCESS:
       return {

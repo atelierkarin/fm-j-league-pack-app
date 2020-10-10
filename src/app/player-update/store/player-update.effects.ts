@@ -18,7 +18,6 @@ const getPlayerUpdatesByDate = gql`
 query ($startDate: String!, $endDate: String!) {
   playerUpdatesByDate(startDate: $startDate, endDate: $endDate) {
     id
-    fmVersion
     player {
       name
       nameEng
@@ -46,6 +45,7 @@ query ($startDate: String!, $endDate: String!) {
     filetype
     previousFiletype
     remarks
+    dbPlayerId
   }
 }`;
 

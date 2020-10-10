@@ -2,6 +2,8 @@ import * as DatabaseActions from './database.actions';
 
 import { PlayerData } from "../../data/fmJDatabase/PlayerData.interface";
 
+import { currentSeason } from '../../shared/common';
+
 import * as moment from 'moment';
 
 export interface State {
@@ -20,7 +22,7 @@ export interface State {
 }
 
 const initialState: State = {
-  season: 2020,
+  season: currentSeason,
 
   players: null,
 

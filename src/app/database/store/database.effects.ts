@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { switchMap, map, catchError, take } from 'rxjs/operators';
-import { from, of, throwError, Observable } from "rxjs";
+import { switchMap, map, catchError } from 'rxjs/operators';
+import { from, of } from "rxjs";
 
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
-import gql from 'graphql-tag';
+import { getLatestDatabaseUpdate, getPlayerByClub, getPlayer } from './database-queries';
 
 import { AngularFirestore, QueryFn } from '@angular/fire/firestore';
 
@@ -15,17 +15,6 @@ import * as DatabaseActions from './database.actions';
 import { PlayerData } from "../../data/fmJDatabase/PlayerData.interface";
 
 import * as moment from 'moment';
-
-const getLatestDatabaseUpdate = gql`
-query {
-  latestDatabaseUpdate {
-    id
-    name
-    dob
-    updateDate
-    club
-  }
-}`;
 
 @Injectable()
 export class DatabaseEffects {

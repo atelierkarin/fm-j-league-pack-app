@@ -5,11 +5,7 @@ import { Router } from '@angular/router';
 
 import * as fromApp from '../../store/app.reducer';
 
-import * as Leagues from '../../data/fmJDatabase/Leagues.data'
-
-import * as moment from 'moment';
-
-import { ClubData } from '../../shared/database-filetype'
+import { ClubData, LeagueData } from '../../shared/database-filetype'
 
 @Component({
   selector: 'app-database-main',
@@ -19,12 +15,11 @@ import { ClubData } from '../../shared/database-filetype'
 export class DatabaseMainComponent implements OnInit, OnDestroy {
 
   public loading: boolean;
-
-  public leagues: Leagues.LeagueData[] = Leagues.Leagues;
-
+  public leagues: LeagueData[];
   public latestUpdatePlayers: {id: string, name: string, dob?: string}[];
 
   private clubList: ClubData[];
+  
 
   private coreSubscription: Subscription;
   private databaseSubscription: Subscription;
@@ -36,6 +31,7 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
       this.clubList = coreState.clubs;
+      this.leagues = coreState.leagues;
     })
     this.databaseSubscription = this.store
       .select("database")
@@ -58,7 +54,7 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
   getTeamCounts(leagueId) {
     try {
       const targetLeague = this.leagues.find(l => l.id === leagueId);
-      const targetLeagueSeason = targetLeague.seasons.find(s => s.year === this.season);
+      const targetLeagueSeason = targetLeague.seasons.find(s => s.season === this.season);
       return targetLeagueSeason.teams.length;
     } catch (err) {}
     return 0;    

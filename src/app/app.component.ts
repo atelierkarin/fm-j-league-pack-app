@@ -39,7 +39,7 @@ export class AppComponent {
       .subscribe((params: any) => {
         this.gaService.sendPageView(params.url);
       });
-    this.store.dispatch(new CoreActions.LoadClubs());
+    this.store.dispatch(new CoreActions.LoadBasicData());
     this.store.dispatch(new DatabaseActions.LoadLatestUpdatePlayers());
   }
 }

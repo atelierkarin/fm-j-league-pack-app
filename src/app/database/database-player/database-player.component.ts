@@ -7,8 +7,7 @@ import { Title } from "@angular/platform-browser";
 import * as fromApp from "../../store/app.reducer";
 import * as DatabaseActions from "../store/database.actions";
 
-import * as Leagues from '../../data/fmJDatabase/Leagues.data'
-import { ClubData } from '../../shared/database-filetype'
+import { ClubData, LeagueData } from '../../shared/database-filetype'
 import * as Players from "../../data/fmJDatabase/Players.data";
 import { PlayerData } from "../../data/fmJDatabase/PlayerData.interface";
 
@@ -16,6 +15,8 @@ import { PlayerType } from "../../shared/player-type.enum";
 import { DatapackFiletype } from '../../shared/datapack-filetype.enum';
 
 import { nationality } from "../../shared/nationality";
+
+import { getCurrentLeague } from "../../shared/common";
 
 import * as moment from 'moment';
 
@@ -30,7 +31,8 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
   public club: ClubData;
   public loanClubContract;
   public loanClub: ClubData;
-  public league: Leagues.LeagueData;
+  public league: LeagueData;
+  public leagues: LeagueData[];
 
   public jobs: PlayerType[];
   public isPlayer: boolean;
@@ -46,6 +48,9 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
 
   private coreSubscription: Subscription;
   private databaseSubscription: Subscription;
+
+  private coreLoaded: boolean = false;
+  private databaseLoaded: boolean = false;
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -66,26 +71,18 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
     });
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
       this.clubs = coreState.clubs;
+      this.leagues = coreState.leagues;
+      this.coreLoaded = true;
+      this.init();
     })
     this.databaseSubscription = this.store
       .select("database")
       .subscribe(databaseState => {
         this.player = databaseState.editPlayer ? databaseState.editPlayer.player : null;
         this.loading = databaseState.loadingPlayer;
-        if (this.player) {
-          this.playerId = databaseState.editPlayer.id;
-          this.clubContract = this.player.clubInfo;
-          this.loanClubContract = this.player.loanInfo;
-          if (this.clubContract) {
-            this.club = this.clubs.find(c => c.id === this.clubContract.id);
-            this.league = this.club ? Leagues.getCurrentLeague(this.club.id, moment().year()) : null;
-          }
-          if (this.loanClubContract) {
-            this.loanClub = this.clubs.find(c => c.id === this.loanClubContract.id);
-            this.league = Leagues.getCurrentLeague(this.loanClub.id, moment().year());
-          }
-          this.titleService.setTitle(this.player.basicInfo.name + " - Football Manager Jリーグデータパック");
-        }
+        if (this.player) this.playerId = databaseState.editPlayer.id;
+        this.databaseLoaded = true;
+        this.init();
       });
   }
 
@@ -151,7 +148,7 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
   getCAClass() {
     const ca =  this.player.playerData.general.ca;
     if (!this.league) return "avereage-ca";
-    const leagueGuideline = this.league.caGuideline;
+    const leagueGuideline = this.league.leagueCaGuideline;
     if (leagueGuideline.length !== 4) return "avereage-ca";
     if (ca >= leagueGuideline[0]) return "overrate-ca";
     else if (ca >= leagueGuideline[1]) return "good-ca";
@@ -165,6 +162,24 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
     else if (val > 10) return "good-ca";
     else if (val > 5) return "avereage-ca";
     else return "poor-ca";
+  }
+
+  private init() {
+    if (this.coreLoaded && this.databaseLoaded) {
+      if (this.player) {        
+        this.clubContract = this.player.clubInfo;
+        this.loanClubContract = this.player.loanInfo;
+        if (this.clubContract) {
+          this.club = this.clubs.find(c => c.id === this.clubContract.id);
+          this.league = this.club ? getCurrentLeague(this.leagues, this.club.id) : null;
+        }
+        if (this.loanClubContract) {
+          this.loanClub = this.clubs.find(c => c.id === this.loanClubContract.id);
+          this.league = getCurrentLeague(this.leagues, this.loanClub.id);
+        }
+        this.titleService.setTitle(this.player.basicInfo.name + " - Football Manager Jリーグデータパック");
+      }
+    }
   }
 
 }

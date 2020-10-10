@@ -1,20 +1,21 @@
 import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
-import { Router, ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { Title } from "@angular/platform-browser";
 
 import * as fromApp from "../../store/app.reducer";
 import * as DatabaseActions from "../store/database.actions";
 
-import * as Leagues from '../../data/fmJDatabase/Leagues.data'
-import { ClubData } from '../../shared/database-filetype'
+import { ClubData, LeagueData } from '../../shared/database-filetype'
 import * as Players from "../../data/fmJDatabase/Players.data";
 import { PlayerData } from "../../data/fmJDatabase/PlayerData.interface";
 
 import { PlayerType } from "../../shared/player-type.enum";
 
 import { nationality } from "../../shared/nationality";
+
+import { getCurrentLeague } from "../../shared/common";
 
 import * as moment from 'moment';
 
@@ -27,7 +28,8 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   public clubAlias: string;
   public club: ClubData;
   public clubs: ClubData[];
-  public league: Leagues.LeagueData;
+  public league: LeagueData;
+  public leagues: LeagueData[];
 
   public loading: boolean = true;
 
@@ -61,6 +63,9 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   private coreSubscription: Subscription;
   private databaseSubscription: Subscription;
 
+  private coreLoading: boolean = false;
+  private databaseLoading: boolean = false;
+
   public innerWidth: any;
 
   constructor(
@@ -79,14 +84,17 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
     });
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
       this.clubs = coreState.clubs;
-      this.loadSeasonInfo();
+      this.leagues = coreState.leagues;
+      this.coreLoading = coreState.loading;
+      if (!this.coreLoading) {
+        this.loadSeasonInfo();
+      }
     })
     this.databaseSubscription = this.store
       .select("database")
       .subscribe(databaseState => {
         this.dbPlayers = databaseState.searchPlayers;
         this.loading = databaseState.loading;
-
         if (this.dbPlayers) {
           this.getPlayersList();
           this.getStaffList();
@@ -106,9 +114,10 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   loadSeasonInfo() {
     if (this.clubs && this.clubAlias) {
       this.club = this.clubs.find(c => (c.id === parseInt(this.clubAlias) || c.clubName === this.clubAlias || c.clubShortname === this.clubAlias));
-      this.league = Leagues.getCurrentLeague(this.club.id, moment().year());
+      this.league = getCurrentLeague(this.leagues, this.club.id);
       this.store.dispatch(new DatabaseActions.SearchPlayersByClub(this.club.id));
       this.titleService.setTitle(this.club.clubName + " - Football Manager Jリーグデータパック");
+      this.loading = true;
     } 
   }
 
@@ -237,7 +246,7 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
 
   getCAClass(ca) {    
     if (!this.league) return "avereage-ca";
-    const leagueGuideline = this.league.caGuideline;
+    const leagueGuideline = this.league.leagueCaGuideline;
     if (leagueGuideline.length !== 4) return "avereage-ca";
     if (ca >= leagueGuideline[0]) return "overrate-ca";
     else if (ca >= leagueGuideline[1]) return "good-ca";

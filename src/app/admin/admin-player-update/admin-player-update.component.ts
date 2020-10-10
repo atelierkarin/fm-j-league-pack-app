@@ -112,8 +112,6 @@ export class AdminPlayerUpdateComponent implements OnInit {
   }
 
   onSubmitCreate(form: NgForm) {
-    const fmVersion = form.value.fmVersion;
-
     const playerName = form.value.playerName;
     const playerNameEng = form.value.playerNameEng;
     const selectedPlayerType: PlayerType[] = this.selectedPlayerType.map(v => v);
@@ -163,7 +161,6 @@ export class AdminPlayerUpdateComponent implements OnInit {
     const remarks = form.value.remarks;
 
     const newPlayerUpdate: PlayerUpdateModel.PlayerUpdate = {
-      fmVersion,
       player,
       updateType: playerUpdateType,
       activeDate,

@@ -5,8 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 import * as fromApp from '../../store/app.reducer';
 
-import * as Leagues from '../../data/fmJDatabase/Leagues.data'
-import { ClubData } from '../../shared/database-filetype'
+import { ClubData, LeagueData } from '../../shared/database-filetype'
 
 import anime from 'animejs';
 
@@ -21,8 +20,8 @@ export class DatabaseLeagueComponent implements OnInit, OnDestroy {
   public season: number;
   public clubs: number[];
 
-  public league: Leagues.LeagueData;
-  public leagues: Leagues.LeagueData[] = Leagues.Leagues;
+  public league: LeagueData;
+  public leagues: LeagueData[];
 
   private clubList: ClubData[];
 
@@ -34,10 +33,9 @@ export class DatabaseLeagueComponent implements OnInit, OnDestroy {
   constructor(private store: Store<fromApp.AppState>, private route: ActivatedRoute, private router: Router) { }
 
   ngOnInit() {
-    this.coreSubscription = this.store.select('core').subscribe(coreState => {
-      
+    this.coreSubscription = this.store.select('core').subscribe(coreState => {      
       this.clubList = coreState.clubs;
-      console.log(this.clubList);
+      this.leagues = coreState.leagues;
     })
     this.databaseSubscription = this.store.select('database').subscribe(databaseState => {
       this.season = databaseState.season;
@@ -61,8 +59,8 @@ export class DatabaseLeagueComponent implements OnInit, OnDestroy {
     if (this.leagueId) {
       try {
         this.league = this.leagues.find(l => l.id === this.leagueId);
-        const targetLeagueSeason = this.league.seasons.find(s => s.year === this.season);
-        this.clubs = targetLeagueSeason.teams.sort((a, b) => a - b);
+        const targetLeagueSeason = this.league.seasons.find(s => s.season === this.season);
+        this.clubs = targetLeagueSeason.teams;
         this.animateTeamButtons();
       } catch (err) {}
     }
