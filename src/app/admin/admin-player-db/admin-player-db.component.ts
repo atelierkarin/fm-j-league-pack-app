@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { FormGroup, FormControl } from '@angular/forms';
+import { ActivatedRoute } from "@angular/router";
 
 import diff from 'deep-diff';
 
@@ -18,11 +19,15 @@ import { PlayerType } from "../../shared/player-type.enum";
 import { DatapackFiletype } from '../../shared/datapack-filetype.enum';
 
 import * as f from './form.data';
+import { exception } from 'console';
 
 function removeEmpty(obj) {
   Object.keys(obj).forEach(function(key) {
-    if (obj[key] && typeof obj[key] === 'object') removeEmpty(obj[key])
-    else if (obj[key] == null) delete obj[key]
+    console.log(key, obj[key], typeof obj[key])
+    try {
+      if (obj[key] && typeof obj[key] === 'object') removeEmpty(obj[key])
+      else if (obj[key] == null) delete obj[key]
+    } catch (err) {}
   });
 };
 
@@ -41,7 +46,6 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
     name: new FormControl(''),
     nameEng: new FormControl(''),
     dob: new FormControl(null),
-    cob: new FormControl(null),
     nationality: new FormControl(''),
     secondNationality: new FormControl(null),
     isPlayer: new FormControl(true),
@@ -55,14 +59,13 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
     dateRenew: new FormControl(null),
     job: new FormControl([PlayerType.選手]),
     contractType: new FormControl(null),
-    salaryPerYear: new FormControl(null),
-    squardNumber: new FormControl(null),
+    squadNumber: new FormControl(null),
   });
   public loanInfoFormGroup = new FormGroup({
     id: new FormControl(null),
     dateStart: new FormControl(''),
     dateEnd: new FormControl(''),
-    squardNumber: new FormControl(null),
+    squadNumber: new FormControl(null),
   });
   public personalDataFormGroup = new FormGroup({
     adaptability: new FormControl(null),
@@ -233,13 +236,13 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
   public loading: boolean = false;
   public updateError: string;
 
-  public editPlayerId: string;
+  public editPlayerId: number;
   public editPlayer: PlayerData;
 
   private coreSubscription: Subscription;
   private databaseSubscription: Subscription;
 
-  constructor(private store: Store<fromApp.AppState>) { }
+  constructor(private store: Store<fromApp.AppState>, private route: ActivatedRoute,) { }
 
   ngOnInit() {
     this.playerTypeList = Object.keys(PlayerType)
@@ -251,6 +254,11 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
       .filter(Number.isInteger)
       .map(k => ({ key: k, val: DatapackFiletype[k] }));
 
+    this.route.paramMap.subscribe(paramMap => {
+      const id = parseInt(paramMap.get("id"));
+      this.store.dispatch(new DatabaseActions.LoadPlayer(id))
+    });
+
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
       this.clubList = coreState.clubs;
     })
@@ -258,37 +266,31 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
       this.loading = databaseState.loading;
       this.updateError = databaseState.errMsg;
 
-      // this.searchPlayers = databaseState.searchPlayers ? databaseState.searchPlayers.map(sp => ({
-      //   ...sp,
-      //   label: sp.player.basicInfo.name + (sp.player.basicInfo.dob ? '( ' + sp.player.basicInfo.dob + ' )' : '')
-      // })) : null;
-
-      // if (databaseState.editPlayer) {
-      //   if (databaseState.editPlayer.player.clubInfo && databaseState.editPlayer.player.clubInfo.id) {
-      //     const isClubIdExist = this.clubList.find(c => c.id === databaseState.editPlayer.player.clubInfo.id);          
-      //     if (!isClubIdExist) {
-      //       this.clubList = [...this.clubList, {
-      //         id: databaseState.editPlayer.player.clubInfo.id,
-      //         clubName: "" + databaseState.editPlayer.player.clubInfo.id
-      //       }];
-      //     }
-      //   }
-      //   if (databaseState.editPlayer.player.loanInfo && databaseState.editPlayer.player.loanInfo.id) {
-      //     const isClubIdExist = this.clubList.find(c => c.id === databaseState.editPlayer.player.loanInfo.id);
-      //     if (!isClubIdExist) {
-      //       this.clubList = [...this.clubList, {
-      //         id: databaseState.editPlayer.player.loanInfo.id,
-      //         clubName: "" + databaseState.editPlayer.player.loanInfo.id
-      //       }];
-      //     }
-      //   }
-
-      //   this.editPlayerId = databaseState.editPlayer.id;
-      //   this.editPlayer = databaseState.editPlayer.player;              
-      // } else {
-      //   this.editPlayerId = null;
-      //   this.editPlayer = null;
-      // }
+      if (databaseState.editPlayer) {
+        if (databaseState.editPlayer.clubInfo && databaseState.editPlayer.clubInfo.id) {
+          const isClubIdExist = this.clubList.find(c => c.id === databaseState.editPlayer.clubInfo.id);          
+          if (!isClubIdExist) {
+            this.clubList = [...this.clubList, {
+              id: databaseState.editPlayer.clubInfo.id,
+              clubName: "" + databaseState.editPlayer.clubInfo.id
+            }];
+          }
+        }
+        if (databaseState.editPlayer.loanInfo && databaseState.editPlayer.loanInfo.id) {
+          const isClubIdExist = this.clubList.find(c => c.id === databaseState.editPlayer.loanInfo.id);
+          if (!isClubIdExist) {
+            this.clubList = [...this.clubList, {
+              id: databaseState.editPlayer.loanInfo.id,
+              clubName: "" + databaseState.editPlayer.loanInfo.id
+            }];
+          }
+        }
+        this.editPlayerId = databaseState.editPlayer.id;
+        this.editPlayer = databaseState.editPlayer;              
+      } else {
+        this.editPlayerId = null;
+        this.editPlayer = null;
+      }
 
       if (!this.loading) {
         this.resetForm();
@@ -377,23 +379,23 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSelectSearchPlayer() {
-    // if (this.searchPlayerId) {
-    //   this.store.dispatch(new DatabaseActions.LoadPlayer(this.searchPlayerId));
-    // }
-  }
-
   onAddPlayer() {
     this.searchPlayerName = "";
     this.store.dispatch(new DatabaseActions.ResetSearch());
     this.resetForm();
   }
 
+  onDelete() {
+    this.store.dispatch(new DatabaseActions.DeletePlayer(this.editPlayerId));
+  }
+
   private resetForm() {
     this.playerForm.reset();
 
     if (this.editPlayer) {
-      this.playerForm.patchValue(this.editPlayer);
+      let editPlayerToSet = {...this.editPlayer}
+      removeEmpty(editPlayerToSet)
+      this.playerForm.patchValue(editPlayerToSet);
     } else {
       this.playerForm.patchValue({
         basicInfo: {

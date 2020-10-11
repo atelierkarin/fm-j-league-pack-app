@@ -135,7 +135,7 @@
               <div *ngIf="player.playerData.general && player.playerData.general.pa">
                 <small class="text-secondary">潜在能力</small>
                 <h5>
-                  <span class="badge player-ability-badge avereage-ca">{{
+                  <span class="badge player-ability-badge" [ngClass]="getPAClass()">{{
                     player.playerData.general.pa
                   }}</span>
                 </h5>

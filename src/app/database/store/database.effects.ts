@@ -5,11 +5,9 @@ import { from, of } from "rxjs";
 
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
-import { getPlayersByLatestUpdate, getPlayersByClub, getPlayer } from './database-queries';
+import { getPlayersByLatestUpdate, getPlayersByClub, getPlayer, mutationDeletePlayer } from './database-queries';
 
 import { AngularFirestore, QueryFn } from '@angular/fire/firestore';
-
-import { HttpClient } from '@angular/common/http';
 
 import * as DatabaseActions from './database.actions';
 import { PlayerData } from "../../data/fmJDatabase/PlayerData.interface";
@@ -167,9 +165,27 @@ export class DatabaseEffects {
     })
   )
 
+  @Effect()
+  deletePlayer = this.actions$.pipe(
+    ofType(DatabaseActions.DELETE_PLAYER),
+    switchMap((action: DatabaseActions.DeletePlayer) => {
+      return this.apollo.mutate<any>({
+        mutation: mutationDeletePlayer,
+        variables: {
+          id: action.payload
+        },
+      });
+    }),
+    map(() => {
+      return new DatabaseActions.UpdateSuccess()
+    }),
+    catchError(() => {
+      return of(new DatabaseActions.UpdateFail("SERVER FAIL"))
+    })
+  )
+
   constructor(
     private actions$: Actions,
-    private http: HttpClient,
     private db: AngularFirestore,
     private apollo: Apollo
   ) {}

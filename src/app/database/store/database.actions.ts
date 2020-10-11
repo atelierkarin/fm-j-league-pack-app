@@ -9,6 +9,7 @@ export const SET_PLAYERS = '[Database] Set Players';
 export const FETCH_PLAYERS = '[Database] Fetch Players';
 
 export const UPDATE_PLAYER = '[Database] Update Player';
+export const DELETE_PLAYER = '[Database] Delete Player';
 
 export const SEARCH_PLAYERS = '[Database] Search Players';
 export const SEARCH_PLAYERS_BY_CLUB = '[Database] Search Players By Club';
@@ -69,7 +70,12 @@ export class SetLoadPlayer implements Action {
 export class UpdatePlayer implements Action {
   readonly type = UPDATE_PLAYER;
 
-  constructor(public payload: {player: PlayerData, id?: string, changeLog?: any}) {}
+  constructor(public payload: {player: PlayerData, id?: number, changeLog?: any}) {}
+}
+export class DeletePlayer implements Action {
+  readonly type = DELETE_PLAYER;
+
+  constructor(public payload: number) {}
 }
 
 export class LoadLatestUpdatePlayers implements Action {
@@ -98,6 +104,7 @@ export type DatabaseActions =
   | SetPlayers
   | FetchPlayers
   | UpdatePlayer
+  | DeletePlayer
   | SearchPlayers
   | SearchPlayersByClub
   | SetSearchPlayers

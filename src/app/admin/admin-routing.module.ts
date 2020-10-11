@@ -13,6 +13,7 @@ const adminRoutes: Routes = [
     { path: 'history', component: AdminHistoryComponent },
     { path: 'playerUpdate', component: AdminPlayerUpdateComponent },
     { path: 'playerDb', component: AdminPlayerDbComponent },
+    { path: 'playerDb/:id', component: AdminPlayerDbComponent },
   ] },
   { path: 'login', component: AdminLoginComponent },  
 ];

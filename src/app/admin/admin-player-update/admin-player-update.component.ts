@@ -15,8 +15,6 @@ import { nationality } from '../../shared/nationality';
 
 import * as VersionData from '../../data/VersionData';
 
-import { ClubData } from '../../shared/database-filetype'
-
 function removeEmpty(obj) {
   Object.keys(obj).forEach(function(key) {
     if (obj[key] && typeof obj[key] === 'object') removeEmpty(obj[key])
@@ -35,11 +33,12 @@ export class AdminPlayerUpdateComponent implements OnInit {
 
   public fmVersion: string;
 
+  public initDone: boolean = false;
   public loading: boolean;
   public updateError: string;
 
   public fmVersionList: string[] = VersionData.fmVersionList;
-  public clubs: string[];
+  public clubs: string[] = [];
 
   public playerTypeList: { key: number, val: string }[] = Object.keys(PlayerType)
     .map(Number)
@@ -82,7 +81,9 @@ export class AdminPlayerUpdateComponent implements OnInit {
   private coreSubscription: Subscription;
   private playerUpdateSubscription: Subscription;
 
-  constructor(private store: Store<fromApp.AppState>) {}
+  constructor(private store: Store<fromApp.AppState>) {
+    this.onSearch = this.onSearch.bind(this);
+  }
 
   ngOnInit() {
     this.setPlayerUpdateType();
@@ -95,7 +96,6 @@ export class AdminPlayerUpdateComponent implements OnInit {
     this.playerUpdateSubscription = this.store.select('playerUpdate').subscribe(playerUpdateState => {
       this.loading = playerUpdateState.loading;
       this.updateError = playerUpdateState.updateError;
-
       if (!this.loading) {
         this.initForm();
       }

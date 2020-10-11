@@ -55,7 +55,6 @@ export function databaseReducer(
         ...state,
         loading: true,
       };
-
     case DatabaseActions.SEARCH_PLAYERS:
       return {
         ...state,
@@ -88,13 +87,16 @@ export function databaseReducer(
         loading: false,
         loadingPlayer: false,
       };
-
     case DatabaseActions.UPDATE_PLAYER:
       return {
         ...state,
         loading: true,
-      };  
-      
+      };
+    case DatabaseActions.DELETE_PLAYER:
+      return {
+        ...state,
+        loading: true,
+      };
     case DatabaseActions.LOAD_LATEST_UPDATE_PLAYERS:
       return {
         ...state,

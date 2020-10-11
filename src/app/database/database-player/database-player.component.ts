@@ -16,7 +16,7 @@ import { DatapackFiletype } from '../../shared/datapack-filetype.enum';
 
 import { nationality } from "../../shared/nationality";
 
-import { getCurrentLeague } from "../../shared/common";
+import { getCurrentLeague, getPAUpperLimit } from "../../shared/common";
 
 import * as moment from 'moment';
 
@@ -148,6 +148,21 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
     else if (ca >= leagueGuideline[1]) return "good-ca";
     else if (ca >= leagueGuideline[2]) return "avereage-ca";
     else if (ca >= leagueGuideline[3]) return "poor-ca";
+    else return "bad-ca"
+  }
+
+  getPAClass() { 
+    let realPa = this.player.playerData.general.pa;
+    if (realPa < 0) {
+      realPa = getPAUpperLimit(realPa);
+    }
+    if (!this.league) return "avereage-ca";
+    const leagueGuideline = this.league.leagueCaGuideline;
+    if (leagueGuideline.length !== 4) return "avereage-ca";
+    if (realPa >= leagueGuideline[0]) return "overrate-ca";
+    else if (realPa >= leagueGuideline[1]) return "good-ca";
+    else if (realPa >= leagueGuideline[2]) return "avereage-ca";
+    else if (realPa >= leagueGuideline[3]) return "poor-ca";
     else return "bad-ca"
   }
 

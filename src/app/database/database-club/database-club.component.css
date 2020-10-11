@@ -1,3 +1,20 @@
+.club-title .heading {
+  overflow: hidden;
+  align-items: center;
+  height: 40px;
+  line-height: 40px;
+  display: flex;
+}
+.club-title .heading:before,
+.club-title .heading:after {
+  content: "";
+  flex: 1;
+  background: #fff;
+  padding: 3px 0;
+  height: 0;
+  transform: rotate(45deg);
+}
+
 .overrate-ca {
   background-color: green;
   background: -moz-linear-gradient(top, rgba(42,150,58,1) 0%, rgba(65,234,65,1) 50%, rgba(69,191,53,1) 51%, rgba(36,130,50,1) 100%); /* FF3.6-15 */

@@ -198,3 +198,9 @@ query getPlayer ($id: Int!) {
   }
 }
 `
+
+export const mutationDeletePlayer = gql`
+mutation($id: Int!) {
+  deletePlayer(id: $id)
+}
+`

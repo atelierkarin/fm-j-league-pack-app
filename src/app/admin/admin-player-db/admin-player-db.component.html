@@ -1,57 +1,19 @@
 <div class="container p-2">
 
-  <div class="alert alert-secondary">
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="名前を入力して検索してください" [(ngModel)]="searchPlayerName" >
-            <div class="input-group-append">
-              <button class="btn btn-outline-secondary" (click)="onSearchPlayer()">検索</button>
-            </div>
-          </div>
-        </div>
-        <div class="col-auto">
-          <button class="btn btn-primary" (click)="onAddPlayer()">新規作成</button>
-        </div>
-      </div>
-    </div>
-    <div *ngIf="searchPlayers" class="mt-2">
-      <ng-select id="seachPlayerList"
-        [items]="searchPlayers"
-        bindLabel="label"
-        bindValue="id"
-        [(ngModel)]="searchPlayerId"
-        (change)="onSelectSearchPlayer()">
-      </ng-select>
-    </div>
-  </div>
-
-
   <form [formGroup]="playerForm" (ngSubmit)="onSubmit()">
   <div class="card mb-1">
-    <div class="card-header">データ関連</div>
-    <div class="card-body" formGroupName="location">
+    <div class="card-header">基本データ</div>
+    <div class="card-body" formGroupName="basicInfo">
       <div class="form-row">
         <div class="form-group col-auto">
           <label for="locationFile">ファイル</label>
           <ng-select id="locationFile" [items]="datepackFileTypeList" bindLabel="val" bindValue="key" formControlName="file" required></ng-select>
         </div>
         <div class="form-group col-auto">
-          <label for="locationId">FM ユニークID</label>
-          <input type="number" class="form-control" id="locationId" formControlName="id" placeholder="FM ユニークID">
-        </div>
-        <div class="form-group col-auto">
           <label for="jleagueId">Jリーグ ID</label>
           <input type="number" class="form-control" id="jleagueId" formControlName="jleagueId" placeholder="Jリーグ ID">
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="card mb-1">
-    <div class="card-header">基本データ</div>
-    <div class="card-body" formGroupName="basicInfo">
       <div class="form-row">
         <div class="form-group col-md-4">
           <label for="basicInfoName">名前</label>
@@ -67,10 +29,6 @@
         </div>
       </div>
       <div class="form-row">
-        <div class="form-group col-md-3">
-          <label for="basicInfoCob">出身地</label>
-          <ng-select id="basicInfoCob" [items]="cityList" bindLabel="name" bindValue="id" formControlName="cob"></ng-select>
-        </div>
         <div class="form-group col-md-3">
           <label for="basicInfoNationality">国籍</label>
           <ng-select id="basicInfoNationality" [items]="nationalityList" bindLabel="name" bindValue="code" formControlName="nationality" required></ng-select>
@@ -99,7 +57,7 @@
       <div class="form-row">
         <div class="form-group col-md-4">
           <label for="clubInfoId">クラブ</label>
-          <ng-select id="clubInfoId" [items]="clubList" bindLabel="name" bindValue="id" formControlName="id"></ng-select>
+          <ng-select id="clubInfoId" [items]="clubList" bindLabel="clubName" bindValue="id" formControlName="id"></ng-select>
         </div>
         <div class="form-group col-md-4" *ngIf="playerForm.value.clubInfo.id">
           <label for="clubInfoDateJoined">加入時期</label>
@@ -115,10 +73,6 @@
           <label for="clubInfoJob">職種</label>
           <ng-select id="clubInfoJob" [items]="playerTypeList" bindLabel="val" bindValue="key" formControlName="job" [multiple]="true"></ng-select>
         </div>
-        <div class="form-group col-md-4" *ngIf="playerForm.value.clubInfo.id">
-          <label for="clubInfoSalaryPerYear">年俸</label>
-          <input type="number" class="form-control" id="clubInfoSalaryPerYear" formControlName="salaryPerYear">
-        </div>
         <div class="form-group col-md-2" *ngIf="playerForm.value.clubInfo.id">
           <label for="clubInfoSquardNumber">背番号</label>
           <input type="number" class="form-control" id="clubInfoSquardNumber" formControlName="squardNumber">
@@ -133,7 +87,7 @@
       <div class="form-row">
         <div class="form-group col-md-4">
           <label for="loanInfoId">レンタルクラブ</label>
-          <ng-select id="loanInfoId" [items]="clubList" bindLabel="name" bindValue="id" formControlName="id"></ng-select>
+          <ng-select id="loanInfoId" [items]="clubList" bindLabel="clubName" bindValue="id" formControlName="id"></ng-select>
         </div>
       </div>
       <div class="form-row" *ngIf="playerForm.value.loanInfo.id">
@@ -269,6 +223,12 @@
 
   <div class="submit-button-div">
     <div class="text-center my-2">
+      <button
+        class="btn btn-alert"
+        type="button"
+        (click)="onDelete()"
+        *ngIf="!loading && searchPlayerId">削除
+      </button>
       <button
         class="btn btn-primary"
         type="submit"

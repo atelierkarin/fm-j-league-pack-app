@@ -6,17 +6,28 @@
   </div>
 </ng-container>
 <ng-template #elseLoadedTemplate>
-  <nav ngbNav #nav="ngbNav" [(activeId)]="activeTabId" class="nav-tabs database-club-nav-tabs">
+  <div class="club-title" [ngStyle]="getClubStyle() ? getClubStyle() : null">
+    <h3 class="heading">{{ club.clubName }}</h3>
+  </div>
+  <nav
+    ngbNav
+    #nav="ngbNav"
+    [(activeId)]="activeTabId"
+    class="nav-tabs database-club-nav-tabs"
+  >
     <ng-container ngbNavItem [ngbNavItem]="1">
       <a ngbNavLink>スタッフ</a>
       <ng-template ngbNavContent>
         <div class="card-body" *ngIf="staff && staff.length > 0">
           <div class="container-fluid">
             <div class="row" *ngFor="let staffMember of staff">
-              <div class="col-12 col-sm-3">{{ getJobType(staffMember.job) }}</div>
+              <div class="col-12 col-sm-3">
+                {{ getJobType(staffMember.job) }}
+              </div>
               <div class="col-12 col-sm-9">
-                <a
-                [routerLink]="['/database/player/' + staffMember.id]">{{ staffMember.name }}</a>
+                <a [routerLink]="['/database/player/' + staffMember.id]">{{
+                  staffMember.name
+                }}</a>
               </div>
             </div>
           </div>
@@ -26,17 +37,22 @@
     <ng-container ngbNavItem [ngbNavItem]="2">
       <a ngbNavLink>選手</a>
       <ng-template ngbNavContent>
-        <div class="card-body player-table-div" *ngIf="players && players.length > 0">
-            <ngx-datatable
+        <div
+          class="card-body player-table-div"
+          *ngIf="players && players.length > 0"
+        >
+          <ngx-datatable
             class="bootstrap fullscreen player-table"
             [rows]="players"
             [columnMode]="'flex'"
             [rowHeight]="'auto'"
             [rowClass]="getRowClass"
-            [sorts]="[{
-              prop: 'squadNo',
-              dir: 'asc'
-            }]"
+            [sorts]="[
+              {
+                prop: 'squadNo',
+                dir: 'asc'
+              }
+            ]"
           >
             <ngx-datatable-column
               name="背番号"
@@ -50,13 +66,19 @@
                 let-value="value"
                 ngx-datatable-cell-template
               >
-                <a
-                  [routerLink]="['/database/player/' + row.id]"
-                  >{{ value }}</a
+                <a [routerLink]="['/database/player/' + row.id]">{{ value }}</a
                 >&nbsp;
-                <span class="badge badge-info badge-pill" *ngIf="row.loanIn">期間付移籍中</span>
-                <span class="badge badge-info badge-pill" *ngIf="row.loanOut">期間付移籍中</span>
-                <span class="badge badge-warning badge-pill" *ngIf="row.updateThisWeek">更新</span>
+                <span class="badge badge-info badge-pill" *ngIf="row.loanIn"
+                  >期間付移籍中</span
+                >
+                <span class="badge badge-info badge-pill" *ngIf="row.loanOut"
+                  >期間付移籍中</span
+                >
+                <span
+                  class="badge badge-warning badge-pill"
+                  *ngIf="row.updateThisWeek"
+                  >更新</span
+                >
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column
@@ -77,14 +99,22 @@
             <ngx-datatable-column name="現在能力" prop="ca" [flexGrow]="1">
               <ng-template let-value="value" ngx-datatable-cell-template>
                 <h5>
-                  <span class="badge player-ability-badge" [ngClass]="getCAClass(value)">{{ value }}</span>
+                  <span
+                    class="badge player-ability-badge"
+                    [ngClass]="getCAClass(value)"
+                    >{{ value }}</span
+                  >
                 </h5>
               </ng-template>
             </ngx-datatable-column>
             <ngx-datatable-column name="潜在能力" prop="pa" [flexGrow]="1">
               <ng-template let-value="value" ngx-datatable-cell-template>
                 <h5>
-                  <span class="badge player-ability-badge avereage-ca">{{ value }}</span>
+                  <span
+                    class="badge player-ability-badge"
+                    [ngClass]="getPAClass(value)"
+                    >{{ value }}</span
+                  >
                 </h5>
               </ng-template>
             </ngx-datatable-column>

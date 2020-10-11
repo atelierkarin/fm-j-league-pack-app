@@ -1,18 +1,17 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { switchMap, map, catchError, take } from 'rxjs/operators';
+import { switchMap, map, catchError, take, withLatestFrom } from 'rxjs/operators';
 import { from, of, throwError } from "rxjs";
-import { Router } from '@angular/router';
 
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
 
-import { AngularFirestore } from '@angular/fire/firestore';
-
 import * as PlayerUpdateActions from './player-update.actions';
 
-import * as PlayerUpdateModel from '../player-update.model';
+import * as fromApp from '../../store/app.reducer';
+import * as fromPlayerUpdate from './player-update.reducer';
 
 const getPlayerUpdatesByDate = gql`
 query ($startDate: String!, $endDate: String!) {
@@ -78,11 +77,12 @@ export class PlayerUpdateEffects {
   @Effect()
   fetchPlayerUpdate = this.actions$.pipe(
     ofType(PlayerUpdateActions.FETCH_PLAYER_UPDATE),
-    switchMap((fetchPlayerUpdate: PlayerUpdateActions.FetchPlayerUpdate) => {
+    withLatestFrom(this.store$.select('playerUpdate')),
+    switchMap(([action, state]: [PlayerUpdateActions.FetchPlayerUpdate, fromPlayerUpdate.State]) => {
       return this.apollo.query<any>({
         query: getPlayerUpdatesByDate,
         variables: {
-          ...fetchPlayerUpdate.payload
+          ...state.displayDate
         }
       });
     }),
@@ -102,12 +102,21 @@ export class PlayerUpdateEffects {
   @Effect()
   addPlayerUpdate = this.actions$.pipe(
     ofType(PlayerUpdateActions.ADD_PLAYER_UPDATE),
-    switchMap((addPlayerHistory: PlayerUpdateActions.AddPlayerHistory) => {   
+    withLatestFrom(this.store$.select('playerUpdate')),
+    switchMap(([action, state]: [PlayerUpdateActions.AddPlayerHistory, fromPlayerUpdate.State]) => {   
       return this.apollo.mutate<any>({
         mutation: mutationAddPlayerUpdate,
         variables: {
-          data: {...addPlayerHistory.payload}
-        }
+          data: {...action.payload}
+        },
+        refetchQueries: [
+          {
+            query: getPlayerUpdatesByDate,
+            variables: {
+              ...state.displayDate
+            }
+          },
+        ],
       });
     }),
     map(() => {
@@ -121,14 +130,23 @@ export class PlayerUpdateEffects {
   @Effect()
   confirmPlayerUpdate = this.actions$.pipe(
     ofType(PlayerUpdateActions.CONFIRM_PLAYER_UPDATE),
-    switchMap((confirmPlayerHistory: PlayerUpdateActions.ConfirmPlayerHistory) => {
-      const originalRecord = confirmPlayerHistory.payload;
+    withLatestFrom(this.store$.select('playerUpdate')),
+    switchMap(([action, state]: [PlayerUpdateActions.ConfirmPlayerHistory, fromPlayerUpdate.State]) => {
+      const originalRecord = action.payload;
       const id = parseInt(originalRecord.id);
       return this.apollo.mutate<any>({
         mutation: mutationConfirmPlayerUpdate,
         variables: {
           id
-        }
+        },
+        refetchQueries: [
+          {
+            query: getPlayerUpdatesByDate,
+            variables: {
+              ...state.displayDate
+            }
+          },
+        ],
       });
     }),
     map(() => {
@@ -141,9 +159,8 @@ export class PlayerUpdateEffects {
 
   constructor(
     private actions$: Actions,
-    private db: AngularFirestore,
-    private router: Router,
-    private apollo: Apollo
+    private apollo: Apollo,
+    private store$: Store<fromApp.AppState>,
   ) {}
 
 }

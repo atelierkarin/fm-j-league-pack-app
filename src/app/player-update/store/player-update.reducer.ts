@@ -4,14 +4,16 @@ import * as PlayerUpdateModel from '../player-update.model';
 
 export interface State {
   playerUpdateRecords: PlayerUpdateModel.PlayerUpdate[];
-
+  displayDate: {
+    startDate: string, endDate: string
+  };
   updateError: string;
   loading: boolean;
 }
 
 const initialState: State = {
   playerUpdateRecords: [],
-
+  displayDate: null,
   updateError: null,
   loading: false
 };
@@ -41,6 +43,7 @@ export function playerUpdateReducer(
     case PlayerUpdateActions.FETCH_PLAYER_UPDATE:
       return {
         ...state,
+        displayDate: {...action.payload},
         updateError: null,
         loading: true
       };
