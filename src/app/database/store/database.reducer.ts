@@ -1,18 +1,16 @@
 import * as DatabaseActions from './database.actions';
 
-import { PlayerData } from "../../data/fmJDatabase/PlayerData.interface";
+import { PlayerData, PlayerDataSimple } from "../../data/fmJDatabase/PlayerData.interface";
 
 import { currentSeason } from '../../shared/common';
-
-import * as moment from 'moment';
 
 export interface State {
   season: number;
 
   players: PlayerData[];
 
-  searchPlayers: {player: PlayerData, id: string}[];
-  latestPlayers: {id: string, name: string, dob?: string, updateDate: string, club?: number}[];
+  searchPlayers: PlayerDataSimple[];
+  latestPlayers: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[];
 
   editPlayer: {player: PlayerData, id: string};
 

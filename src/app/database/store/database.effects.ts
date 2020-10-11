@@ -5,7 +5,7 @@ import { from, of } from "rxjs";
 
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
-import { getLatestDatabaseUpdate, getPlayerByClub, getPlayer } from './database-queries';
+import { getPlayersByLatestUpdate, getPlayersByClub, getPlayer } from './database-queries';
 
 import { AngularFirestore, QueryFn } from '@angular/fire/firestore';
 
@@ -18,10 +18,7 @@ import * as moment from 'moment';
 
 @Injectable()
 export class DatabaseEffects {
-
-  private tempPlayers: {player: PlayerData, id: string}[];
-  private tempSearchPlayers: DatabaseActions.SearchPlayersByClub
-
+  
   private collectionReference: QueryFn;
 
   @Effect()
@@ -68,12 +65,19 @@ export class DatabaseEffects {
   @Effect()
   searchPlayersByClub = this.actions$.pipe(
     ofType(DatabaseActions.SEARCH_PLAYERS_BY_CLUB),
-    switchMap((searchPlayers: DatabaseActions.SearchPlayersByClub) => {
-      this.tempPlayers = [];
-      this.tempSearchPlayers = searchPlayers;
-      return this.searchPlayersByClubFromServer(this.tempSearchPlayers.payload);
+    switchMap((action: DatabaseActions.SearchPlayersByClub) => {
+      return this.apollo.watchQuery<any>({
+        query: getPlayersByClub,
+        variables: {
+          clubId: action.payload
+        }
+      }).valueChanges;
     }),
-    map((players: {player: PlayerData, id: string}[]) => {
+    map((result: ApolloQueryResult<any>) => {
+      let players = [];
+      if (result && result.data && result.data.playersByClub) {
+        players = result.data.playersByClub.map(v => v)
+      }
       return new DatabaseActions.SetSearchPlayers(players);
     }),
     catchError(() => {
@@ -161,13 +165,13 @@ export class DatabaseEffects {
     ofType(DatabaseActions.LOAD_LATEST_UPDATE_PLAYERS),
     switchMap(() => {
       return this.apollo.watchQuery<any>({
-        query: getLatestDatabaseUpdate
+        query: getPlayersByLatestUpdate
       }).valueChanges;
     }),
     map((result: ApolloQueryResult<any>) => {
       let latestUpdatePlayers = [];
-      if (result && result.data && result.data.latestDatabaseUpdate) {
-        latestUpdatePlayers = result.data.latestDatabaseUpdate.map(v => v)
+      if (result && result.data && result.data.playersByLatestUpdate) {
+        latestUpdatePlayers = result.data.playersByLatestUpdate.map(v => v)
       }
       return new DatabaseActions.SetLatestUpdatePlayers(latestUpdatePlayers);
     }),
@@ -175,32 +179,6 @@ export class DatabaseEffects {
       return of(new DatabaseActions.UpdateFail("SERVER FAIL"))
     })
   )
-
-  searchPlayersByClubFromServer(clubId: number) {
-    let players = [];
-    const basicCollectionReference = ref => ref.where('player.clubInfo.id', '==', clubId);
-    const loanCollectionReference = ref => ref.where('player.loanInfo.id', '==', clubId);
-
-    const basicQuery = this.db.collection<{player: PlayerData, id: string}>('playerDb', basicCollectionReference)
-      .get({ source: "server" })
-    const loanQuery = this.db.collection<{player: PlayerData, id: string}>('playerDb', loanCollectionReference)
-      .get({ source: "server" })
-
-    return basicQuery.pipe(
-      switchMap((docs: firebase.firestore.QuerySnapshot) => {
-        docs.forEach(doc => {
-          players.push(doc.data())
-        })
-        return loanQuery
-      }),
-      map((docs: firebase.firestore.QuerySnapshot) => {
-        docs.forEach(doc => {
-          players.push(doc.data())
-        })
-        return players
-      })
-    )
-  }
 
   constructor(
     private actions$: Actions,

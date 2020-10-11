@@ -8,7 +8,7 @@ import diff from 'deep-diff';
 import * as fromApp from '../../store/app.reducer';
 import * as DatabaseActions from '../../database/store/database.actions';
 
-import { PlayerData } from "../../data/fmJDatabase/PlayerData.interface";
+import { PlayerData, PlayerDataSimple } from "../../data/fmJDatabase/PlayerData.interface";
 
 import * as CitiesData from '../../data/fmJDatabase/Cities.data';
 import { ClubData } from '../../shared/database-filetype'
@@ -34,14 +34,9 @@ function removeEmpty(obj) {
 export class AdminPlayerDbComponent implements OnInit, OnDestroy {
 
   public searchPlayerName: string;
-  public searchPlayers: {player: PlayerData, id: string, label: string}[];
+  public searchPlayers: {player: PlayerDataSimple, id: number, label: string}[];
   public searchPlayerId: string;
 
-  public locationFormGroup = new FormGroup({
-    file: new FormControl(DatapackFiletype["新規選手.fmf"]),
-    id: new FormControl(null),
-    jleagueId: new FormControl(null),
-  });
   public basicInfoFormGroup = new FormGroup({
     name: new FormControl(''),
     nameEng: new FormControl(''),
@@ -51,6 +46,8 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
     secondNationality: new FormControl(null),
     isPlayer: new FormControl(true),
     isNonPlayer: new FormControl(false),
+    file: new FormControl(DatapackFiletype["新規選手.fmf"]),
+    jleagueId: new FormControl(null),
   });
   public clubInfoFormGroup = new FormGroup({
     id: new FormControl(null),
@@ -205,7 +202,7 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
   });
 
   public playerForm = new FormGroup({
-    location: this.locationFormGroup,
+    id: new FormControl(null),
     basicInfo: this.basicInfoFormGroup,
     clubInfo: this.clubInfoFormGroup,
     loanInfo: this.loanInfoFormGroup,
@@ -261,10 +258,10 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
       this.loading = databaseState.loading;
       this.updateError = databaseState.errMsg;
 
-      this.searchPlayers = databaseState.searchPlayers ? databaseState.searchPlayers.map(sp => ({
-        ...sp,
-        label: sp.player.basicInfo.name + (sp.player.basicInfo.dob ? '( ' + sp.player.basicInfo.dob + ' )' : '')
-      })) : null;
+      // this.searchPlayers = databaseState.searchPlayers ? databaseState.searchPlayers.map(sp => ({
+      //   ...sp,
+      //   label: sp.player.basicInfo.name + (sp.player.basicInfo.dob ? '( ' + sp.player.basicInfo.dob + ' )' : '')
+      // })) : null;
 
       if (databaseState.editPlayer) {
         if (databaseState.editPlayer.player.clubInfo && databaseState.editPlayer.player.clubInfo.id) {
@@ -340,7 +337,7 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
     removeEmpty(playerDataGoalkeeping);
 
     let player: PlayerData = {
-      location: this.playerForm.value.location,
+      id: this.playerForm.value.id,
       basicInfo: {
         ...this.playerForm.value.basicInfo,
         updateDate: this.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss")
@@ -399,15 +396,13 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
       this.playerForm.patchValue(this.editPlayer);
     } else {
       this.playerForm.patchValue({
-        location: {
-          file: DatapackFiletype["新規選手.fmf"]
-        },
         basicInfo: {
           name: '',
           nameEng: '',
           nationality: 'JPN',
           isPlayer: true,
           isNonPlayer: false,
+          file: DatapackFiletype["新規選手.fmf"]
         },
         clubInfo: {
           dateJoined: '',

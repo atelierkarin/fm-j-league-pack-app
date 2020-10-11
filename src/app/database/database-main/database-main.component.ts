@@ -16,7 +16,7 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
 
   public loading: boolean;
   public leagues: LeagueData[];
-  public latestUpdatePlayers: {id: string, name: string, dob?: string}[];
+  public latestUpdatePlayers: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[];
 
   private clubList: ClubData[];
   
@@ -39,6 +39,7 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
         this.latestUpdatePlayers = databaseState.latestPlayers;
         this.season = databaseState.season;
         this.loading = databaseState.loading;
+        console.log("GET LATEST", this.latestUpdatePlayers)
       });
   }
 

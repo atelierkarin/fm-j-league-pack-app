@@ -47,8 +47,8 @@
             <span *ngIf="!club">フリー／クラブデータ無し</span>
           </ng-template>
           <span
-            >&nbsp;(ID: {{ player.location.id }}
-            {{ getDatapackFiletype(player.location.file) }})</span
+            >&nbsp;(ID: {{ player.id }}
+            {{ getDatapackFiletype(player.basicInfo.file) }})</span
           >
         </small>
       </div>
@@ -90,9 +90,9 @@
           <span *ngIf="!club">フリー／クラブデータ無し</span>
         </ng-template>
       </div>
-      <div class="col-12 col-md-4 text-right" *ngIf="player.location.jleagueId">
-        <a class="btn btn-sm btn-outline-secondary mx-1" [href]="'https://www.jleague.jp/player/'+ player.location.jleagueId +'/'" target="_blank" rel="noreferrer">Jリーグ公式サイト</a>
-        <a class="btn btn-sm btn-outline-secondary mx-1" [href]="'https://www.football-lab.jp/player/'+ player.location.jleagueId +'/'" target="_blank" rel="noreferrer">Football LAB</a>
+      <div class="col-12 col-md-4 text-right" *ngIf="player.basicInfo.jleagueId">
+        <a class="btn btn-sm btn-outline-secondary mx-1" [href]="'https://www.jleague.jp/player/'+ player.basicInfo.jleagueId +'/'" target="_blank" rel="noreferrer">Jリーグ公式サイト</a>
+        <a class="btn btn-sm btn-outline-secondary mx-1" [href]="'https://www.football-lab.jp/player/'+ player.basicInfo.jleagueId +'/'" target="_blank" rel="noreferrer">Football LAB</a>
       </div>
     </div>
     <hr />

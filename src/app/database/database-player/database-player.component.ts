@@ -119,7 +119,7 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
   }
 
   getPlayerPosition() {
-    return this.player ? Players.getPlayerPosition(this.player) : "";
+    return this.player && this.player.playerData && this.player.playerData.positions ? Players.getPlayerPosition(this.player.playerData.positions) : "";
   }
 
   getJobType(job: PlayerType[]) {

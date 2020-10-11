@@ -82,33 +82,42 @@ export interface PlayerDataGoalkeeping {
   throwing?: number;
 }
 
+export interface PlayerDataSimple {
+  id: number;
+  name: string;
+  nameEng?: string;
+  dob?: string;
+  nationality: string;
+  clubId: number;
+  loanClubId: number;
+  squadNo: number;
+  isPlayer: boolean;
+  isNonPlayer: boolean;
+  job: PlayerType[];
+  ca: number;
+  pa: number;
+  positions?: PlayerDataPosition;
+  updateDate: string;
+}
+
 export interface PlayerData {
-  location: {
-    file: DatapackFiletype;
-    id?: number;
-    jleagueId?: number;
-  };
+  id: number;
   basicInfo: {
     name: string;
-    nameEng: string;
+    nameEng?: string;
     dob?: string;
-    cob?: string;
     nationality: string;
     secondNationality?: string[];
-    international?: {
-      apps: number;
-      goals: number;
-    };
     isPlayer: boolean;
     isNonPlayer: boolean;
-    updateDate?: string;
-  };
+    file: DatapackFiletype;
+    jleagueId?: number;
+  }
   clubInfo?: {
     id: number;
     dateJoined: string;
     dateRenew?: string;
     job: PlayerType[];
-    salaryPerYear?: number;
     squardNumber?: number;
   };
   loanInfo?: {

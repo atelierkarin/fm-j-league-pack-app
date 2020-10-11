@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
 
-import { PlayerData } from "../../data/fmJDatabase/PlayerData.interface";
+import { PlayerData, PlayerDataSimple } from "../../data/fmJDatabase/PlayerData.interface";
 import { PlayerDataChangelog } from "../../data/fmJDatabase/PlayerDataChangelog.interface";
 
 export const SET_SEASON = '[Database] Set Season';
@@ -53,7 +53,7 @@ export class SearchPlayersByClub implements Action {
 export class SetSearchPlayers implements Action {
   readonly type = SET_SEARCH_PLAYERS;
 
-  constructor(public payload: {player: PlayerData, id: string}[]) {}
+  constructor(public payload: PlayerDataSimple[]) {}
 }
 export class LoadPlayer implements Action {
   readonly type = LOAD_PLAYER;
@@ -78,7 +78,7 @@ export class LoadLatestUpdatePlayers implements Action {
 export class SetLatestUpdatePlayers implements Action {
   readonly type = SET_LATEST_UPDATE_PLAYERS;
 
-  constructor(public payload: {id: string, name: string, dob?: string, updateDate: string, club?: number}[]) {}
+  constructor(public payload: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[]) {}
 }
 
 export class UpdateSuccess implements Action {

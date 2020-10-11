@@ -1,32 +1,32 @@
 import gql from 'graphql-tag';
 
-export const getLatestDatabaseUpdate = gql`
-query {
-  latestDatabaseUpdate {
+export const getPlayersByLatestUpdate = gql`
+query getPlayersByLatestUpdate {
+  playersByLatestUpdate {
     id
     name
     dob
+    clubId
     updateDate
-    club
   }
 }`;
 
-export const getPlayerByClub = gql`
-query getPlayerByClub($clubId: Int!) {
-  playerByClub(clubId: $clubId) {
-    id,
-    name,
-    nameEng,
-    dob,
-    nationality,
-    clubId,
-    loanClubId,
-    squadNo,
-    isPlayer,
-    isNonPlayer,
-    job,
-    ca,
-    pa,
+export const getPlayersByClub = gql`
+query getPlayersByClub($clubId: Int!) {
+  playersByClub(clubId: $clubId) {
+    id
+    name
+    nameEng
+    dob
+    nationality
+    clubId
+    loanClubId
+    squadNo
+    isPlayer
+    isNonPlayer
+    job
+    ca
+    pa
     positions {
       goalkeeper
       defenderLeft

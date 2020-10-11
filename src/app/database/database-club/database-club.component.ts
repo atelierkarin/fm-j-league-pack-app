@@ -9,7 +9,7 @@ import * as DatabaseActions from "../store/database.actions";
 
 import { ClubData, LeagueData } from '../../shared/database-filetype'
 import * as Players from "../../data/fmJDatabase/Players.data";
-import { PlayerData } from "../../data/fmJDatabase/PlayerData.interface";
+import { PlayerData, PlayerDataSimple } from "../../data/fmJDatabase/PlayerData.interface";
 
 import { PlayerType } from "../../shared/player-type.enum";
 
@@ -33,10 +33,10 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
 
   public loading: boolean = true;
 
-  public dbPlayers: {player: PlayerData, id: string}[];
+  public dbPlayers: PlayerDataSimple[];
 
   public staff: {
-    id: string;
+    id: number;
     name: string;
     nameEng: string;
     nationality: string;
@@ -45,8 +45,8 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   }[];
 
   public players: {
-    id: string;
-    squardNo: number;
+    id: number;
+    squadNo: number;
     name: string;
     nameEng: string;
     nationality: string;
@@ -123,42 +123,41 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
 
   getPlayersList() {
     this.players = this.dbPlayers
-      ? this.dbPlayers.map(({player, id}) => {
-          const currentClub = player.clubInfo;
-          if (player.basicInfo.isPlayer) {
-            const currentLoan = player.loanInfo;
+      ? this.dbPlayers.map((player) => {
+          const id = player.id;
+          const currentClubId = player.clubId;
+          if (player.isPlayer) {
+            const currentLoanClubId = player.loanClubId;
             const loanOut =
-              currentClub && currentLoan ? currentClub.id === this.club.id : false;
+              currentClubId && currentLoanClubId ? currentClubId === this.club.id : false;
             const loanIn =
-              currentClub && currentLoan ? currentLoan.id === this.club.id : false;
+              currentClubId && currentLoanClubId ? currentLoanClubId === this.club.id : false;
             
-            const ca = player.playerData && player.playerData.general && player.playerData.general.ca ? player.playerData.general.ca : null;
-            const pa = player.playerData && player.playerData.general && player.playerData.general.pa ? player.playerData.general.pa : null;
+            const ca = player.ca;
+            const pa = player.pa;
 
-            let squardNo = null;
-            if (loanIn && currentLoan.squardNumber) squardNo = currentLoan.squardNumber;
-            if (!currentLoan && currentClub.squardNumber) squardNo = currentClub.squardNumber;
+            let squadNo = player.squadNo;
 
             let updateThisWeek = false;
-            if (player.basicInfo.updateDate) {
-              const updateFrom = moment().diff(moment(player.basicInfo.updateDate), 'days');
+            if (player.updateDate) {
+              const updateFrom = moment().diff(moment(player.updateDate), 'days');
               updateThisWeek = updateFrom < 7;
             }
 
             return {
               id,
-              squardNo,
-              name: player.basicInfo.name,
-              nameEng: player.basicInfo.nameEng,
-              nationality: player.basicInfo.nationality,
-              dob: player.basicInfo.dob,
-              position: Players.getPlayerPosition(player),
+              squadNo,
+              name: player.name,
+              nameEng: player.nameEng,
+              nationality: player.nationality,
+              dob: player.dob,
+              position: Players.getPlayerPosition(player.positions),
               loanOut,
               loanIn,
               ca,
               pa,
               updateThisWeek,
-              updateDate: player.basicInfo.updateDate
+              updateDate: player.updateDate
             };
           } else return null
         }).filter(v => v)
@@ -167,16 +166,16 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
 
   getStaffList() {
     const allStaff = this.dbPlayers
-    ? this.dbPlayers.map(({player, id}) => {
-        const currentClub = player.clubInfo;
-          if (player.basicInfo.isNonPlayer) {
+    ? this.dbPlayers.map((player) => {
+        const currentClubId = player.clubId;
+          if (player.isNonPlayer) {
             return {
-              id,
-              name: player.basicInfo.name,
-              nameEng: player.basicInfo.nameEng,
-              nationality: player.basicInfo.nationality,
-              dob: player.basicInfo.dob,
-              job: currentClub.job
+              id: player.id,
+              name: player.name,
+              nameEng: player.nameEng,
+              nationality: player.nationality,
+              dob: player.dob,
+              job: player.job
             };
           } else return null
         }).filter(v => v)
