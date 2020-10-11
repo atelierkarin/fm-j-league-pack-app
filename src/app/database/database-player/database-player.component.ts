@@ -37,7 +37,7 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
   public jobs: PlayerType[];
   public isPlayer: boolean;
 
-  public playerId: string;
+  public playerId: number;
   public player: PlayerData;
   public playerAlias: string;
   public playerSecAlias: string;
@@ -59,15 +59,9 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
-    this.route.queryParams.subscribe(params => {
-      const name = params['name'];
-      const id = params['id'];
-      const dob = params['dob'];
-      this.store.dispatch(new DatabaseActions.LoadPlayer({
-        id,
-        name,
-        dob
-      }))
+    this.route.paramMap.subscribe(paramMap => {
+      const id = parseInt(paramMap.get("id"));
+      this.store.dispatch(new DatabaseActions.LoadPlayer(id))
     });
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
       this.clubs = coreState.clubs;
@@ -78,7 +72,7 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
     this.databaseSubscription = this.store
       .select("database")
       .subscribe(databaseState => {
-        this.player = databaseState.editPlayer ? databaseState.editPlayer.player : null;
+        this.player = databaseState.editPlayer;
         this.loading = databaseState.loadingPlayer;
         if (this.player) this.playerId = databaseState.editPlayer.id;
         this.databaseLoaded = true;

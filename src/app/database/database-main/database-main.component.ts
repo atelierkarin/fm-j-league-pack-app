@@ -74,6 +74,6 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
   }
 
   onNavigateToPlayers(player: {id: string, name: string, dob?: string}) {
-    this.router.navigate(['/database/player/'], { queryParams: {name: player.name, id: player.id, dob: player.dob} });
+    this.router.navigate(['/database/player/' + player.id]);
   }
 }

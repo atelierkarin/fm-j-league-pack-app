@@ -12,7 +12,7 @@ export interface State {
   searchPlayers: PlayerDataSimple[];
   latestPlayers: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[];
 
-  editPlayer: {player: PlayerData, id: string};
+  editPlayer: PlayerData;
 
   errMsg: string;
   loading: boolean;

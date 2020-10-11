@@ -58,12 +58,12 @@ export class SetSearchPlayers implements Action {
 export class LoadPlayer implements Action {
   readonly type = LOAD_PLAYER;
 
-  constructor(public payload: {id?: string, name?: string, dob?: string}) {}
+  constructor(public payload: number) {}
 }
 export class SetLoadPlayer implements Action {
   readonly type = SET_LOAD_PLAYER;
 
-  constructor(public payload: {player: PlayerData, id: string}) {}
+  constructor(public payload: PlayerData) {}
 }
 
 export class UpdatePlayer implements Action {

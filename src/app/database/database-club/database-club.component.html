@@ -6,8 +6,8 @@
   </div>
 </ng-container>
 <ng-template #elseLoadedTemplate>
-  <nav ngbNav #nav="ngbNav" class="nav-tabs database-club-nav-tabs">
-    <ng-container ngbNavItem>
+  <nav ngbNav #nav="ngbNav" [(activeId)]="activeTabId" class="nav-tabs database-club-nav-tabs">
+    <ng-container ngbNavItem [ngbNavItem]="1">
       <a ngbNavLink>スタッフ</a>
       <ng-template ngbNavContent>
         <div class="card-body" *ngIf="staff && staff.length > 0">
@@ -16,15 +16,14 @@
               <div class="col-12 col-sm-3">{{ getJobType(staffMember.job) }}</div>
               <div class="col-12 col-sm-9">
                 <a
-                [routerLink]="['/database/player/']"
-                [queryParams]="{name: staffMember.name, id: staffMember.id, dob: staffMember.dob}">{{ staffMember.name }}</a>
+                [routerLink]="['/database/player/' + staffMember.id]">{{ staffMember.name }}</a>
               </div>
             </div>
           </div>
         </div>
       </ng-template>
     </ng-container>
-    <ng-container ngbNavItem>
+    <ng-container ngbNavItem [ngbNavItem]="2">
       <a ngbNavLink>選手</a>
       <ng-template ngbNavContent>
         <div class="card-body player-table-div" *ngIf="players && players.length > 0">
@@ -52,8 +51,7 @@
                 ngx-datatable-cell-template
               >
                 <a
-                  [routerLink]="['/database/player/']"
-                  [queryParams]="{name: row.name, id: row.id, dob: row.dob}"
+                  [routerLink]="['/database/player/' + row.id]"
                   >{{ value }}</a
                 >&nbsp;
                 <span class="badge badge-info badge-pill" *ngIf="row.loanIn">期間付移籍中</span>

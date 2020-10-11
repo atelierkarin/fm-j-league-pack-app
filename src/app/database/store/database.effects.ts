@@ -88,34 +88,21 @@ export class DatabaseEffects {
   @Effect()
   loadPlayer = this.actions$.pipe(
     ofType(DatabaseActions.LOAD_PLAYER),
-    switchMap((loadPlayer: DatabaseActions.LoadPlayer) => {
-      this.collectionReference = null;
-      if (loadPlayer.payload.id) {
-        this.collectionReference = ref => ref.where('id', '==', loadPlayer.payload.id).limit(1);
-      } else if (loadPlayer.payload.name && loadPlayer.payload.dob) {
-        this.collectionReference = ref => ref
-          .where('player.basicInfo.name', '==', loadPlayer.payload.name)
-          .where('player.basicInfo.dob', '==', loadPlayer.payload.dob).limit(1);
-      } else if (loadPlayer.payload.name) {
-        this.collectionReference = ref => ref
-          .where('player.basicInfo.name', '==', loadPlayer.payload.name).limit(1);
-      } else {
-        throw "NOT ENOUGH INFORMATION"
+    switchMap((action: DatabaseActions.LoadPlayer) => {
+      return this.apollo.watchQuery<any>({
+        query: getPlayer,
+        variables: {
+          id: action.payload
+        }
+      }).valueChanges;
+    }),
+    map((result: ApolloQueryResult<any>) => {
+      let player = null;
+      if (result && result.data && result.data.player) {
+        player = result.data.player;
       }
-      return this.db.collection<{player: PlayerData, id: string}>('playerDb', this.collectionReference)
-        .get({ source: "server" })
+      return new DatabaseActions.SetLoadPlayer(player);
     }),
-    map((docs: firebase.firestore.QuerySnapshot) => {
-      let players = [];
-      docs.forEach(doc => {
-        players.push(doc.data())
-      })
-      if (players.length > 0)
-        return new DatabaseActions.SetLoadPlayer(players[0]);
-      else
-        return new DatabaseActions.SetLoadPlayer(null);
-    }),
-    
     catchError(() => {
       return of(new DatabaseActions.UpdateFail("SERVER FAIL"))
     })

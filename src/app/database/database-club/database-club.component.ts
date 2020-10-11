@@ -9,7 +9,7 @@ import * as DatabaseActions from "../store/database.actions";
 
 import { ClubData, LeagueData } from '../../shared/database-filetype'
 import * as Players from "../../data/fmJDatabase/Players.data";
-import { PlayerData, PlayerDataSimple } from "../../data/fmJDatabase/PlayerData.interface";
+import { PlayerDataSimple } from "../../data/fmJDatabase/PlayerData.interface";
 
 import { PlayerType } from "../../shared/player-type.enum";
 
@@ -64,9 +64,10 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   private databaseSubscription: Subscription;
 
   private coreLoading: boolean = false;
-  private databaseLoading: boolean = false;
 
   public innerWidth: any;
+
+  public activeTabId: number = 2;
 
   constructor(
     private store: Store<fromApp.AppState>,

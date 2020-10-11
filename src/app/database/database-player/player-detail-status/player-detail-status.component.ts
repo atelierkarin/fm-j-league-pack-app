@@ -102,13 +102,13 @@ export class PlayerDetailStatusComponent implements OnInit {
 
   getStatusValue(status: Status): number | string {
     if (status.type === "technical") {
-      return this.technical && status.value in this.technical ?this.technical[status.value] : "-"
+      return this.technical && status.value in this.technical && this.technical[status.value] ? this.technical[status.value] : "-"
     } else if (status.type === "mental") {
-      return this.mental && status.value in this.mental ? this.mental[status.value] : "-"
+      return this.mental && status.value in this.mental && this.mental[status.value] ? this.mental[status.value] : "-"
     } else if (status.type === "physical") {
-      return this.physical && status.value in this.physical ? this.physical[status.value] : "-"
+      return this.physical && status.value in this.physical && this.physical[status.value] ? this.physical[status.value] : "-"
     } else if (status.type === "goalkeeping") {
-      return this.goalkeeping && status.value in this.goalkeeping ? this.goalkeeping[status.value] : "-"
+      return this.goalkeeping && status.value in this.goalkeeping && this.goalkeeping[status.value] ? this.goalkeeping[status.value] : "-"
     } 
     return "-"
   }

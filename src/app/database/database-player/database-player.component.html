@@ -12,15 +12,15 @@
         <h3 class="player-name-col" [ngStyle]="getClubStyle()">
           <span
             *ngIf="
-              loanClub && loanClubContract && loanClubContract.squardNumber;
-              else elseSquardNumberTemplate
+              loanClub && loanClubContract && loanClubContract.squadNumber;
+              else elsesquadNumberTemplate
             "
           >
-            <b>{{ loanClubContract.squardNumber }}. </b>
+            <b>{{ loanClubContract.squadNumber }}. </b>
           </span>
-          <ng-template #elseSquardNumberTemplate>
-            <span *ngIf="club && clubContract && clubContract.squardNumber">
-              <b>{{ clubContract.squardNumber }}. </b>
+          <ng-template #elsesquadNumberTemplate>
+            <span *ngIf="club && clubContract && clubContract.squadNumber">
+              <b>{{ clubContract.squadNumber }}. </b>
             </span>
           </ng-template>
           {{ player.basicInfo.name }}

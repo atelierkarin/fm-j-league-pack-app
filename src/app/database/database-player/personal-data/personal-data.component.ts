@@ -39,7 +39,7 @@ export class PersonalDataComponent implements OnInit {
   }
 
   getStatusValue(status: Status): number | string {
-    return this.personal && status.value in this.personal ?this.personal[status.value] : "-"
+    return this.personal && status.value in this.personal && this.personal[status.value] ? this.personal[status.value] : "-"
   }
 
 }
