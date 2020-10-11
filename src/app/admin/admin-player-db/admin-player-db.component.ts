@@ -263,32 +263,32 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
       //   label: sp.player.basicInfo.name + (sp.player.basicInfo.dob ? '( ' + sp.player.basicInfo.dob + ' )' : '')
       // })) : null;
 
-      if (databaseState.editPlayer) {
-        if (databaseState.editPlayer.player.clubInfo && databaseState.editPlayer.player.clubInfo.id) {
-          const isClubIdExist = this.clubList.find(c => c.id === databaseState.editPlayer.player.clubInfo.id);          
-          if (!isClubIdExist) {
-            this.clubList = [...this.clubList, {
-              id: databaseState.editPlayer.player.clubInfo.id,
-              clubName: "" + databaseState.editPlayer.player.clubInfo.id
-            }];
-          }
-        }
-        if (databaseState.editPlayer.player.loanInfo && databaseState.editPlayer.player.loanInfo.id) {
-          const isClubIdExist = this.clubList.find(c => c.id === databaseState.editPlayer.player.loanInfo.id);
-          if (!isClubIdExist) {
-            this.clubList = [...this.clubList, {
-              id: databaseState.editPlayer.player.loanInfo.id,
-              clubName: "" + databaseState.editPlayer.player.loanInfo.id
-            }];
-          }
-        }
+      // if (databaseState.editPlayer) {
+      //   if (databaseState.editPlayer.player.clubInfo && databaseState.editPlayer.player.clubInfo.id) {
+      //     const isClubIdExist = this.clubList.find(c => c.id === databaseState.editPlayer.player.clubInfo.id);          
+      //     if (!isClubIdExist) {
+      //       this.clubList = [...this.clubList, {
+      //         id: databaseState.editPlayer.player.clubInfo.id,
+      //         clubName: "" + databaseState.editPlayer.player.clubInfo.id
+      //       }];
+      //     }
+      //   }
+      //   if (databaseState.editPlayer.player.loanInfo && databaseState.editPlayer.player.loanInfo.id) {
+      //     const isClubIdExist = this.clubList.find(c => c.id === databaseState.editPlayer.player.loanInfo.id);
+      //     if (!isClubIdExist) {
+      //       this.clubList = [...this.clubList, {
+      //         id: databaseState.editPlayer.player.loanInfo.id,
+      //         clubName: "" + databaseState.editPlayer.player.loanInfo.id
+      //       }];
+      //     }
+      //   }
 
-        this.editPlayerId = databaseState.editPlayer.id;
-        this.editPlayer = databaseState.editPlayer.player;              
-      } else {
-        this.editPlayerId = null;
-        this.editPlayer = null;
-      }
+      //   this.editPlayerId = databaseState.editPlayer.id;
+      //   this.editPlayer = databaseState.editPlayer.player;              
+      // } else {
+      //   this.editPlayerId = null;
+      //   this.editPlayer = null;
+      // }
 
       if (!this.loading) {
         this.resetForm();
@@ -378,9 +378,9 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
   }
 
   onSelectSearchPlayer() {
-    if (this.searchPlayerId) {
-      this.store.dispatch(new DatabaseActions.LoadPlayer({id: this.searchPlayerId}));
-    }
+    // if (this.searchPlayerId) {
+    //   this.store.dispatch(new DatabaseActions.LoadPlayer(this.searchPlayerId));
+    // }
   }
 
   onAddPlayer() {
