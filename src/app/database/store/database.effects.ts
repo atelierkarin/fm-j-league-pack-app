@@ -100,7 +100,6 @@ export class DatabaseEffects {
         player = result.data.player;
         return new DatabaseActions.SetLoadPlayer(player);
       } else {
-        console.log("PLAYER NOT FOUND");
         return new DatabaseActions.LoadFail("PLAYER NOT FOUND");
       }
     }),
