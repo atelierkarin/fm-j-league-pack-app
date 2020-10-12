@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { switchMap, map, catchError } from 'rxjs/operators';
-import { from, of } from "rxjs";
+import { from, of, EMPTY } from "rxjs";
 
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
-import { getPlayersByLatestUpdate, getPlayersByClub, getPlayer, mutationDeletePlayer } from './database-queries';
+import { getPlayersByLatestUpdate, getPlayersByClub, getPlayer, mutationDeletePlayer, mutationBrowsePlayer } from './database-queries';
 
 import { AngularFirestore, QueryFn } from '@angular/fire/firestore';
 
@@ -35,7 +35,7 @@ export class DatabaseEffects {
       return new DatabaseActions.SetPlayers(players.map(p => p.player));
     }),
     catchError(() => {
-      return of(new DatabaseActions.UpdateFail("SERVER FAIL"))
+      return of(new DatabaseActions.LoadFail("SERVER FAIL"))
     })
   )
 
@@ -56,7 +56,7 @@ export class DatabaseEffects {
       return new DatabaseActions.SetSearchPlayers(players);
     }),
     catchError(() => {
-      return of(new DatabaseActions.UpdateFail("SERVER FAIL"))
+      return of(new DatabaseActions.LoadFail("SERVER FAIL"))
     })
   )
 
@@ -79,7 +79,7 @@ export class DatabaseEffects {
       return new DatabaseActions.SetSearchPlayers(players);
     }),
     catchError(() => {
-      return of(new DatabaseActions.UpdateFail("SERVER FAIL"))
+      return of(new DatabaseActions.LoadFail("SERVER FAIL"))
     })
   )
 
@@ -102,7 +102,7 @@ export class DatabaseEffects {
       return new DatabaseActions.SetLoadPlayer(player);
     }),
     catchError(() => {
-      return of(new DatabaseActions.UpdateFail("SERVER FAIL"))
+      return of(new DatabaseActions.LoadFail("SERVER FAIL"))
     })
   )
 
@@ -161,7 +161,26 @@ export class DatabaseEffects {
       return new DatabaseActions.SetLatestUpdatePlayers(latestUpdatePlayers);
     }),
     catchError(() => {
-      return of(new DatabaseActions.UpdateFail("SERVER FAIL"))
+      return of(new DatabaseActions.LoadFail("SERVER FAIL"))
+    })
+  )
+
+  @Effect()
+  browsePlayer = this.actions$.pipe(
+    ofType(DatabaseActions.BROWSE_PLAYER),
+    switchMap((action: DatabaseActions.BrowsePlayer) => {
+      return this.apollo.mutate<any>({
+        mutation: mutationBrowsePlayer,
+        variables: {
+          id: action.payload
+        },
+      });
+    }),
+    map(() => {
+      return EMPTY;
+    }),
+    catchError(() => {
+      return of(new DatabaseActions.LoadFail("SERVER FAIL"))
     })
   )
 

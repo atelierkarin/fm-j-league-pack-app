@@ -87,6 +87,8 @@ export function databaseReducer(
         loading: false,
         loadingPlayer: false,
       };
+    case DatabaseActions.BROWSE_PLAYER:
+      return state;
     case DatabaseActions.UPDATE_PLAYER:
       return {
         ...state,
@@ -109,6 +111,18 @@ export function databaseReducer(
         loading: false,
       };
 
+    case DatabaseActions.LOAD_SUCCESS:
+      return {
+        ...state,
+        updateError: null,
+        loading: false
+      };
+    case DatabaseActions.LOAD_FAIL:
+      return {
+        ...state,
+        updateError: action.payload,
+        loading: false
+      };
     case DatabaseActions.UPDATE_SUCCESS:
       return {
         ...state,
