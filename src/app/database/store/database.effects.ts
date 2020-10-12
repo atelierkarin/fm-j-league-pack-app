@@ -177,7 +177,7 @@ export class DatabaseEffects {
       });
     }),
     map(() => {
-      return EMPTY;
+      return new DatabaseActions.LoadSuccess();
     }),
     catchError(() => {
       return of(new DatabaseActions.LoadFail("SERVER FAIL"))

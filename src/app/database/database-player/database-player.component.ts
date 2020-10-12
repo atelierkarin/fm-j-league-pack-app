@@ -50,6 +50,7 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
 
   private coreLoaded: boolean = false;
   private databaseLoaded: boolean = false;
+  private initDone: boolean = false;
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -178,7 +179,7 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
   }
 
   private init() {
-    if (this.coreLoaded && this.databaseLoaded) {
+    if (this.coreLoaded && this.databaseLoaded && !this.initDone) {
       if (this.player) {
         this.clubContract = this.player.clubInfo;
         this.loanClubContract = this.player.loanInfo;
@@ -197,6 +198,7 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
         this.titleService.setTitle(
           this.player.basicInfo.name + " - Football Manager Jリーグデータパック"
         );
+        this.initDone = true;
         this.store.dispatch(new DatabaseActions.BrowsePlayer(this.playerId));
       }
     }
