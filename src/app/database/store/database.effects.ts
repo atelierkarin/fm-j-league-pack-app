@@ -5,7 +5,7 @@ import { from, of, EMPTY } from "rxjs";
 
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
-import { getPlayersByLatestUpdate, getPlayersByClub, getPlayer, mutationDeletePlayer, mutationBrowsePlayer } from './database-queries';
+import { getPlayersByLatestUpdate, getPlayersByClub, getPlayer, mutationDeletePlayer, mutationBrowsePlayer, mutationUpdatePlayer } from './database-queries';
 
 import { AngularFirestore, QueryFn } from '@angular/fire/firestore';
 
@@ -98,8 +98,11 @@ export class DatabaseEffects {
       let player = null;
       if (result && result.data && result.data.player) {
         player = result.data.player;
+        return new DatabaseActions.SetLoadPlayer(player);
+      } else {
+        console.log("PLAYER NOT FOUND");
+        return new DatabaseActions.LoadFail("PLAYER NOT FOUND");
       }
-      return new DatabaseActions.SetLoadPlayer(player);
     }),
     catchError(() => {
       return of(new DatabaseActions.LoadFail("SERVER FAIL"))
@@ -109,33 +112,13 @@ export class DatabaseEffects {
   @Effect()
   updatePlayer = this.actions$.pipe(
     ofType(DatabaseActions.UPDATE_PLAYER),
-    switchMap((updatePlayer: DatabaseActions.UpdatePlayer) => {
-      let id = null;
-      if (updatePlayer.payload.id) {
-        id = updatePlayer.payload.id;
-      } else {
-        id = this.db.createId();
-      }
-      const changelog = updatePlayer.payload.changeLog;
-      const item = {
-        player: updatePlayer.payload.player,
-        id: id
-      }
-      return from((this.db.collection<PlayerData>('playerDb').doc(id).set(item)).then(() => {
-        if (changelog) {
-          const changelogItem = {
-            changelog: JSON.stringify(changelog),
-            updateDate: moment().valueOf(),
-            id: id
-          }
-          return this.db.collection<{changelog: string, updateDate: number, id: string}>('playerDbChangelog').add(changelogItem).then(() => Promise.resolve());          
-        } else {
-          return Promise.resolve();
-        }
-      }).catch(err => {
-        console.error(err);
-        throw err
-      }));
+    switchMap((action: DatabaseActions.UpdatePlayer) => {
+      return this.apollo.mutate<any>({
+        mutation: mutationUpdatePlayer,
+        variables: {
+          player: action.payload
+        },
+      });
     }),
     map(() => {
       return new DatabaseActions.UpdateSuccess()

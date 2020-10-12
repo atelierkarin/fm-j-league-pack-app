@@ -1,242 +1,481 @@
-<div class="container p-2">
-
+<div class="container-fluid p-2">
   <form [formGroup]="playerForm" (ngSubmit)="onSubmit()">
-  <div class="card mb-1">
-    <div class="card-header">基本データ</div>
-    <div class="card-body" formGroupName="basicInfo">
-      <div class="form-row">
-        <div class="form-group col-auto">
-          <label for="locationFile">ファイル</label>
-          <ng-select id="locationFile" [items]="datepackFileTypeList" bindLabel="val" bindValue="key" formControlName="file" required></ng-select>
-        </div>
-        <div class="form-group col-auto">
-          <label for="jleagueId">Jリーグ ID</label>
-          <input type="number" class="form-control" id="jleagueId" formControlName="jleagueId" placeholder="Jリーグ ID">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-4">
-          <label for="basicInfoName">名前</label>
-          <input type="text" class="form-control" id="basicInfoName" formControlName="name" placeholder="名前" required>
-        </div>
-        <div class="form-group col-md-4">
-          <label for="basicInfoNameEng">名前（ローマ字）</label>
-          <input type="text" class="form-control" id="basicInfoNameEng" formControlName="nameEng" placeholder="名前（ローマ字）">
-        </div>
-        <div class="form-group col-md-4">
-          <label for="basicInfoDob">生年月日</label>
-          <input type="date" class="form-control" id="basicInfoDob" formControlName="dob" placeholder="生年月日">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-3">
-          <label for="basicInfoNationality">国籍</label>
-          <ng-select id="basicInfoNationality" [items]="nationalityList" bindLabel="name" bindValue="code" formControlName="nationality" required></ng-select>
-        </div>
-        <div class="form-group col-md-3">
-          <label for="basicInfoSecondNationality">第2国籍</label>
-          <ng-select id="basicInfoSecondNationality" [items]="nationalityList" bindLabel="name" bindValue="code" formControlName="secondNationality" [multiple]="true"></ng-select>
-        </div>
-        <div class="form-group col-md-3">
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="basicInfoIsPlayer" formControlName="isPlayer">
-            <label class="form-check-label" for="basicInfoIsPlayer">プレイヤー</label>
-          </div>
-          <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="basicInfoIsNonPlayer" formControlName="isNonPlayer">
-            <label class="form-check-label" for="basicInfoIsNonPlayer">ノンプレイヤー</label>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card mb-1">
-    <div class="card-header">クラブデータ</div>
-    <div class="card-body" formGroupName="clubInfo">
-      <div class="form-row">
-        <div class="form-group col-md-4">
-          <label for="clubInfoId">クラブ</label>
-          <ng-select id="clubInfoId" [items]="clubList" bindLabel="clubName" bindValue="id" formControlName="id"></ng-select>
-        </div>
-        <div class="form-group col-md-4" *ngIf="playerForm.value.clubInfo.id">
-          <label for="clubInfoDateJoined">加入時期</label>
-          <input type="date" class="form-control" id="clubInfoDateJoined" formControlName="dateJoined">
-        </div>
-        <div class="form-group col-md-4" *ngIf="playerForm.value.clubInfo.id">
-          <label for="clubInfoDateJoined">契約更新時期</label>
-          <input type="date" class="form-control" id="clubInfoDateRenew" formControlName="dateRenew">
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6" *ngIf="playerForm.value.clubInfo.id">
-          <label for="clubInfoJob">職種</label>
-          <ng-select id="clubInfoJob" [items]="playerTypeList" bindLabel="val" bindValue="key" formControlName="job" [multiple]="true"></ng-select>
-        </div>
-        <div class="form-group col-md-2" *ngIf="playerForm.value.clubInfo.id">
-          <label for="clubInfoSquardNumber">背番号</label>
-          <input type="number" class="form-control" id="clubInfoSquardNumber" formControlName="squardNumber">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card mb-1" *ngIf="playerForm.value.clubInfo.id">
-    <div class="card-header">レンタルデータ</div>
-    <div class="card-body" formGroupName="loanInfo">
-      <div class="form-row">
-        <div class="form-group col-md-4">
-          <label for="loanInfoId">レンタルクラブ</label>
-          <ng-select id="loanInfoId" [items]="clubList" bindLabel="clubName" bindValue="id" formControlName="id"></ng-select>
-        </div>
-      </div>
-      <div class="form-row" *ngIf="playerForm.value.loanInfo.id">
-        <div class="form-group col-md-4">
-          <label for="loanInfoDateStart">開始時期</label>
-          <input type="date" class="form-control" id="loanInfoDateStart" formControlName="dateStart">
-        </div>
-        <div class="form-group col-md-4">
-          <label for="loanInfoDateEnd">終了時期</label>
-          <input type="date" class="form-control" id="loanInfoDateEnd" formControlName="dateEnd">
-        </div>
-        <div class="form-group col-md-2">
-          <label for="loanInfoSquardNumber">背番号</label>
-          <input type="number" class="form-control" id="loanInfoSquardNumber" formControlName="squardNumber">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card mb-1">
-    <div class="card-header">性格</div>
-    <div class="card-body" formGroupName="personalData">
-      <div class="form-row">
-        <div class="form-group col-4 col-md-3" *ngFor="let formData of formList.personalDataForm">
-          <label class="d-none d-md-block" [for]="'personalData-' + formData.key">{{ formData.name }}<br /><small>{{ formData.nameEng }}</small></label>
-          <input type="number" class="form-control" [id]="'personalData' + formData.key" [formControlName]="formData.key" [max]="formData.max" min="0" [placeholder]="formData.name">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="card mb-1" *ngIf="playerForm.value.basicInfo.isNonPlayer">
-    <div class="card-header">スタッフ職種</div>
-    <div class="card-body" formGroupName="jobReferences">
-      <div class="form-row">
-        <div class="form-group col-4 col-md-3" *ngFor="let formData of formList.jobReferencesForm">
-          <label class="d-none d-md-block" [for]="'jobReferences-' + formData.key">{{ formData.name }}<br /><small>{{ formData.nameEng }}</small></label>
-          <input type="number" class="form-control" [id]="'jobReferences-' + formData.key" [formControlName]="formData.key" [max]="formData.max" min="0" [placeholder]="formData.name">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="mt-2" formGroupName="playerData" *ngIf="playerForm.value.basicInfo.isPlayer">
-    <h5>プレイヤーデータ</h5>
     <div class="card mb-1">
-      <div class="card-header">基本能力</div>
-      <div class="card-body" formGroupName="general">
+      <div class="card-header">
+        基本データ
+        <button
+          class="btn btn-danger mr-2"
+          type="button"
+          (click)="onDelete()"
+          *ngIf="!loading && editPlayerId"
+        >
+          削除
+        </button>
+      </div>
+      <div class="card-body" formGroupName="basicInfo">
         <div class="form-row">
-          <div class="form-group col-4 col-md-3" *ngFor="let formData of formList.playerDataGeneralForm">
-            <label class="d-none d-md-block" [for]="'playerDataGeneral-' + formData.key">{{ formData.name }}<br /><small>{{ formData.nameEng }}</small></label>
-            <input type="number" class="form-control" [id]="'playerDataGeneral-' + formData.key" [formControlName]="formData.key" [max]="formData.max" min="0" [placeholder]="formData.name">
+          <div class="form-group col-auto">
+            <label for="locationFile">ファイル</label>
+            <ng-select
+              id="locationFile"
+              [items]="datepackFileTypeList"
+              bindLabel="val"
+              bindValue="key"
+              formControlName="file"
+              required
+            ></ng-select>
+          </div>
+          <div class="form-group col-auto">
+            <label for="jleagueId">Jリーグ ID</label>
+            <input
+              type="number"
+              class="form-control"
+              id="jleagueId"
+              formControlName="jleagueId"
+              placeholder="Jリーグ ID"
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-4">
+            <label for="basicInfoName">名前</label>
+            <input
+              type="text"
+              class="form-control"
+              id="basicInfoName"
+              formControlName="name"
+              placeholder="名前"
+              required
+            />
+          </div>
+          <div class="form-group col-md-4">
+            <label for="basicInfoNameEng">名前（ローマ字）</label>
+            <input
+              type="text"
+              class="form-control"
+              id="basicInfoNameEng"
+              formControlName="nameEng"
+              placeholder="名前（ローマ字）"
+            />
+          </div>
+          <div class="form-group col-md-4">
+            <label for="basicInfoDob">生年月日</label>
+            <input
+              type="date"
+              class="form-control"
+              id="basicInfoDob"
+              formControlName="dob"
+              placeholder="生年月日"
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-3">
+            <label for="basicInfoNationality">国籍</label>
+            <ng-select
+              id="basicInfoNationality"
+              [items]="nationalityList"
+              bindLabel="name"
+              bindValue="code"
+              formControlName="nationality"
+              required
+            ></ng-select>
+          </div>
+          <div class="form-group col-md-3">
+            <label for="basicInfoSecondNationality">第2国籍</label>
+            <ng-select
+              id="basicInfoSecondNationality"
+              [items]="nationalityList"
+              bindLabel="name"
+              bindValue="code"
+              formControlName="secondNationality"
+              [multiple]="true"
+            ></ng-select>
+          </div>
+          <div class="form-group col-md-3">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="basicInfoIsPlayer"
+                formControlName="isPlayer"
+              />
+              <label class="form-check-label" for="basicInfoIsPlayer"
+                >プレイヤー</label
+              >
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="checkbox"
+                id="basicInfoIsNonPlayer"
+                formControlName="isNonPlayer"
+              />
+              <label class="form-check-label" for="basicInfoIsNonPlayer"
+                >ノンプレイヤー</label
+              >
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <div class="card mb-1">
-      <div class="card-header">ポジション</div>
-      <div class="card-body" formGroupName="positions">
+      <div class="card-header">クラブデータ</div>
+      <div class="card-body" formGroupName="clubInfo">
         <div class="form-row">
-          <div class="form-group col-3 col-md-3" *ngFor="let formData of formList.playerDataPositionForm">
-            <label class="d-none d-md-block" [for]="'playerDataPositions-' + formData.key">{{ formData.name }}<br /><small>{{ formData.nameEng }}</small></label>
-            <input type="number" class="form-control" [id]="'playerDataPositions-' + formData.key" [formControlName]="formData.key" [max]="formData.max" min="0" [placeholder]="formData.nameEng">
+          <div class="form-group col-md-3">
+            <label for="clubInfoId">クラブ</label>
+            <ng-select
+              id="clubInfoId"
+              [items]="clubList"
+              bindLabel="clubName"
+              bindValue="id"
+              formControlName="id"
+            ></ng-select>
+          </div>
+          <div class="form-group col-md-3" *ngIf="playerForm.value.clubInfo.id">
+            <label for="clubInfoDateJoined">加入時期</label>
+            <input
+              type="date"
+              class="form-control"
+              id="clubInfoDateJoined"
+              formControlName="dateJoined"
+            />
+          </div>
+          <div class="form-group col-md-3" *ngIf="playerForm.value.clubInfo.id">
+            <label for="clubInfoDateJoined">契約更新時期</label>
+            <input
+              type="date"
+              class="form-control"
+              id="clubInfoDateRenew"
+              formControlName="dateRenew"
+            />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group col-md-3" *ngIf="playerForm.value.clubInfo.id">
+            <label for="clubInfoJob">職種</label>
+            <ng-select
+              id="clubInfoJob"
+              [items]="playerTypeList"
+              bindLabel="val"
+              bindValue="key"
+              formControlName="job"
+              [multiple]="true"
+            ></ng-select>
+          </div>
+          <div class="form-group col-md-2" *ngIf="playerForm.value.clubInfo.id">
+            <label for="clubInfoSquadNumber">背番号</label>
+            <input
+              type="number"
+              class="form-control"
+              id="clubInfoSquadNumber"
+              formControlName="squadNumber"
+            />
           </div>
         </div>
       </div>
     </div>
 
-    <div class="card mb-1">
-      <div class="card-header">メンタル</div>
-      <div class="card-body" formGroupName="mental">
+    <div class="card mb-1" *ngIf="playerForm.value.clubInfo.id">
+      <div class="card-header">レンタルデータ</div>
+      <div class="card-body" formGroupName="loanInfo">
         <div class="form-row">
-          <div class="form-group col-4 col-md-3" *ngFor="let formData of formList.playerDataMentalForm">
-            <label class="d-none d-md-block" [for]="'playerDataMental-' + formData.key">{{ formData.name }}<br /><small>{{ formData.nameEng }}</small></label>
-            <input type="number" max="20" class="form-control" [id]="'playerDataMental-' + formData.key" [formControlName]="formData.key" [max]="formData.max" min="0" [placeholder]="formData.name">
+          <div class="form-group col-md-3">
+            <label for="loanInfoId">レンタルクラブ</label>
+            <ng-select
+              id="loanInfoId"
+              [items]="clubList"
+              bindLabel="clubName"
+              bindValue="id"
+              formControlName="id"
+            ></ng-select>
+          </div>
+          <div class="form-group col-md-3">
+            <label for="loanInfoDateStart">開始時期</label>
+            <input
+              type="date"
+              class="form-control"
+              id="loanInfoDateStart"
+              formControlName="dateStart"
+            />
+          </div>
+          <div class="form-group col-md-3">
+            <label for="loanInfoDateEnd">終了時期</label>
+            <input
+              type="date"
+              class="form-control"
+              id="loanInfoDateEnd"
+              formControlName="dateEnd"
+            />
+          </div>
+          <div class="form-group col-md-2">
+            <label for="loanInfoSquadNumber">背番号</label>
+            <input
+              type="number"
+              class="form-control"
+              id="loanInfoSquadNumber"
+              formControlName="squadNumber"
+            />
           </div>
         </div>
       </div>
     </div>
 
-    <div class="card mb-1">
-      <div class="card-header">フィジカル</div>
-      <div class="card-body" formGroupName="physical">
-        <div class="form-row">
-          <div class="form-group col-4 col-md-3" *ngFor="let formData of formList.playerDataPhysicalForm">
-            <label class="d-none d-md-block" [for]="'playerDataPhysical-' + formData.key">{{ formData.name }}<br /><small>{{ formData.nameEng }}</small></label>
-            <input type="number" max="20" class="form-control" [id]="'playerDataPhysical-' + formData.key" [formControlName]="formData.key" [max]="formData.max" min="0" [placeholder]="formData.name">
-          </div>
+    <div class="card mb-1 player-status-form">
+      <div class="row">
+        <div class="col-12 col-sm-4 col-md-3 col-lg-2">
+          <small class="text-secondary">性格</small>
+          <ul class="list-group list-status" formGroupName="personalData">
+            <li
+              class="p-1 list-group-item d-flex justify-content-between align-items-center small"
+              *ngFor="let formData of formList.personalDataForm"
+            >
+              {{ formData.name }}
+              <span class="badge player-ability-badge">
+                <input
+                  type="number"
+                  class="form-control"
+                  [id]="'personalData-' + formData.key"
+                  [formControlName]="formData.key"
+                  [max]="formData.max"
+                  min="0"
+                  [placeholder]="formData.name"
+                />
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="col-12 col-sm-4 col-md-3 col-lg-2"
+          *ngIf="playerForm.value.basicInfo.isNonPlayer"
+        >
+          <small class="text-secondary">スタッフ職種</small>
+          <ul class="list-group list-status" formGroupName="jobReferences">
+            <li
+              class="p-1 list-group-item d-flex justify-content-between align-items-center small"
+              *ngFor="let formData of formList.jobReferencesForm"
+            >
+              {{ formData.name }}
+              <span class="badge player-ability-badge">
+                <input
+                  type="number"
+                  class="form-control"
+                  [id]="'jobReferences-' + formData.key"
+                  [formControlName]="formData.key"
+                  [max]="formData.max"
+                  min="0"
+                  [placeholder]="formData.name"
+                />
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="col-12 col-sm-4 col-md-3 col-lg-2"
+          formGroupName="playerData"
+          *ngIf="playerForm.value.basicInfo.isPlayer"
+        >
+          <small class="text-secondary">基本能力</small>
+          <ul class="list-group list-status" formGroupName="general">
+            <li
+              class="p-1 list-group-item d-flex justify-content-between align-items-center small"
+              *ngFor="let formData of formList.playerDataGeneralForm"
+            >
+              {{ formData.name }}
+              <span class="badge player-ability-badge">
+                <input
+                  type="number"
+                  class="form-control"
+                  [id]="'playerDataGeneral-' + formData.key"
+                  [formControlName]="formData.key"
+                  [max]="formData.max"
+                  min="0"
+                  [placeholder]="formData.name"
+                />
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="col-12 col-sm-4 col-md-3 col-lg-2"
+          formGroupName="playerData"
+          *ngIf="playerForm.value.basicInfo.isPlayer"
+        >
+          <small class="text-secondary">ポジション</small>
+          <ul class="list-group list-status" formGroupName="positions">
+            <li
+              class="p-1 list-group-item d-flex justify-content-between align-items-center small"
+              *ngFor="let formData of formList.playerDataPositionForm"
+            >
+              {{ formData.name }}
+              <span class="badge player-ability-badge">
+                <input
+                  type="number"
+                  class="form-control"
+                  [id]="'playerDataPositionForm-' + formData.key"
+                  [formControlName]="formData.key"
+                  [max]="formData.max"
+                  min="0"
+                  [placeholder]="formData.name"
+                />
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="col-12 col-sm-4 col-md-3 col-lg-2"
+          formGroupName="playerData"
+          *ngIf="playerForm.value.basicInfo.isPlayer"
+        >
+          <small class="text-secondary">メンタル</small>
+          <ul class="list-group list-status" formGroupName="mental">
+            <li
+              class="p-1 list-group-item d-flex justify-content-between align-items-center small"
+              *ngFor="let formData of formList.playerDataMentalForm"
+            >
+              {{ formData.name }}
+              <span class="badge player-ability-badge">
+                <input
+                  type="number"
+                  class="form-control"
+                  [id]="'playerDataMentalForm-' + formData.key"
+                  [formControlName]="formData.key"
+                  [max]="formData.max"
+                  min="0"
+                  [placeholder]="formData.name"
+                />
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="col-12 col-sm-4 col-md-3 col-lg-2"
+          formGroupName="playerData"
+          *ngIf="playerForm.value.basicInfo.isPlayer"
+        >
+          <small class="text-secondary">フィジカル</small>
+          <ul class="list-group list-status" formGroupName="physical">
+            <li
+              class="p-1 list-group-item d-flex justify-content-between align-items-center small"
+              *ngFor="let formData of formList.playerDataPhysicalForm"
+            >
+              {{ formData.name }}
+              <span class="badge player-ability-badge">
+                <input
+                  type="number"
+                  class="form-control"
+                  [id]="'playerDataPhysicalForm-' + formData.key"
+                  [formControlName]="formData.key"
+                  [max]="formData.max"
+                  min="0"
+                  [placeholder]="formData.name"
+                />
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="col-12 col-sm-4 col-md-3 col-lg-2"
+          formGroupName="playerData"
+          *ngIf="playerForm.value.basicInfo.isPlayer"
+        >
+          <small class="text-secondary">スキル</small>
+          <ul class="list-group list-status" formGroupName="technical">
+            <li
+              class="p-1 list-group-item d-flex justify-content-between align-items-center small"
+              *ngFor="let formData of formList.playerDataTechnicalForm"
+            >
+              {{ formData.name }}
+              <span class="badge player-ability-badge">
+                <input
+                  type="number"
+                  class="form-control"
+                  [id]="'playerDataTechnicalForm-' + formData.key"
+                  [formControlName]="formData.key"
+                  [max]="formData.max"
+                  min="0"
+                  [placeholder]="formData.name"
+                />
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="col-12 col-sm-4 col-md-3 col-lg-2"
+          formGroupName="playerData"
+          *ngIf="playerForm.value.basicInfo.isPlayer"
+        >
+          <small class="text-secondary">ゴールキーピング</small>
+          <ul class="list-group list-status" formGroupName="goalkeeping">
+            <li
+              class="p-1 list-group-item d-flex justify-content-between align-items-center small"
+              *ngFor="let formData of formList.playerDataGoalkeepingForm"
+            >
+              {{ formData.name }}
+              <span class="badge player-ability-badge">
+                <input
+                  type="number"
+                  class="form-control"
+                  [id]="'playerDataGoalkeepingForm-' + formData.key"
+                  [formControlName]="formData.key"
+                  [max]="formData.max"
+                  min="0"
+                  [placeholder]="formData.name"
+                />
+              </span>
+            </li>
+          </ul>
+        </div>
+
+        <div
+          class="col-12 col-sm-4 col-md-3 col-lg-2"
+          *ngIf="playerForm.value.basicInfo.isNonPlayer"
+        >
+          <small class="text-secondary">基本能力</small>
+          <ul class="list-group list-status" formGroupName="nonPlayerData">
+            <li
+              class="p-1 list-group-item d-flex justify-content-between align-items-center small"
+              *ngFor="let formData of formList.nonPlayerDataGeneralForm"
+            >
+              {{ formData.name }}
+              <span class="badge player-ability-badge">
+                <input
+                  type="number"
+                  class="form-control"
+                  [id]="'nonPlayerDataGeneralForm-' + formData.key"
+                  [formControlName]="formData.key"
+                  [max]="formData.max"
+                  min="0"
+                  [placeholder]="formData.name"
+                />
+              </span>
+            </li>
+          </ul>
         </div>
       </div>
     </div>
 
-    <div class="card mb-1">
-      <div class="card-header">スキル</div>
-      <div class="card-body" formGroupName="technical">
-        <div class="form-row">
-          <div class="form-group col-4 col-md-3" *ngFor="let formData of formList.playerDataTechnicalForm">
-            <label class="d-none d-md-block" [for]="'playerDataTechnical-' + formData.key">{{ formData.name }}<br /><small>{{ formData.nameEng }}</small></label>
-            <input type="number" max="20" class="form-control" [id]="'playerDataTechnical-' + formData.key" [formControlName]="formData.key" [max]="formData.max" min="0" [placeholder]="formData.name">
-          </div>
-        </div>
+    <div class="submit-button-div">
+      <div class="text-center my-2">
+        <button
+          class="btn btn-primary"
+          type="submit"
+          [disabled]="!playerForm.valid"
+          *ngIf="!loading"
+        >
+          確認
+        </button>
+        <span *ngIf="loading">更新中…</span>
       </div>
     </div>
-
-    <div class="card mb-1">
-      <div class="card-header">ゴールキーピング</div>
-      <div class="card-body" formGroupName="goalkeeping">
-        <div class="form-row">
-          <div class="form-group col-4 col-md-3" *ngFor="let formData of formList.playerDataGoalkeepingForm">
-            <label class="d-none d-md-block" [for]="'playerDataGoalkeeping-' + formData.key">{{ formData.name }}<br /><small>{{ formData.nameEng }}</small></label>
-            <input type="number" max="20" class="form-control" [id]="'playerDataGoalkeeping-' + formData.key" [formControlName]="formData.key" [max]="formData.max" min="0" [placeholder]="formData.name">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>  
-
-  <div class="mt-2" *ngIf="playerForm.value.basicInfo.isNonPlayer">
-    <h5>ノンプレイヤーデータ</h5>
-    <div class="card mb-1">
-      <div class="card-header">基本能力</div>
-      <div class="card-body" formGroupName="nonPlayerData">
-        <div class="form-row">
-          <div class="form-group col-md-3" *ngFor="let formData of formList.nonPlayerDataGeneralForm">
-            <label [for]="'nonPlayerDataGeneral-' + formData.key">{{ formData.name }}<br /><small>{{ formData.nameEng }}</small></label>
-            <input type="number" max="20" class="form-control" [id]="'nonPlayerDataGeneral-' + formData.key" [formControlName]="formData.key" [max]="formData.max">
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>  
-
-  <div class="submit-button-div">
-    <div class="text-center my-2">
-      <button
-        class="btn btn-alert"
-        type="button"
-        (click)="onDelete()"
-        *ngIf="!loading && searchPlayerId">削除
-      </button>
-      <button
-        class="btn btn-primary"
-        type="submit"
-        [disabled]="!playerForm.valid"
-        *ngIf="!loading">確認
-      </button>
-      <span *ngIf="loading">更新中…</span>
-    </div>
-  </div>
   </form>
 </div>

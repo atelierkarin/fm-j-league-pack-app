@@ -199,6 +199,12 @@ query getPlayer ($id: Int!) {
 }
 `
 
+export const mutationUpdatePlayer = gql`
+mutation updatePlayer($player: PlayerInput!) {
+  updatePlayer(player: $player)
+}
+`
+
 export const mutationBrowsePlayer = gql`
 mutation insertPlayerAccessLog ($id: Int!) {
   insertPlayerAccessLog(id: $id)

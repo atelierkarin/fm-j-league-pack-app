@@ -26,6 +26,8 @@ import * as moment from "moment";
   styleUrls: ["./database-player.component.css"],
 })
 export class DatabasePlayerComponent implements OnInit, OnDestroy {
+  public isAdmin: boolean;
+
   public clubContract;
   public club: ClubData;
   public loanClubContract;
@@ -45,6 +47,7 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
 
   private clubs: ClubData[];
 
+  private adminAuthSubscription: Subscription;
   private coreSubscription: Subscription;
   private databaseSubscription: Subscription;
 
@@ -52,17 +55,25 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
   private databaseLoaded: boolean = false;
   private initDone: boolean = false;
 
+  private loadError: boolean = false;
+
   constructor(
     private store: Store<fromApp.AppState>,
     private route: ActivatedRoute,
+    private router: Router,
     private titleService: Title
   ) {}
 
   ngOnInit() {
     this.route.paramMap.subscribe((paramMap) => {
       const id = parseInt(paramMap.get("id"));
-      this.store.dispatch(new DatabaseActions.LoadPlayer(id));
+      if (id && id > 0) this.store.dispatch(new DatabaseActions.LoadPlayer(id));
     });
+    this.adminAuthSubscription = this.store
+      .select("admin")
+      .subscribe((adminState) => {
+        this.isAdmin = adminState.isAdmin;
+      });
     this.coreSubscription = this.store.select("core").subscribe((coreState) => {
       this.clubs = coreState.clubs;
       this.leagues = coreState.leagues;
@@ -72,11 +83,16 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
     this.databaseSubscription = this.store
       .select("database")
       .subscribe((databaseState) => {
-        this.player = databaseState.editPlayer;
-        this.loading = databaseState.loadingPlayer;
-        if (this.player) this.playerId = databaseState.editPlayer.id;
-        this.databaseLoaded = true;
-        this.init();
+        if (!databaseState.errMsg) {
+          this.player = databaseState.editPlayer;
+          this.loading = databaseState.loadingPlayer;
+          if (this.player) this.playerId = databaseState.editPlayer.id;
+          this.databaseLoaded = true;
+          this.init();
+        } else {
+          this.loadError = true;
+          this.router.navigate(['/database']);
+        }
       });
   }
 
@@ -85,6 +101,10 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
     if (this.databaseSubscription) {
       this.databaseSubscription.unsubscribe();
     }
+    if (this.adminAuthSubscription) {
+      this.adminAuthSubscription.unsubscribe();
+    }
+    this.store.dispatch(new DatabaseActions.Reset())
     this.titleService.setTitle("Football Manager Jリーグデータパック");
   }
 
@@ -176,6 +196,12 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
     else if (val > 10) return "good-ca";
     else if (val > 5) return "avereage-ca";
     else return "poor-ca";
+  }
+
+  onEditPlayer() {
+    if (this.isAdmin) {
+      this.router.navigate(["/admin/playerDb/" + this.playerId]);
+    }
   }
 
   private init() {

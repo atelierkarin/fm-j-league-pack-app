@@ -8,7 +8,7 @@
 <ng-template #elseLoadedTemplate>
   <div class="container-fluid" *ngIf="player; else elsePlayerTemplate">
     <div class="row">
-      <div class="col-12">
+      <div class="col">
         <h3 class="player-name-col" [ngStyle]="getClubStyle()">
           <span
             *ngIf="
@@ -25,6 +25,12 @@
           </ng-template>
           {{ player.basicInfo.name }}
           <span class="h6">{{ player.basicInfo.nameEng }}</span>
+          <button
+            class="ml-2 btn btn-outline-dark"
+            type="button"
+            (click)="onEditPlayer()"
+            *ngIf="isAdmin">編集
+          </button>
         </h3>
       </div>
     </div>

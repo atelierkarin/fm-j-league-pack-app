@@ -115,7 +115,7 @@ export interface PlayerData {
   }
   clubInfo?: {
     id: number;
-    dateJoined: string;
+    dateJoined?: string;
     dateRenew?: string;
     job: PlayerType[];
     squardNumber?: number;

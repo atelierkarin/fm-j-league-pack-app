@@ -114,34 +114,34 @@ export function databaseReducer(
     case DatabaseActions.LOAD_SUCCESS:
       return {
         ...state,
-        updateError: null,
+        errMsg: null,
         loading: false
       };
     case DatabaseActions.LOAD_FAIL:
       return {
         ...state,
-        updateError: action.payload,
+        errMsg: action.payload,
         loading: false
       };
     case DatabaseActions.UPDATE_SUCCESS:
       return {
         ...state,
         editPlayer: null,
-        updateError: null,
+        errMsg: null,
         loading: false
       };
     case DatabaseActions.UPDATE_FAIL:
       return {
         ...state,
-        updateError: action.payload,
+        errMsg: action.payload,
         loading: false
       };
-    case DatabaseActions.RESET_SEARCH:
+    case DatabaseActions.RESET:
       return {
         ...state,
         searchPlayers: null,
         editPlayer: null,
-        updateError: null,
+        errMsg: null,
         loading: false,
         loadingPlayer: false,
       };

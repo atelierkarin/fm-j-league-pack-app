@@ -1,7 +1,6 @@
 import { Action } from '@ngrx/store';
 
 import { PlayerData, PlayerDataSimple } from "../../data/fmJDatabase/PlayerData.interface";
-import { PlayerDataChangelog } from "../../data/fmJDatabase/PlayerDataChangelog.interface";
 
 export const SET_SEASON = '[Database] Set Season';
 
@@ -26,7 +25,7 @@ export const LOAD_FAIL = '[Database] Load Fail';
 export const UPDATE_SUCCESS = '[Database] Update Success';
 export const UPDATE_FAIL = '[Database] Update Fail';
 
-export const RESET_SEARCH = '[Database] Reset Search';
+export const RESET = '[Database] Reset';
 
 export class SetSeason implements Action {
   readonly type = SET_SEASON;
@@ -78,7 +77,7 @@ export class BrowsePlayer implements Action {
 export class UpdatePlayer implements Action {
   readonly type = UPDATE_PLAYER;
 
-  constructor(public payload: {player: PlayerData, id?: number, changeLog?: any}) {}
+  constructor(public payload: PlayerData) {}
 }
 export class DeletePlayer implements Action {
   readonly type = DELETE_PLAYER;
@@ -111,8 +110,8 @@ export class UpdateFail implements Action {
 
   constructor(public payload: string) {}
 }
-export class ResetSearch implements Action {
-  readonly type = RESET_SEARCH;
+export class Reset implements Action {
+  readonly type = RESET;
 }
 
 export type DatabaseActions =
@@ -133,4 +132,4 @@ export type DatabaseActions =
   | LoadFail
   | UpdateSuccess
   | UpdateFail
-  | ResetSearch;
+  | Reset;

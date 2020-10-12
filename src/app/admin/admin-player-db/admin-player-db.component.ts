@@ -1,52 +1,57 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { Store } from '@ngrx/store';
-import { FormGroup, FormControl } from '@angular/forms';
+import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Subscription } from "rxjs";
+import { Store } from "@ngrx/store";
+import { FormGroup, FormControl } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 
-import diff from 'deep-diff';
+import diff from "deep-diff";
 
-import * as fromApp from '../../store/app.reducer';
-import * as DatabaseActions from '../../database/store/database.actions';
+import * as fromApp from "../../store/app.reducer";
+import * as DatabaseActions from "../../database/store/database.actions";
 
-import { PlayerData, PlayerDataSimple } from "../../data/fmJDatabase/PlayerData.interface";
+import {
+  PlayerData,
+  PlayerDataSimple,
+} from "../../data/fmJDatabase/PlayerData.interface";
 
-import * as CitiesData from '../../data/fmJDatabase/Cities.data';
-import { ClubData } from '../../shared/database-filetype'
-import { nationality } from '../../shared/nationality';
+import * as CitiesData from "../../data/fmJDatabase/Cities.data";
+import { ClubData } from "../../shared/database-filetype";
+import { nationality } from "../../shared/nationality";
 
 import { PlayerType } from "../../shared/player-type.enum";
-import { DatapackFiletype } from '../../shared/datapack-filetype.enum';
+import { DatapackFiletype } from "../../shared/datapack-filetype.enum";
 
-import * as f from './form.data';
-import { exception } from 'console';
+import * as f from "./form.data";
+import { exception } from "console";
 
 function removeEmpty(obj) {
-  Object.keys(obj).forEach(function(key) {
-    console.log(key, obj[key], typeof obj[key])
+  Object.keys(obj).forEach(function (key) {
     try {
-      if (obj[key] && typeof obj[key] === 'object') removeEmpty(obj[key])
-      else if (obj[key] == null) delete obj[key]
+      if (obj[key] && typeof obj[key] === "object") removeEmpty(obj[key]);
+      else if (obj[key] == null) delete obj[key];
     } catch (err) {}
   });
-};
+}
 
 @Component({
-  selector: 'app-admin-player-db',
-  templateUrl: './admin-player-db.component.html',
-  styleUrls: ['./admin-player-db.component.css']
+  selector: "app-admin-player-db",
+  templateUrl: "./admin-player-db.component.html",
+  styleUrls: ["./admin-player-db.component.css"],
 })
 export class AdminPlayerDbComponent implements OnInit, OnDestroy {
-
   public searchPlayerName: string;
-  public searchPlayers: {player: PlayerDataSimple, id: number, label: string}[];
+  public searchPlayers: {
+    player: PlayerDataSimple;
+    id: number;
+    label: string;
+  }[];
   public searchPlayerId: string;
 
   public basicInfoFormGroup = new FormGroup({
-    name: new FormControl(''),
-    nameEng: new FormControl(''),
+    name: new FormControl(""),
+    nameEng: new FormControl(""),
     dob: new FormControl(null),
-    nationality: new FormControl(''),
+    nationality: new FormControl(""),
     secondNationality: new FormControl(null),
     isPlayer: new FormControl(true),
     isNonPlayer: new FormControl(false),
@@ -55,16 +60,15 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
   });
   public clubInfoFormGroup = new FormGroup({
     id: new FormControl(null),
-    dateJoined: new FormControl(''),
+    dateJoined: new FormControl(null),
     dateRenew: new FormControl(null),
     job: new FormControl([PlayerType.選手]),
-    contractType: new FormControl(null),
     squadNumber: new FormControl(null),
   });
   public loanInfoFormGroup = new FormGroup({
     id: new FormControl(null),
-    dateStart: new FormControl(''),
-    dateEnd: new FormControl(''),
+    dateStart: new FormControl(""),
+    dateEnd: new FormControl(""),
     squadNumber: new FormControl(null),
   });
   public personalDataFormGroup = new FormGroup({
@@ -140,7 +144,7 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
     vision: new FormControl(null),
     workRate: new FormControl(null),
   });
-  
+
   public playerDataPhysicalFormGroup = new FormGroup({
     acceleration: new FormControl(null),
     agility: new FormControl(null),
@@ -152,7 +156,7 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
     stamina: new FormControl(null),
     strength: new FormControl(null),
   });
-  
+
   public playerDataTechnicalFormGroup = new FormGroup({
     corners: new FormControl(null),
     crossing: new FormControl(null),
@@ -170,7 +174,7 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
     technique: new FormControl(null),
     versatility: new FormControl(null),
   });
-  
+
   public playerDataGoalkeepingFormGroup = new FormGroup({
     aerialAbility: new FormControl(null),
     commandOfArea: new FormControl(null),
@@ -187,8 +191,6 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
 
   public playerDataFormGroup = new FormGroup({
     general: this.playerDataGeneralFormGroup,
-    trainedInNation: new FormControl(null),
-    trainedAtClub: new FormControl(null),
     positions: this.playerDataPositionFormGroup,
     mental: this.playerDataMentalFormGroup,
     physical: this.playerDataPhysicalFormGroup,
@@ -213,22 +215,22 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
     jobReferences: this.jobReferencesFormGroup,
     playerData: this.playerDataFormGroup,
     nonPlayerData: this.nonPlayerDataFormGroup,
-  })
+  });
 
-  public playerTypeList: { key: number, val: string }[];
-  public datepackFileTypeList: { key: number, val: string }[];
+  public playerTypeList: { key: number; val: string }[];
+  public datepackFileTypeList: { key: number; val: string }[];
   public nationalityList: {
-    name: string,
-    code: string
+    name: string;
+    code: string;
   }[] = nationality;
   public cityList: CitiesData.CityData[] = CitiesData.Cities;
   public clubList: ClubData[];
 
   public nationalityDropdownSettings = {
     singleSelection: true,
-    idField: 'code',
-    textField: 'name',
-    allowSearchFilter: true
+    idField: "code",
+    textField: "name",
+    allowSearchFilter: true,
   };
 
   public formList = f;
@@ -242,60 +244,81 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
   private coreSubscription: Subscription;
   private databaseSubscription: Subscription;
 
-  constructor(private store: Store<fromApp.AppState>, private route: ActivatedRoute,) { }
+  constructor(
+    private store: Store<fromApp.AppState>,
+    private route: ActivatedRoute
+  ) {}
 
   ngOnInit() {
     this.playerTypeList = Object.keys(PlayerType)
       .map(Number)
       .filter(Number.isInteger)
-      .map(k => ({ key: k, val: PlayerType[k] }));
+      .map((k) => ({ key: k, val: PlayerType[k] }));
     this.datepackFileTypeList = Object.keys(DatapackFiletype)
       .map(Number)
       .filter(Number.isInteger)
-      .map(k => ({ key: k, val: DatapackFiletype[k] }));
+      .map((k) => ({ key: k, val: DatapackFiletype[k] }));
 
-    this.route.paramMap.subscribe(paramMap => {
+    this.route.paramMap.subscribe((paramMap) => {
       const id = parseInt(paramMap.get("id"));
-      this.store.dispatch(new DatabaseActions.LoadPlayer(id))
+      if (id && id > 0) this.store.dispatch(new DatabaseActions.LoadPlayer(id));
     });
 
-    this.coreSubscription = this.store.select('core').subscribe(coreState => {
+    this.coreSubscription = this.store.select("core").subscribe((coreState) => {
       this.clubList = coreState.clubs;
-    })
-    this.databaseSubscription = this.store.select('database').subscribe(databaseState => {
-      this.loading = databaseState.loading;
-      this.updateError = databaseState.errMsg;
+    });
+    this.databaseSubscription = this.store
+      .select("database")
+      .subscribe((databaseState) => {
+        this.loading = databaseState.loading;
+        this.updateError = databaseState.errMsg;
 
-      if (databaseState.editPlayer) {
-        if (databaseState.editPlayer.clubInfo && databaseState.editPlayer.clubInfo.id) {
-          const isClubIdExist = this.clubList.find(c => c.id === databaseState.editPlayer.clubInfo.id);          
-          if (!isClubIdExist) {
-            this.clubList = [...this.clubList, {
-              id: databaseState.editPlayer.clubInfo.id,
-              clubName: "" + databaseState.editPlayer.clubInfo.id
-            }];
+        if (databaseState.editPlayer) {
+          if (
+            databaseState.editPlayer.clubInfo &&
+            databaseState.editPlayer.clubInfo.id
+          ) {
+            const isClubIdExist = this.clubList.find(
+              (c) => c.id === databaseState.editPlayer.clubInfo.id
+            );
+            if (!isClubIdExist) {
+              this.clubList = [
+                ...this.clubList,
+                {
+                  id: databaseState.editPlayer.clubInfo.id,
+                  clubName: "" + databaseState.editPlayer.clubInfo.id,
+                },
+              ];
+            }
           }
-        }
-        if (databaseState.editPlayer.loanInfo && databaseState.editPlayer.loanInfo.id) {
-          const isClubIdExist = this.clubList.find(c => c.id === databaseState.editPlayer.loanInfo.id);
-          if (!isClubIdExist) {
-            this.clubList = [...this.clubList, {
-              id: databaseState.editPlayer.loanInfo.id,
-              clubName: "" + databaseState.editPlayer.loanInfo.id
-            }];
+          if (
+            databaseState.editPlayer.loanInfo &&
+            databaseState.editPlayer.loanInfo.id
+          ) {
+            const isClubIdExist = this.clubList.find(
+              (c) => c.id === databaseState.editPlayer.loanInfo.id
+            );
+            if (!isClubIdExist) {
+              this.clubList = [
+                ...this.clubList,
+                {
+                  id: databaseState.editPlayer.loanInfo.id,
+                  clubName: "" + databaseState.editPlayer.loanInfo.id,
+                },
+              ];
+            }
           }
+          this.editPlayerId = databaseState.editPlayer.id;
+          this.editPlayer = databaseState.editPlayer;
+        } else {
+          this.editPlayerId = null;
+          this.editPlayer = null;
         }
-        this.editPlayerId = databaseState.editPlayer.id;
-        this.editPlayer = databaseState.editPlayer;              
-      } else {
-        this.editPlayerId = null;
-        this.editPlayer = null;
-      }
 
-      if (!this.loading) {
-        this.resetForm();
-      }
-    })
+        if (!this.loading) {
+          this.resetForm();
+        }
+      });
   }
 
   ngOnDestroy() {
@@ -309,26 +332,26 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
 
   onSubmit() {
     let personalData = {
-      ...this.playerForm.value.personalData
-    }
+      ...this.playerForm.value.personalData,
+    };
     let playerDataGeneral = {
-      ...this.playerForm.value.playerData.general
-    }    
+      ...this.playerForm.value.playerData.general,
+    };
     let playerDataPositions = {
-      ...this.playerForm.value.playerData.positions
-    }
+      ...this.playerForm.value.playerData.positions,
+    };
     let playerDataMental = {
-      ...this.playerForm.value.playerData.mental
-    }
+      ...this.playerForm.value.playerData.mental,
+    };
     let playerDataPhyiscal = {
-      ...this.playerForm.value.playerData.physical
-    }
+      ...this.playerForm.value.playerData.physical,
+    };
     let playerDataTechnical = {
-      ...this.playerForm.value.playerData.technical
-    }
+      ...this.playerForm.value.playerData.technical,
+    };
     let playerDataGoalkeeping = {
-      ...this.playerForm.value.playerData.goalkeeping
-    }    
+      ...this.playerForm.value.playerData.goalkeeping,
+    };
 
     removeEmpty(personalData);
     removeEmpty(playerDataGeneral);
@@ -341,22 +364,47 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
     let player: PlayerData = {
       id: this.playerForm.value.id,
       basicInfo: {
-        ...this.playerForm.value.basicInfo,
-        updateDate: this.formatDate(new Date(), "yyyy-MM-dd HH:mm:ss")
+        ...this.playerForm.value.basicInfo
       },
-      clubInfo: this.playerForm.value.clubInfo.id ? this.playerForm.value.clubInfo : null,
-      loanInfo: this.playerForm.value.loanInfo.id ? this.playerForm.value.loanInfo : null,
+      clubInfo: this.playerForm.value.clubInfo.id
+        ? this.playerForm.value.clubInfo
+        : null,
+      loanInfo: this.playerForm.value.loanInfo.id
+        ? this.playerForm.value.loanInfo
+        : null,
       personalData: Object.keys(personalData).length > 0 ? personalData : null,
-      playerData: this.playerForm.value.basicInfo.isPlayer ? {
-        general: Object.keys(playerDataGeneral).length > 0 ? playerDataGeneral : null,
-        positions: Object.keys(playerDataPositions).length > 0 ? playerDataPositions : null,
-        mental: Object.keys(playerDataMental).length > 0 ? playerDataMental : null,
-        physical: Object.keys(playerDataPhyiscal).length > 0 ? playerDataPhyiscal : null,
-        technical: Object.keys(playerDataTechnical).length > 0 ? playerDataTechnical : null,
-        goalkeeping: Object.keys(playerDataGoalkeeping).length > 0 ? playerDataGoalkeeping : null,
-      } : null,
-      nonPlayerData: this.playerForm.value.basicInfo.isNonPlayer ? this.playerForm.value.nonPlayerData : null,
-    }
+      playerData: this.playerForm.value.basicInfo.isPlayer
+        ? {
+            general:
+              Object.keys(playerDataGeneral).length > 0
+                ? playerDataGeneral
+                : null,
+            positions:
+              Object.keys(playerDataPositions).length > 0
+                ? playerDataPositions
+                : null,
+            mental:
+              Object.keys(playerDataMental).length > 0
+                ? playerDataMental
+                : null,
+            physical:
+              Object.keys(playerDataPhyiscal).length > 0
+                ? playerDataPhyiscal
+                : null,
+            technical:
+              Object.keys(playerDataTechnical).length > 0
+                ? playerDataTechnical
+                : null,
+            goalkeeping:
+              Object.keys(playerDataGoalkeeping).length > 0
+                ? playerDataGoalkeeping
+                : null,
+          }
+        : null,
+      nonPlayerData: this.playerForm.value.basicInfo.isNonPlayer
+        ? this.playerForm.value.nonPlayerData
+        : null,
+    };
     removeEmpty(player);
 
     let differences = null;
@@ -364,24 +412,12 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
       differences = diff.diff(this.editPlayer, player);
     }
 
-    this.store.dispatch(new DatabaseActions.UpdatePlayer({
-      player,
-      id: this.editPlayerId,
-      changeLog: differences
-    }));
-    this.searchPlayerName = "";
-    this.store.dispatch(new DatabaseActions.ResetSearch());
-  }
-
-  onSearchPlayer() {
-    if (this.searchPlayerName) {
-      this.store.dispatch(new DatabaseActions.SearchPlayers(this.searchPlayerName));
-    }
+    this.store.dispatch(
+      new DatabaseActions.UpdatePlayer(player)
+    );
   }
 
   onAddPlayer() {
-    this.searchPlayerName = "";
-    this.store.dispatch(new DatabaseActions.ResetSearch());
     this.resetForm();
   }
 
@@ -393,40 +429,39 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
     this.playerForm.reset();
 
     if (this.editPlayer) {
-      let editPlayerToSet = {...this.editPlayer}
-      removeEmpty(editPlayerToSet)
+      let editPlayerToSet = { ...this.editPlayer };
+      removeEmpty(editPlayerToSet);
       this.playerForm.patchValue(editPlayerToSet);
     } else {
       this.playerForm.patchValue({
         basicInfo: {
-          name: '',
-          nameEng: '',
-          nationality: 'JPN',
+          name: "",
+          nameEng: "",
+          nationality: "JPN",
           isPlayer: true,
           isNonPlayer: false,
-          file: DatapackFiletype["新規選手.fmf"]
+          file: DatapackFiletype["新規選手.fmf"],
         },
         clubInfo: {
-          dateJoined: '',
+          dateJoined: "",
           job: [PlayerType.選手],
         },
         loanInfo: {
-          dateStart: '',
-          dateEnd: '',
-        }
-      })
+          dateStart: "",
+          dateEnd: "",
+        },
+      });
     }
   }
 
   private formatDate(date: Date, format: string) {
-    format = format.replace(/yyyy/g, '' + date.getFullYear());
-    format = format.replace(/MM/g, ('0' + (date.getMonth() + 1)).slice(-2));
-    format = format.replace(/dd/g, ('0' + date.getDate()).slice(-2));
-    format = format.replace(/HH/g, ('0' + date.getHours()).slice(-2));
-    format = format.replace(/mm/g, ('0' + date.getMinutes()).slice(-2));
-    format = format.replace(/ss/g, ('0' + date.getSeconds()).slice(-2));
-    format = format.replace(/SSS/g, ('00' + date.getMilliseconds()).slice(-3));
+    format = format.replace(/yyyy/g, "" + date.getFullYear());
+    format = format.replace(/MM/g, ("0" + (date.getMonth() + 1)).slice(-2));
+    format = format.replace(/dd/g, ("0" + date.getDate()).slice(-2));
+    format = format.replace(/HH/g, ("0" + date.getHours()).slice(-2));
+    format = format.replace(/mm/g, ("0" + date.getMinutes()).slice(-2));
+    format = format.replace(/ss/g, ("0" + date.getSeconds()).slice(-2));
+    format = format.replace(/SSS/g, ("00" + date.getMilliseconds()).slice(-3));
     return format;
-  };
-
+  }
 }
