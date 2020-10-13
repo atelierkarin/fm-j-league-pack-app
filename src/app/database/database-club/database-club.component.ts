@@ -247,12 +247,16 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   getCAClass(ca) {    
     if (!this.league) return "avereage-ca";
     const leagueGuideline = this.league.leagueCaGuideline;
-    if (leagueGuideline.length !== 4) return "avereage-ca";
-    if (ca >= leagueGuideline[0]) return "overrate-ca";
-    else if (ca >= leagueGuideline[1]) return "good-ca";
-    else if (ca >= leagueGuideline[2]) return "avereage-ca";
-    else if (ca >= leagueGuideline[3]) return "poor-ca";
-    else return "bad-ca"
+    if (leagueGuideline && Array.isArray(leagueGuideline)) {
+      if (leagueGuideline.length !== 4) return "avereage-ca";
+      if (ca >= leagueGuideline[0]) return "overrate-ca";
+      else if (ca >= leagueGuideline[1]) return "good-ca";
+      else if (ca >= leagueGuideline[2]) return "avereage-ca";
+      else if (ca >= leagueGuideline[3]) return "poor-ca";
+      else return "bad-ca"
+    } else {
+      return "avereage-ca";
+    }
   }
 
   getPAClass(pa) { 
@@ -262,12 +266,16 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
     }
     if (!this.league) return "avereage-ca";
     const leagueGuideline = this.league.leagueCaGuideline;
-    if (leagueGuideline.length !== 4) return "avereage-ca";
-    if (realPa >= leagueGuideline[0]) return "overrate-ca";
-    else if (realPa >= leagueGuideline[1]) return "good-ca";
-    else if (realPa >= leagueGuideline[2]) return "avereage-ca";
-    else if (realPa >= leagueGuideline[3]) return "poor-ca";
-    else return "bad-ca"
+    if (leagueGuideline && Array.isArray(leagueGuideline)) {
+      if (leagueGuideline.length !== 4) return "avereage-ca";
+      if (realPa >= leagueGuideline[0]) return "overrate-ca";
+      else if (realPa >= leagueGuideline[1]) return "good-ca";
+      else if (realPa >= leagueGuideline[2]) return "avereage-ca";
+      else if (realPa >= leagueGuideline[3]) return "poor-ca";
+      else return "bad-ca"
+    } else {
+      return "avereage-ca";
+    }
   }
 
   sortSquadNo(valueA, valueB, rowA, rowB, sortDirection) {
