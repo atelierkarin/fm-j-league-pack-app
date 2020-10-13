@@ -22,7 +22,6 @@ import { PlayerType } from "../../shared/player-type.enum";
 import { DatapackFiletype } from "../../shared/datapack-filetype.enum";
 
 import * as f from "./form.data";
-import { exception } from "console";
 
 function removeEmpty(obj) {
   Object.keys(obj).forEach(function (key) {

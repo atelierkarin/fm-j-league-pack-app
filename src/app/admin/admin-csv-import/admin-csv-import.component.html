@@ -1,0 +1,82 @@
+<div class="container p-2">
+  <div class="card">
+    <div class="card-header">データをインポートする</div>
+    <div class="card-body">
+      <div class="custom-file">
+        <input
+          type="file"
+          class="custom-file-input"
+          id="customFile"
+          #fl
+          accept=".csv"
+          (change)="onUploadFiles(fl.files)"
+        />
+        <label class="custom-file-label" for="customFile"
+          >CSVファイルを選択する</label
+        >
+      </div>
+      <div>
+        <ng-select
+          id="locationFile"
+          [items]="datepackFileTypeList"
+          bindLabel="val"
+          bindValue="key"
+          [(ngModel)]="datepackFileType"
+        ></ng-select>
+      </div>
+
+      <div *ngIf="loadData">
+        <hr />
+        <input type="number" [(ngModel)]="updateId" class="form-control" placeholder="更新ID" />
+        <hr />
+        <input
+          type="text"
+          class="form-control"
+          (keyup)="updateFilter($event)"
+        />
+        <ngx-datatable
+          class="bootstrap fullscreen player-table"
+          [rows]="displayData"
+          [columnMode]="'flex'"
+          [rowHeight]="'auto'"
+          [footerHeight]="50"
+          [limit]="10"
+          [sorts]="[
+            {
+              prop: 'common_name',
+              dir: 'asc'
+            }
+          ]"
+        >
+          <ngx-datatable-column
+            name="Common Name"
+            prop="common_name"
+            [flexGrow]="2"
+          ></ngx-datatable-column>
+          <ngx-datatable-column name="Name" prop="name" [flexGrow]="2">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              {{ row.first_name }} {{ row.last_name }}
+            </ng-template>
+          </ngx-datatable-column>
+          <ngx-datatable-column
+            name="DOB"
+            prop="dob"
+            [flexGrow]="1"
+          ></ngx-datatable-column>
+          <ngx-datatable-column
+            name="Action"
+            prop="action"
+            [flexGrow]="1"
+            [sortable]="false"
+          >
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <button class="btn btn-primary" (click)="onDoAnalysis(row)">
+                更新
+              </button>
+            </ng-template>
+          </ngx-datatable-column>
+        </ngx-datatable>
+      </div>
+    </div>
+  </div>
+</div>

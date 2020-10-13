@@ -16,9 +16,10 @@ import { AdminMainComponent } from './admin-main/admin-main.component';
 import { AdminHistoryComponent } from './admin-history/admin-history.component';
 import { AdminPlayerUpdateComponent } from './admin-player-update/admin-player-update.component';
 import { AdminPlayerDbComponent } from './admin-player-db/admin-player-db.component';
+import { AdminCsvImportComponent } from './admin-csv-import/admin-csv-import.component';
 
 @NgModule({
-  declarations: [AdminComponent, AdminLoginComponent, AdminMainComponent, AdminHistoryComponent, AdminPlayerUpdateComponent, AdminPlayerDbComponent],
+  declarations: [AdminComponent, AdminLoginComponent, AdminMainComponent, AdminHistoryComponent, AdminPlayerUpdateComponent, AdminPlayerDbComponent, AdminCsvImportComponent],
   imports: [
     CommonModule,
     FormsModule,
