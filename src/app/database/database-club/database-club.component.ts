@@ -220,12 +220,14 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   }
 
   getClubStyle() {
-    return this.club.clubColor1
-      ? {
-          backgroundColor: this.club.clubColor2,
-          color: this.club.clubColor1
-        }
-      : null;
+    if (this.club)
+      return this.club.clubColor1
+        ? {
+            backgroundColor: this.club.clubColor2,
+            color: this.club.clubColor1
+          }
+        : null;
+    return null;
   }
 
   getFlag(nat) {

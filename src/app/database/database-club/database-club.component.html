@@ -7,7 +7,7 @@
 </ng-container>
 <ng-template #elseLoadedTemplate>
   <div class="club-title" [ngStyle]="getClubStyle() ? getClubStyle() : null">
-    <h3 class="heading">{{ club.clubName }}</h3>
+    <h3 class="heading">{{ club ? club.clubName : "" }}</h3>
   </div>
   <nav
     ngbNav
