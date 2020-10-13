@@ -50,17 +50,6 @@ export function databaseReducer(
         players: [...action.payload],
         loading: false,
       };
-    case DatabaseActions.FETCH_PLAYERS:
-      return {
-        ...state,
-        loading: true,
-      };
-    case DatabaseActions.SEARCH_PLAYERS:
-      return {
-        ...state,
-        searchPlayers: null,
-        loading: true,
-      };
     case DatabaseActions.SEARCH_PLAYERS_BY_CLUB:
       return {
         ...state,

@@ -5,13 +5,11 @@ import { PlayerData, PlayerDataSimple } from "../../data/fmJDatabase/PlayerData.
 export const SET_SEASON = '[Database] Set Season';
 
 export const SET_PLAYERS = '[Database] Set Players';
-export const FETCH_PLAYERS = '[Database] Fetch Players';
 
 export const BROWSE_PLAYER = '[Database] Browse Player';
 export const UPDATE_PLAYER = '[Database] Update Player';
 export const DELETE_PLAYER = '[Database] Delete Player';
 
-export const SEARCH_PLAYERS = '[Database] Search Players';
 export const SEARCH_PLAYERS_BY_CLUB = '[Database] Search Players By Club';
 export const SET_SEARCH_PLAYERS = '[Database] Set Search Players';
 export const LOAD_PLAYER = '[Database] Load Player';
@@ -39,15 +37,6 @@ export class SetPlayers implements Action {
   constructor(public payload: PlayerData[]) {}
 }
 
-export class FetchPlayers implements Action {
-  readonly type = FETCH_PLAYERS;
-}
-
-export class SearchPlayers implements Action {
-  readonly type = SEARCH_PLAYERS;
-
-  constructor(public payload: string) {}
-}
 export class SearchPlayersByClub implements Action {
   readonly type = SEARCH_PLAYERS_BY_CLUB;
 
@@ -117,11 +106,9 @@ export class Reset implements Action {
 export type DatabaseActions =
   | SetSeason
   | SetPlayers
-  | FetchPlayers
   | BrowsePlayer
   | UpdatePlayer
   | DeletePlayer
-  | SearchPlayers
   | SearchPlayersByClub
   | SetSearchPlayers
   | LoadPlayer

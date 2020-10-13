@@ -16,7 +16,6 @@ export class DatabaseComponent implements OnInit {
   constructor(private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
-    this.store.dispatch(new DatabaseActions.FetchPlayers());
     this.store.dispatch(new DatabaseActions.LoadLatestUpdatePlayers());
   }
 
