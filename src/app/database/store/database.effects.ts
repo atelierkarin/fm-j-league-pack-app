@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
 import { switchMap, map, catchError } from 'rxjs/operators';
-import { from, of, EMPTY } from "rxjs";
+import { of } from "rxjs";
 
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
@@ -34,8 +35,10 @@ export class DatabaseEffects {
       })
       return new DatabaseActions.SetPlayers(players.map(p => p.player));
     }),
-    catchError(() => {
-      return of(new DatabaseActions.LoadFail("SERVER FAIL"))
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.LoadFail("SERVER FAIL"));
+      return caught;
     })
   )
 
@@ -55,8 +58,10 @@ export class DatabaseEffects {
       })
       return new DatabaseActions.SetSearchPlayers(players);
     }),
-    catchError(() => {
-      return of(new DatabaseActions.LoadFail("SERVER FAIL"))
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.LoadFail("SERVER FAIL"));
+      return caught;
     })
   )
 
@@ -78,8 +83,10 @@ export class DatabaseEffects {
       }
       return new DatabaseActions.SetSearchPlayers(players);
     }),
-    catchError(() => {
-      return of(new DatabaseActions.LoadFail("SERVER FAIL"))
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.LoadFail("SERVER FAIL"));
+      return caught;
     })
   )
 
@@ -103,8 +110,10 @@ export class DatabaseEffects {
         return new DatabaseActions.LoadFail("PLAYER NOT FOUND");
       }
     }),
-    catchError(() => {
-      return of(new DatabaseActions.LoadFail("SERVER FAIL"))
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.LoadFail("SERVER FAIL"));
+      return caught;
     })
   )
 
@@ -122,8 +131,10 @@ export class DatabaseEffects {
     map(() => {
       return new DatabaseActions.UpdateSuccess()
     }),
-    catchError(() => {
-      return of(new DatabaseActions.UpdateFail("SERVER FAIL"))
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.UpdateFail("SERVER FAIL"));
+      return caught;
     })
   )
 
@@ -142,8 +153,10 @@ export class DatabaseEffects {
       }
       return new DatabaseActions.SetLatestUpdatePlayers(latestUpdatePlayers);
     }),
-    catchError(() => {
-      return of(new DatabaseActions.LoadFail("SERVER FAIL"))
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.LoadFail("SERVER FAIL"));
+      return caught;
     })
   )
 
@@ -161,8 +174,10 @@ export class DatabaseEffects {
     map(() => {
       return new DatabaseActions.LoadSuccess();
     }),
-    catchError(() => {
-      return of(new DatabaseActions.LoadFail("SERVER FAIL"))
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.LoadFail("SERVER FAIL"));
+      return caught;
     })
   )
 
@@ -180,12 +195,15 @@ export class DatabaseEffects {
     map(() => {
       return new DatabaseActions.UpdateSuccess()
     }),
-    catchError(() => {
-      return of(new DatabaseActions.UpdateFail("SERVER FAIL"))
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.UpdateFail("SERVER FAIL"));
+      return caught;
     })
   )
 
   constructor(
+    private store: Store,
     private actions$: Actions,
     private db: AngularFirestore,
     private apollo: Apollo
