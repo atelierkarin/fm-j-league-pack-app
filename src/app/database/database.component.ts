@@ -17,6 +17,7 @@ export class DatabaseComponent implements OnInit {
 
   ngOnInit() {
     this.store.dispatch(new DatabaseActions.LoadLatestUpdatePlayers());
+    this.store.dispatch(new DatabaseActions.LoadMostAccessedPlayers());
   }
 
   onClearCache() {

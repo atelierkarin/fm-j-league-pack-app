@@ -1,7 +1,7 @@
 <div class="container-fluid" *ngIf="league">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-12 col-md-6 col-lg-4 p-1" *ngFor="let clubId of clubs">
+      <div class="col-12 col-md-6 p-1" *ngFor="let clubId of clubs">
         <button class="btn btn-block btn-outline-secondary club-button"
           [ngClass]="'club-button-of-league-' + leagueId"
           (click)="onClickClub(clubId)"

@@ -18,6 +18,9 @@ export const SET_LOAD_PLAYER = '[Database] Set Load Player';
 export const LOAD_LATEST_UPDATE_PLAYERS = '[Database] Load Latest Update Players';
 export const SET_LATEST_UPDATE_PLAYERS = '[Database] Set Latest Update Players';
 
+export const LOAD_MOST_ACCESSED_PLAYERS = '[Database] Load Most Accessed Players';
+export const SET_MOST_ACCESSED_PLAYERS = '[Database] Set Most Accessed Players';
+
 export const LOAD_SUCCESS = '[Database] Load Success';
 export const LOAD_FAIL = '[Database] Load Fail';
 export const UPDATE_SUCCESS = '[Database] Update Success';
@@ -83,6 +86,15 @@ export class SetLatestUpdatePlayers implements Action {
   constructor(public payload: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[]) {}
 }
 
+export class LoadMostAccessedPlayers implements Action {
+  readonly type = LOAD_MOST_ACCESSED_PLAYERS;
+}
+export class SetMostAccessedPlayers implements Action {
+  readonly type = SET_MOST_ACCESSED_PLAYERS;
+
+  constructor(public payload: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[]) {}
+}
+
 export class LoadSuccess implements Action {
   readonly type = LOAD_SUCCESS;
 }
@@ -115,6 +127,8 @@ export type DatabaseActions =
   | SetLoadPlayer
   | LoadLatestUpdatePlayers
   | SetLatestUpdatePlayers
+  | LoadMostAccessedPlayers
+  | SetMostAccessedPlayers
   | LoadSuccess
   | LoadFail
   | UpdateSuccess

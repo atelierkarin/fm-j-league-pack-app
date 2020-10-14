@@ -1,25 +1,49 @@
 <div class="container-fluid">
   <div class="row">
-    <div class="col-md-8 col-12">
+    <div class="col-md-6 col-12">
       <div class="content-league mb-5" *ngFor="let league of leagues">
         <h2 class="league-title">{{ league.leagueName }}</h2>
         <app-database-league [leagueId]="league.id"></app-database-league>
       </div>
     </div>
-    <div class="col-md-4 col-12">
-      <h5>最新更新された選手・スタッフ</h5>
-      <ng-container *ngIf="loading; else elseTemplate">
-        <div class="d-flex justify-content-center">
-          <div class="spinner-border m-5" role="status">
-            <span class="sr-only">データ読み込み中</span>
-          </div>
+    <ng-container *ngIf="loading; else elseTemplate">
+      <div class="d-flex justify-content-center">
+        <div class="spinner-border m-5" role="status">
+          <span class="sr-only">データ読み込み中</span>
         </div>
-      </ng-container>
-      <ng-template #elseTemplate>
+      </div>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <div class="col-md-3 col-12">
+        <h5>最近の人気選手</h5>
         <div class="list-group">
-          <button type="button" (click)="onNavigateToPlayers(players)"
+          <button
+            type="button"
+            (click)="onNavigateToPlayers(players)"
             class="list-group-item list-group-item-action"
-            *ngFor="let players of latestUpdatePlayers">
+            *ngFor="let players of mostAccessedPlayers; index as i"
+          >
+            <div class="d-flex w-100 justify-content-between">
+              <h5 class="mb-1">
+                <div class="media">
+                  <h1><i>{{ i + 1 }}.</i></h1>
+                  <div class="media-body ml-1 mt-3">{{ players.name }}</div>
+                </div>
+              </h5>
+              <small class="text-mute">{{ getClub(players.clubId) }}</small>
+            </div>
+          </button>
+        </div>
+      </div>
+      <div class="col-md-3 col-12">
+        <h5>最新更新された選手・スタッフ</h5>
+        <div class="list-group">
+          <button
+            type="button"
+            (click)="onNavigateToPlayers(players)"
+            class="list-group-item list-group-item-action"
+            *ngFor="let players of latestUpdatePlayers"
+          >
             <div class="d-flex w-100 justify-content-between">
               <h5 class="mb-1">{{ players.name }}</h5>
               <small class="text-mute">{{ getClub(players.clubId) }}</small>
@@ -27,7 +51,7 @@
             <small>{{ players.updateDate }}</small>
           </button>
         </div>
-      </ng-template>
-    </div>
+      </div>
+    </ng-template>
   </div>
 </div>

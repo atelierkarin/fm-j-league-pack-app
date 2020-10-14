@@ -34,10 +34,16 @@ export class ImportCsvModalContentComponent implements OnInit {
   }
 
   public genResultData() {
-    return this.updateId ? {
-      ...this.formattedData,
-      id: this.updateId
-    } : this.formattedData
+    if (this.updateId) {
+      let returnData = {
+        ...this.formattedData,
+        id: this.updateId
+      };
+      delete returnData["basicInfo"]["name"];
+      return returnData;
+    } else {
+      return this.formattedData;
+    }
   }
 
   public getJsonData() {
@@ -132,7 +138,7 @@ export class ImportCsvModalContentComponent implements OnInit {
       );
       if (playerTypes) {
         let clubInfo = {};
-        clubInfo["clubId"] = parseInt(this.data["club"]);
+        clubInfo["id"] = parseInt(this.data["club"]);
         clubInfo["dateJoined"] = this.data["clubDateJoined"]
           ? this.data["clubDateJoined"]
           : null;
@@ -154,7 +160,7 @@ export class ImportCsvModalContentComponent implements OnInit {
   private getLoanInfo() {
     if (this.checkNotEmpty("loanClub")) {
       let loanInfo = {};
-      loanInfo["clubId"] = parseInt(this.data["loanClub"]);
+      loanInfo["id"] = parseInt(this.data["loanClub"]);
       loanInfo["dateStart"] = this.data["loanDateStart"]
         ? this.data["loanDateStart"]
         : null;

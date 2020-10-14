@@ -17,9 +17,9 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
   public loading: boolean;
   public leagues: LeagueData[];
   public latestUpdatePlayers: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[];
+  public mostAccessedPlayers: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[];
 
-  private clubList: ClubData[];
-  
+  private clubList: ClubData[];  
 
   private coreSubscription: Subscription;
   private databaseSubscription: Subscription;
@@ -36,9 +36,11 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
     this.databaseSubscription = this.store
       .select("database")
       .subscribe(databaseState => {
+        console.log(databaseState)
         this.latestUpdatePlayers = databaseState.latestPlayers;
+        this.mostAccessedPlayers = databaseState.mostAccessedPlayers;
         this.season = databaseState.season;
-        this.loading = databaseState.loading;
+        this.loading = databaseState.loading || databaseState.loadingMostAccessedPlayers;
       });
   }
 

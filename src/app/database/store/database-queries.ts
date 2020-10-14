@@ -11,6 +11,17 @@ query getPlayersByLatestUpdate {
   }
 }`;
 
+export const getPlayersByMostAccessed = gql`
+query getPlayersByMostAccessed {
+  playersByMostAccessed {
+    id
+    name
+    dob
+    clubId
+    updateDate
+  }
+}`;
+
 export const getPlayersByClub = gql`
 query getPlayersByClub($clubId: Int!) {
   playersByClub(clubId: $clubId) {

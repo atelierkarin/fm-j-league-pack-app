@@ -5,7 +5,7 @@ import { switchMap, map, catchError } from 'rxjs/operators';
 
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
-import { getPlayersByLatestUpdate, getPlayersByClub, getPlayer, mutationDeletePlayer, mutationBrowsePlayer, mutationUpdatePlayer } from './database-queries';
+import { getPlayersByLatestUpdate, getPlayersByMostAccessed, getPlayersByClub, getPlayer, mutationDeletePlayer, mutationBrowsePlayer, mutationUpdatePlayer } from './database-queries';
 
 import * as DatabaseActions from './database.actions';
 
@@ -99,6 +99,28 @@ export class DatabaseEffects {
         latestUpdatePlayers = result.data.playersByLatestUpdate.map(v => v)
       }
       return new DatabaseActions.SetLatestUpdatePlayers(latestUpdatePlayers);
+    }),
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.LoadFail("SERVER FAIL"));
+      return caught;
+    })
+  )
+
+  @Effect()
+  loadLatestMostAccessed = this.actions$.pipe(
+    ofType(DatabaseActions.LOAD_MOST_ACCESSED_PLAYERS),
+    switchMap(() => {
+      return this.apollo.watchQuery<any>({
+        query: getPlayersByMostAccessed
+      }).valueChanges;
+    }),
+    map((result: ApolloQueryResult<any>) => {
+      let playersByMostAccessed = [];
+      if (result && result.data && result.data.playersByMostAccessed) {
+        playersByMostAccessed = result.data.playersByMostAccessed.map(v => v)
+      }
+      return new DatabaseActions.SetMostAccessedPlayers(playersByMostAccessed)
     }),
     catchError((err, caught) => {
       console.error(err);

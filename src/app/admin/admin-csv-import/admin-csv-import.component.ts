@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Subscription } from 'rxjs';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
@@ -6,28 +8,52 @@ import { DatapackFiletype } from "../../shared/datapack-filetype.enum";
 
 import { ImportCsvModalContentComponent } from '../../shared/import-csv-modal-content/import-csv-modal-content.component'
 
+import * as fromApp from "../../store/app.reducer";
+import * as DatabaseActions from "../../database/store/database.actions";
+
 @Component({
   selector: 'app-admin-csv-import',
   templateUrl: './admin-csv-import.component.html',
   styleUrls: ['./admin-csv-import.component.css']
 })
-export class AdminCsvImportComponent implements OnInit {
+export class AdminCsvImportComponent implements OnInit, OnDestroy {
 
   public loadData: Array<any> = null;
   public displayData: Array<any> = null;
 
   public updateId: number = null;
 
+  public isUpdating: boolean = false;
+
   public datepackFileType: number = 0;
   public datepackFileTypeList: { key: number; val: string }[];
 
-  constructor(private modal$: NgbModal) { }
+  private databaseSubscription: Subscription;  
+
+  constructor(private modal$: NgbModal, private store$: Store<fromApp.AppState>) { }
 
   ngOnInit(): void {
     this.datepackFileTypeList = Object.keys(DatapackFiletype)
       .map(Number)
       .filter(Number.isInteger)
       .map((k) => ({ key: k, val: DatapackFiletype[k] }));
+    
+    this.databaseSubscription = this.store$
+      .select("database")
+      .subscribe((databaseState) => {
+        if (this.isUpdating) {
+          const loading = databaseState.loading;
+          if (!loading) {
+            this.isUpdating = false;
+          }
+        }
+      });
+  }
+
+  ngOnDestroy() {
+    if (this.databaseSubscription) {
+      this.databaseSubscription.unsubscribe();
+    }
   }
 
   onUploadFiles(files: any) {
@@ -58,7 +84,8 @@ export class AdminCsvImportComponent implements OnInit {
     modalRef.componentInstance.datafileType = this.datepackFileType;
     modalRef.componentInstance.updateId = this.updateId;
     modalRef.result.then((result) => {
-      console.log(result)
+      this.isUpdating = true;
+      this.store$.dispatch(new DatabaseActions.UpdatePlayer(result));
     }, (dismiss) => {});
   }
 

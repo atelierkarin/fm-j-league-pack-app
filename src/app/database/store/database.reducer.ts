@@ -17,6 +17,9 @@ export interface State {
   errMsg: string;
   loading: boolean;
   loadingPlayer: boolean;
+
+  mostAccessedPlayers: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[];
+  loadingMostAccessedPlayers: boolean;
 }
 
 const initialState: State = {
@@ -32,6 +35,9 @@ const initialState: State = {
   errMsg: null,
   loading: false,
   loadingPlayer: false,
+
+  mostAccessedPlayers: null,
+  loadingMostAccessedPlayers: false,
 };
 
 export function databaseReducer(
@@ -94,12 +100,24 @@ export function databaseReducer(
         loading: true,
       };
     case DatabaseActions.SET_LATEST_UPDATE_PLAYERS:
+      console.log("SET_LATEST_UPDATE_PLAYERS", action.payload)
       return {
         ...state,
         latestPlayers: [...action.payload],
         loading: false,
       };
-
+    case DatabaseActions.LOAD_MOST_ACCESSED_PLAYERS:
+      return {
+        ...state,
+        loadingMostAccessedPlayers: true,
+      };
+    case DatabaseActions.SET_MOST_ACCESSED_PLAYERS:
+      console.log("SET_MOST_ACCESSED_PLAYERS", action.payload)
+      return {
+        ...state,
+        mostAccessedPlayers: [...action.payload],
+        loadingMostAccessedPlayers: false,
+      };
     case DatabaseActions.LOAD_SUCCESS:
       return {
         ...state,
