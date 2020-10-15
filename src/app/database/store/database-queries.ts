@@ -206,6 +206,15 @@ query getPlayer ($id: Int!) {
       homeReputation
       worldReputation
     }
+    updateLog {
+      updateDate
+      records {
+        recordTable
+        recordField
+        oldValue
+        newValue
+      }
+    }
   }
 }
 `

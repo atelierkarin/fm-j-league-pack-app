@@ -1,26 +1,45 @@
-<div class="card my-1" *ngFor="let changelogItem of changelog">
-  <div class="card-header">
-    {{ formatDateString(changelogItem.updateDate) }}
-  </div>
-  <div class="card-body">
+<ul class="list-group list-group-flush" *ngIf="player">
+  <li class="list-group-item" *ngFor="let ul of player.updateLog">
+    <h4>{{ ul.updateDate }}</h4>
     <div class="row">
-      <div class="col-12 col-sm-6 col-md-4" *ngFor="let item of analyzeChangelog(changelogItem.changelog)">
-        <small class="text-muted">{{ item.type }}</small>        
-        <h6>
-          <span class="text-secondary">{{ item.updateName }}</span>
-          <span class="badge badge-pill badge-secondary mx-1">{{ item.before }}</span>
-          <span *ngIf="item.after">
-            <ng-container *ngIf="item.isNumeric; else elseTemplate">
-              <i class="fas fa-level-up-alt text-success" *ngIf="item.after > item.before && item.before >= 0 && item.after >= 0"></i>
-              <i class="fas fa-level-down-alt text-danger" *ngIf="item.after < item.before && item.before >= 0 && item.after >= 0"></i>
-            </ng-container>
-            <ng-template #elseTemplate>
-              <i class="fas fa-arrow-right text-secondary"></i>
-            </ng-template>
-            <span class="badge badge-pill badge-secondary mx-1">{{ item.after }}</span>
-          </span>
-        </h6>
+      <div class="col-12 col-md-4 p-1" *ngFor="let r of ul.records">
+        <div
+          *ngIf="
+            formatUpdateRecord(r) && formatUpdateRecord(r).type === 'normal'
+          "
+        >
+          <b class="text-secondary">{{ formatUpdateRecord(r).title }}</b
+          >&nbsp;&nbsp; {{ formatUpdateRecord(r).oldValue }} →
+          {{ formatUpdateRecord(r).newValue }}
+        </div>
+        <div
+          *ngIf="
+            formatUpdateRecord(r) && formatUpdateRecord(r).type === 'number'
+          "
+        >
+          <ng-container
+            *ngIf="
+              formatUpdateRecord(r).oldValue < formatUpdateRecord(r).newValue;
+              else elseTemplate
+            "
+          >
+            <span class="text-success">
+              {{ formatUpdateRecord(r).oldValue }} ↑
+              {{ formatUpdateRecord(r).newValue }}
+            </span>
+          </ng-container>
+          <ng-template #elseTemplate>
+            <span class="text-danger" #elseTemplate>
+              {{ formatUpdateRecord(r).oldValue }} ↓
+              {{ formatUpdateRecord(r).newValue }}
+            </span>
+          </ng-template>
+
+          &nbsp;&nbsp;<span class="text-secondary">{{
+            formatUpdateRecord(r).title
+          }}</span>
+        </div>
       </div>
     </div>
-  </div>
-</div>
+  </li>
+</ul>

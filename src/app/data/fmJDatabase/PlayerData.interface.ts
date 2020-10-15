@@ -177,4 +177,13 @@ export interface PlayerData {
     homeReputation?: number;
     worldReputation?: number;
   };
+  updateLog?: {
+    updateDate: string;
+    records: {
+      recordTable: string
+      recordField: string
+      oldValue?: string
+      newValue?: string
+    }[]
+  }[]
 }
