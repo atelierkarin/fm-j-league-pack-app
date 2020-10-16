@@ -21,9 +21,10 @@ import { DiscussAreaMainComponent } from './database-player/discuss-area/discuss
 import { CommentFormComponent } from './database-player/discuss-area/comment-form/comment-form/comment-form.component';
 import { DisplayCommentsComponent } from './database-player/discuss-area/display-comments/display-comments/display-comments.component';
 import { ChangelogComponent } from './database-player/changelog/changelog.component';
+import { RecordFormatterComponent } from './database-player/changelog/record-formatter/record-formatter.component';
 
 @NgModule({
-  declarations: [DatabaseComponent, DatabaseMainComponent, DatabaseLeagueComponent, DatabaseClubComponent, DatabasePlayerComponent, PositionImageComponent, PlayerDetailStatusComponent, PersonalDataComponent, DiscussAreaMainComponent, CommentFormComponent, DisplayCommentsComponent, ChangelogComponent],
+  declarations: [DatabaseComponent, DatabaseMainComponent, DatabaseLeagueComponent, DatabaseClubComponent, DatabasePlayerComponent, PositionImageComponent, PlayerDetailStatusComponent, PersonalDataComponent, DiscussAreaMainComponent, CommentFormComponent, DisplayCommentsComponent, ChangelogComponent, RecordFormatterComponent],
   imports: [
     CommonModule,
     FormsModule,

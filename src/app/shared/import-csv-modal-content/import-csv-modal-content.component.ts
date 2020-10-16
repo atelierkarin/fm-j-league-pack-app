@@ -87,7 +87,7 @@ export class ImportCsvModalContentComponent implements OnInit {
   }
 
   private formatNumber(v): number {
-    return v && v > 0 ? parseInt(v) : null;
+    return v && v !== 0 ? parseInt(v) : null;
   }
 
   private isPlayer(): boolean {
