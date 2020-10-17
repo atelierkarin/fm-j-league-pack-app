@@ -83,7 +83,7 @@ export class LoadLatestUpdatePlayers implements Action {
 export class SetLatestUpdatePlayers implements Action {
   readonly type = SET_LATEST_UPDATE_PLAYERS;
 
-  constructor(public payload: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[]) {}
+  constructor(public payload: {id: string, name: string, dob?: string, nationality?: string, ca?: number, pa?: number, updateDate: string, clubId?: number}[]) {}
 }
 
 export class LoadMostAccessedPlayers implements Action {
@@ -92,7 +92,7 @@ export class LoadMostAccessedPlayers implements Action {
 export class SetMostAccessedPlayers implements Action {
   readonly type = SET_MOST_ACCESSED_PLAYERS;
 
-  constructor(public payload: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[]) {}
+  constructor(public payload: {id: string, name: string, dob?: string, nationality?: string, ca?: number, pa?: number, updateDate: string, clubId?: number}[]) {}
 }
 
 export class LoadSuccess implements Action {

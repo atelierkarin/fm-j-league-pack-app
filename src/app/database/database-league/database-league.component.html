@@ -1,12 +1,12 @@
 <div class="container-fluid" *ngIf="league">
   <div class="container-fluid">
     <div class="row">
-      <div class="col-12 col-md-6 p-1" *ngFor="let clubId of clubs">
-        <button class="btn btn-block btn-outline-secondary club-button"
+      <div class="col-12 col-md-6 col-lg-4 p-1" *ngFor="let clubId of clubs">
+        <button class="btn btn-block btn-outline-secondary club-button btn-parallelogram"
           [ngClass]="'club-button-of-league-' + leagueId"
           (click)="onClickClub(clubId)"
           [ngStyle]="getClubStyle(clubId) ? getClubStyle(clubId) : null">
-          {{ getClubName(clubId) }}
+          <span class="skew-fix">{{ getClubName(clubId) }}</span>
         </button>        
       </div>
     </div>

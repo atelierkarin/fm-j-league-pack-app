@@ -1,0 +1,16 @@
+<div class="list-group list-group-flush">
+  <button
+    type="button"
+    (click)="onNavigateToPlayers(players)"
+    class="list-group-item list-group-item-action"
+    *ngFor="let players of mostAccessedPlayers; index as i"
+  >
+    <div class="media">
+      <span class="badge badge-pill badge-info badge-rank mx-4" [class]="'badge-rank-' + (i + 1)">{{ i + 1 }}</span>
+      <div class="media-body">
+        <h4><span class="mx-2" [class]="getFlag(players.nationality)"></span>{{ players.name }}</h4>
+        <small class="text-mute">{{ getClub(players.clubId) }}</small>
+      </div>
+    </div>
+  </button>
+</div>

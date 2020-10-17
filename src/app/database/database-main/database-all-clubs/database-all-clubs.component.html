@@ -1,0 +1,4 @@
+<div class="content-league mb-5" *ngFor="let league of leagues">
+  <h2 class="league-title">{{ league.leagueName }}</h2>
+  <app-database-league [leagueId]="league.id"></app-database-league>
+</div>

@@ -22,9 +22,12 @@ import { CommentFormComponent } from './database-player/discuss-area/comment-for
 import { DisplayCommentsComponent } from './database-player/discuss-area/display-comments/display-comments/display-comments.component';
 import { ChangelogComponent } from './database-player/changelog/changelog.component';
 import { RecordFormatterComponent } from './database-player/changelog/record-formatter/record-formatter.component';
+import { DatabaseAllClubsComponent } from './database-main/database-all-clubs/database-all-clubs.component';
+import { DatabaseRecentUpdatesComponent } from './database-main/database-recent-updates/database-recent-updates.component';
+import { DatabaseMostAccessedComponent } from './database-main/database-most-accessed/database-most-accessed.component';
 
 @NgModule({
-  declarations: [DatabaseComponent, DatabaseMainComponent, DatabaseLeagueComponent, DatabaseClubComponent, DatabasePlayerComponent, PositionImageComponent, PlayerDetailStatusComponent, PersonalDataComponent, DiscussAreaMainComponent, CommentFormComponent, DisplayCommentsComponent, ChangelogComponent, RecordFormatterComponent],
+  declarations: [DatabaseComponent, DatabaseMainComponent, DatabaseLeagueComponent, DatabaseClubComponent, DatabasePlayerComponent, PositionImageComponent, PlayerDetailStatusComponent, PersonalDataComponent, DiscussAreaMainComponent, CommentFormComponent, DisplayCommentsComponent, ChangelogComponent, RecordFormatterComponent, DatabaseAllClubsComponent, DatabaseRecentUpdatesComponent, DatabaseMostAccessedComponent],
   imports: [
     CommonModule,
     FormsModule,

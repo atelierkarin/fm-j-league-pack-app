@@ -1,3 +1,18 @@
 .club-button:hover {
-  filter: brightness(80%);
+  filter: brightness(105%);
+}
+
+.club-button {
+  background-image:
+    linear-gradient(to bottom, rgba(250, 250, 250, 0.1), rgba(50, 50, 50, 0.3));
+  transition: .1s ease-in-out .1s;
+}
+
+.btn-parallelogram {
+  transform: skew(-20deg);
+}
+
+.skew-fix {
+  display:inline-block;
+  transform: skew(20deg);
 }

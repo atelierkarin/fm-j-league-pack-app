@@ -7,6 +7,9 @@ query getPlayersByLatestUpdate {
     name
     dob
     clubId
+    nationality
+    ca
+    pa
     updateDate
   }
 }`;
@@ -18,6 +21,9 @@ query getPlayersByMostAccessed {
     name
     dob
     clubId
+    nationality
+    ca
+    pa
     updateDate
   }
 }`;
