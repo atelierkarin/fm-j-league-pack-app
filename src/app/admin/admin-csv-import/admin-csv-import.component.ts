@@ -10,6 +10,7 @@ import { ImportCsvModalContentComponent } from '../../shared/import-csv-modal-co
 
 import * as fromApp from "../../store/app.reducer";
 import * as DatabaseActions from "../../database/store/database.actions";
+import * as SharedActions from "../../shared/store/shared.actions";
 
 @Component({
   selector: 'app-admin-csv-import',
@@ -45,7 +46,17 @@ export class AdminCsvImportComponent implements OnInit, OnDestroy {
           const loading = databaseState.loading;
           if (!loading) {
             this.isUpdating = false;
+            this.store$.dispatch(new SharedActions.SetToastContent({
+              content: "レコードを更新しました",
+              style: "success"
+            }));
           }
+        }
+        if (databaseState.errMsg) {
+          this.store$.dispatch(new SharedActions.SetToastContent({
+            content: databaseState.errMsg,
+            style: "danger"
+          }));
         }
       });
   }

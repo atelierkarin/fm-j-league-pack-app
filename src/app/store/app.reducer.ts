@@ -9,6 +9,8 @@ import * as fromChangelog from '../database/database-player/changelog/store/chan
 import * as fromCalcCa from '../calc-ca/store/calc-ca.reducer'
 import * as fromCore from '../core/store/core.reducer';
 
+import * as fromShared from '../shared/store/shared.reducer';
+
 export interface AppState {
   history: fromHistory.State;
   admin: fromAdmin.State;
@@ -18,6 +20,7 @@ export interface AppState {
   discussArea: fromDiscussArea.State;
   changelog: fromChangelog.State;
   calcCa: fromCalcCa.State;
+  shared: fromShared.State;
 }
 
 export const appReducer: ActionReducerMap<AppState> = {
@@ -29,4 +32,5 @@ export const appReducer: ActionReducerMap<AppState> = {
   discussArea: fromDiscussArea.discussAreaReducer,
   changelog: fromChangelog.changelogReducer,
   calcCa: fromCalcCa.calcCaReducer,
+  shared: fromShared.sharedReducer,
 };

@@ -11,13 +11,15 @@ import {
   NgbDatepickerModule,
   NgbTypeaheadModule,
   NgbModalModule,
+  NgbToastModule
 } from "@ng-bootstrap/ng-bootstrap";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { ImportCsvModalContentComponent } from "./import-csv-modal-content/import-csv-modal-content.component";
 import { LoadingIndicatorComponent } from "./loading-indicator/loading-indicator.component";
+import { CustomToastComponent } from './custom-toast/custom-toast.component';
 
 @NgModule({
-  declarations: [ImportCsvModalContentComponent, LoadingIndicatorComponent],
+  declarations: [ImportCsvModalContentComponent, LoadingIndicatorComponent, CustomToastComponent],
   imports: [
     NgbAlertModule,
     NgbCollapseModule,
@@ -29,6 +31,7 @@ import { LoadingIndicatorComponent } from "./loading-indicator/loading-indicator
     NgbTypeaheadModule,
     NgbModalModule,
     NgxDatatableModule,
+    NgbToastModule,
   ],
   exports: [
     CommonModule,
@@ -42,7 +45,10 @@ import { LoadingIndicatorComponent } from "./loading-indicator/loading-indicator
     NgbTypeaheadModule,
     NgbModalModule,
     NgxDatatableModule,
+    NgbToastModule,
+
     LoadingIndicatorComponent,
+    CustomToastComponent,
   ],
 })
 export class SharedModule {}

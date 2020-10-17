@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 
 import { Router, NavigationEnd } from '@angular/router';
@@ -16,7 +16,7 @@ import * as DatabaseActions from './database/store/database.actions';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'fm-j-league-pack';
 
   loaded = false;
@@ -41,5 +41,9 @@ export class AppComponent {
       });
     this.store.dispatch(new CoreActions.LoadBasicData());
     this.store.dispatch(new DatabaseActions.LoadLatestUpdatePlayers());
+  }
+
+  ngOnDestroy() {
+    
   }
 }
