@@ -38,8 +38,8 @@ export class PersonalDataComponent implements OnInit {
   ngOnInit() {
   }
 
-  getStatusValue(status: Status): number | string {
-    return this.personal && status.value in this.personal && this.personal[status.value] ? this.personal[status.value] : "-"
+  getStatusValue(status: Status): number {
+    return this.personal && status.value in this.personal && this.personal[status.value] ? this.personal[status.value] : null
   }
 
 }

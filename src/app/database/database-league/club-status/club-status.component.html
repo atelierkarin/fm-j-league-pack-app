@@ -1,18 +1,6 @@
 <div class="row" *ngIf="clubStatus">
-  <span class="badge club-status-badge mx-1" [ngClass]="getStatusClass(clubStatus.overall)"
-    ><div class="text-light">ALL</div>
-    <h5 class="m-0">{{ clubStatus.overall ? clubStatus.overall : '--' }}</h5></span
-  >
-  <span class="badge club-status-badge mx-1" [ngClass]="getStatusClass(clubStatus.defence)"
-    ><div class="text-light">DEF</div>
-    <h5 class="m-0">{{ clubStatus.defence ? clubStatus.defence : '--' }}</h5></span
-  >
-  <span class="badge club-status-badge mx-1" [ngClass]="getStatusClass(clubStatus.midfield)"
-    ><div class="text-light">MID</div>
-    <h5 class="m-0">{{ clubStatus.midfield ? clubStatus.midfield : '--' }}</h5></span
-  >
-  <span class="badge club-status-badge mx-1" [ngClass]="getStatusClass(clubStatus.attack)"
-    ><div class="text-light">ATK</div>
-    <h5 class="m-0">{{ clubStatus.attack? clubStatus.attack : '--' }}</h5></span
-  >
+  <app-status-badge [value]="clubStatus.overall" [subtitle]="'ALL'" [league]="league"></app-status-badge>
+  <app-status-badge [value]="clubStatus.defence" [subtitle]="'DEF'" [league]="league"></app-status-badge>
+  <app-status-badge [value]="clubStatus.midfield" [subtitle]="'MID'" [league]="league"></app-status-badge>
+  <app-status-badge [value]="clubStatus.attack" [subtitle]="'ATK'" [league]="league"></app-status-badge>
 </div>

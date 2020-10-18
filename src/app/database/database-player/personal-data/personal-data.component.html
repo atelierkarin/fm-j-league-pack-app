@@ -3,7 +3,7 @@
   <ul class="list-group list-status">
     <li class="p-1 list-group-item d-flex justify-content-between align-items-center" *ngFor="let personalData of personalDataList">
       {{ personalData.name }}
-      <span class="badge player-ability-badge avereage-status">{{ getStatusValue(personalData) }}</span>
+      <app-status-badge [value]="getStatusValue(personalData)" [max]="20"></app-status-badge>
     </li>
   </ul>
   <hr class="d-block d-md-none" />

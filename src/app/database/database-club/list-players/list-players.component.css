@@ -1,0 +1,11 @@
+.player-table-div {
+  overflow: auto;
+}
+
+.player-table {
+  min-width: 800px;
+}
+
+.ngx-datatable.bootstrap {
+  font-size: 15px;
+}

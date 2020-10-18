@@ -100,7 +100,6 @@ export function databaseReducer(
         loading: true,
       };
     case DatabaseActions.SET_LATEST_UPDATE_PLAYERS:
-      console.log("SET_LATEST_UPDATE_PLAYERS", action.payload)
       return {
         ...state,
         latestPlayers: [...action.payload],
@@ -112,7 +111,6 @@ export function databaseReducer(
         loadingMostAccessedPlayers: true,
       };
     case DatabaseActions.SET_MOST_ACCESSED_PLAYERS:
-      console.log("SET_MOST_ACCESSED_PLAYERS", action.payload)
       return {
         ...state,
         mostAccessedPlayers: [...action.payload],

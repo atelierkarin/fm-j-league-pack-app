@@ -13,9 +13,7 @@ import { PlayerDataSimple } from "../../data/fmJDatabase/PlayerData.interface";
 
 import { PlayerType } from "../../shared/player-type.enum";
 
-import { nationality } from "../../shared/nationality";
-
-import { getCurrentLeague, getPAUpperLimit } from "../../shared/common";
+import { getCurrentLeague } from "../../shared/common";
 
 import * as moment from 'moment';
 
@@ -54,6 +52,7 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
     position: string;
     loanOut?: boolean;
     loanIn?: boolean;
+    loanClubId?: number;
     ca?: number;
     pa?: number;
     updateThisWeek: boolean;
@@ -134,6 +133,11 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
             const loanIn =
               currentClubId && currentLoanClubId ? currentLoanClubId === this.club.id : false;
             
+            let loanClubId = null;
+            if (loanOut) {
+              loanClubId = currentLoanClubId;
+            }
+            
             const ca = player.ca;
             const pa = player.pa;
 
@@ -155,6 +159,7 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
               position: Players.getPlayerPosition(player.positions),
               loanOut,
               loanIn,
+              loanClubId,
               ca,
               pa,
               updateThisWeek,
@@ -215,10 +220,6 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
     this.staff = staff;
   }
 
-  getJobType(job: PlayerType) {
-    return PlayerType[job]
-  }
-
   getClubStyle() {
     if (this.club)
       return this.club.clubColor1
@@ -228,64 +229,6 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
           }
         : null;
     return null;
-  }
-
-  getFlag(nat) {
-    const targetNationality = nationality.find(n => n.code === nat);
-    if (targetNationality) {
-      return targetNationality.iso
-        ? "flag-icon flag-icon-" + targetNationality.iso
-        : "";
-    }
-    return "";
-  }
-
-  getRowClass(row): string {
-    if (row.loanOut) return "loan-out";
-    if (row.loanIn) return "loan-in";
-    return "";
-  }
-
-  getCAClass(ca) {    
-    if (!this.league) return "avereage-ca";
-    const leagueGuideline = this.league.leagueCaGuideline;
-    if (leagueGuideline && Array.isArray(leagueGuideline)) {
-      if (leagueGuideline.length !== 4) return "avereage-ca";
-      if (ca >= leagueGuideline[0]) return "overrate-ca";
-      else if (ca >= leagueGuideline[1]) return "good-ca";
-      else if (ca >= leagueGuideline[2]) return "avereage-ca";
-      else if (ca >= leagueGuideline[3]) return "poor-ca";
-      else return "bad-ca"
-    } else {
-      return "avereage-ca";
-    }
-  }
-
-  getPAClass(pa) { 
-    let realPa = pa;
-    if (realPa < 0) {
-      realPa = getPAUpperLimit(pa);
-    }
-    if (!this.league) return "avereage-ca";
-    const leagueGuideline = this.league.leagueCaGuideline;
-    if (leagueGuideline && Array.isArray(leagueGuideline)) {
-      if (leagueGuideline.length !== 4) return "avereage-ca";
-      if (realPa >= leagueGuideline[0]) return "overrate-ca";
-      else if (realPa >= leagueGuideline[1]) return "good-ca";
-      else if (realPa >= leagueGuideline[2]) return "avereage-ca";
-      else if (realPa >= leagueGuideline[3]) return "poor-ca";
-      else return "bad-ca"
-    } else {
-      return "avereage-ca";
-    }
-  }
-
-  sortSquadNo(valueA, valueB, rowA, rowB, sortDirection) {
-    let defaultEmptyValue = sortDirection === "asc" ? 99999 : 0;
-    let sortValueA = valueA ? parseInt(valueA) : defaultEmptyValue;
-    let sortValueB = valueB ? parseInt(valueB) : defaultEmptyValue;
-
-    return sortValueA > sortValueB ? 1 : sortValueA < sortValueB ? -1 : 0;
   }
 
   @HostListener('window:resize', ['$event'])

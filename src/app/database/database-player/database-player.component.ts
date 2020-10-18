@@ -16,7 +16,7 @@ import { DatapackFiletype } from "../../shared/datapack-filetype.enum";
 
 import { nationality } from "../../shared/nationality";
 
-import { getCurrentLeague, getPAUpperLimit } from "../../shared/common";
+import { getCurrentLeague } from "../../shared/common";
 
 import * as moment from "moment";
 
@@ -53,7 +53,7 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
 
   private coreLoaded: boolean = false;
   private databaseLoaded: boolean = false;
-  private initDone: boolean = false;
+  public initDone: boolean = false;
 
   private loadError: boolean = false;
 
@@ -77,8 +77,10 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
     this.coreSubscription = this.store.select("core").subscribe((coreState) => {
       this.clubs = coreState.clubs;
       this.leagues = coreState.leagues;
-      this.coreLoaded = true;
-      this.init();
+      if (this.clubs.length > 0 && this.leagues.length > 0) {
+        this.coreLoaded = true;
+        this.init();
+      }
     });
     this.databaseSubscription = this.store
       .select("database")
@@ -162,48 +164,6 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
         : null;
     }
     return null;
-  }
-
-  getCAClass() {
-    const ca = this.player.playerData.general.ca;
-    if (!this.league) return "avereage-ca";
-    const leagueGuideline = this.league.leagueCaGuideline;
-    if (leagueGuideline && Array.isArray(leagueGuideline)) {
-      if (leagueGuideline.length !== 4) return "avereage-ca";
-      if (ca >= leagueGuideline[0]) return "overrate-ca";
-      else if (ca >= leagueGuideline[1]) return "good-ca";
-      else if (ca >= leagueGuideline[2]) return "avereage-ca";
-      else if (ca >= leagueGuideline[3]) return "poor-ca";
-      else return "bad-ca";
-    } else {
-      return "avereage-ca";
-    }
-  }
-
-  getPAClass() {
-    let realPa = this.player.playerData.general.pa;
-    if (realPa < 0) {
-      realPa = getPAUpperLimit(realPa);
-    }
-    if (!this.league) return "avereage-ca";
-    const leagueGuideline = this.league.leagueCaGuideline;
-    if (leagueGuideline && Array.isArray(leagueGuideline)) {
-      if (leagueGuideline.length !== 4) return "avereage-ca";
-      if (realPa >= leagueGuideline[0]) return "overrate-ca";
-      else if (realPa >= leagueGuideline[1]) return "good-ca";
-      else if (realPa >= leagueGuideline[2]) return "avereage-ca";
-      else if (realPa >= leagueGuideline[3]) return "poor-ca";
-      else return "bad-ca";
-    } else {
-      return "avereage-ca";
-    }
-  }
-
-  getNormalValueClass(val) {
-    if (val > 15) return "overrate-ca";
-    else if (val > 10) return "good-ca";
-    else if (val > 5) return "avereage-ca";
-    else return "poor-ca";
   }
 
   onEditPlayer() {

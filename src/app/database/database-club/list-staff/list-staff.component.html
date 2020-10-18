@@ -1,0 +1,14 @@
+<div class="card-body" *ngIf="staff && staff.length > 0">
+  <div class="container-fluid">
+    <div class="row" *ngFor="let staffMember of staff">
+      <div class="col-12 col-sm-3">
+        {{ getJobType(staffMember.job) }}
+      </div>
+      <div class="col-12 col-sm-9">
+        <a [routerLink]="['/database/player/' + staffMember.id]">{{
+          staffMember.name
+        }}</a>
+      </div>
+    </div>
+  </div>
+</div>

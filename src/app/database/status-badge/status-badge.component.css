@@ -1,0 +1,30 @@
+.status-badge {
+  width: 55px;
+  margin-left: 5px;
+  background-image:
+    linear-gradient(to bottom, rgba(50, 50, 50, 0.2), rgba(50, 50, 50, 0));
+  transform: skew(-5deg);
+  text-shadow: 2px 2px 1px rgba(0,0,0,0.3);
+}
+
+@media (max-width: 720px) {
+  .status-badge {
+    width: 30px;
+    margin-left: 1px;
+    transform: skew(-5deg);
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+  }
+
+  .status-badge .status-title {
+    font-size: 0.8rem;
+  }
+
+  .status-badge h5 {
+    font-size: 0.9rem;
+  }
+}
+
+.skew-fix {
+  display:inline-block;
+  transform: skew(5deg);
+}

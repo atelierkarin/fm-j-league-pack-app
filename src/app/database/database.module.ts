@@ -26,9 +26,12 @@ import { DatabaseAllClubsComponent } from './database-main/database-all-clubs/da
 import { DatabaseRecentUpdatesComponent } from './database-main/database-recent-updates/database-recent-updates.component';
 import { DatabaseMostAccessedComponent } from './database-main/database-most-accessed/database-most-accessed.component';
 import { ClubStatusComponent } from './database-league/club-status/club-status.component';
+import { StatusBadgeComponent } from './status-badge/status-badge.component';
+import { ListStaffComponent } from './database-club/list-staff/list-staff.component';
+import { ListPlayersComponent } from './database-club/list-players/list-players.component';
 
 @NgModule({
-  declarations: [DatabaseComponent, DatabaseMainComponent, DatabaseLeagueComponent, DatabaseClubComponent, DatabasePlayerComponent, PositionImageComponent, PlayerDetailStatusComponent, PersonalDataComponent, DiscussAreaMainComponent, CommentFormComponent, DisplayCommentsComponent, ChangelogComponent, RecordFormatterComponent, DatabaseAllClubsComponent, DatabaseRecentUpdatesComponent, DatabaseMostAccessedComponent, ClubStatusComponent],
+  declarations: [DatabaseComponent, DatabaseMainComponent, DatabaseLeagueComponent, DatabaseClubComponent, DatabasePlayerComponent, PositionImageComponent, PlayerDetailStatusComponent, PersonalDataComponent, DiscussAreaMainComponent, CommentFormComponent, DisplayCommentsComponent, ChangelogComponent, RecordFormatterComponent, DatabaseAllClubsComponent, DatabaseRecentUpdatesComponent, DatabaseMostAccessedComponent, ClubStatusComponent, StatusBadgeComponent, ListStaffComponent, ListPlayersComponent],
   imports: [
     CommonModule,
     FormsModule,
