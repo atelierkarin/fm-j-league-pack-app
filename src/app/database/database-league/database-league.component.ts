@@ -23,6 +23,7 @@ export class DatabaseLeagueComponent implements OnInit, OnDestroy {
   public league: LeagueData;
   public leagues: LeagueData[];
 
+  public clubSelected: ClubData;
   private clubList: ClubData[];
 
   private coreSubscription: Subscription;
@@ -77,6 +78,11 @@ export class DatabaseLeagueComponent implements OnInit, OnDestroy {
       'backgroundColor': club.clubColor2,
       'color': club.clubColor1,
     } : null;
+  }
+
+  getClubStatus(clubId) {
+    const club = this.clubList.find(c => c.id === clubId)
+    return club && club.status ? club.status : null;    
   }
 
   private animateTeamButtons() {

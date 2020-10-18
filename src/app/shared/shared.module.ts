@@ -11,7 +11,8 @@ import {
   NgbDatepickerModule,
   NgbTypeaheadModule,
   NgbModalModule,
-  NgbToastModule
+  NgbToastModule,
+  NgbProgressbarModule
 } from "@ng-bootstrap/ng-bootstrap";
 import { NgxDatatableModule } from "@swimlane/ngx-datatable";
 import { ImportCsvModalContentComponent } from "./import-csv-modal-content/import-csv-modal-content.component";
@@ -32,6 +33,7 @@ import { CustomToastComponent } from './custom-toast/custom-toast.component';
     NgbModalModule,
     NgxDatatableModule,
     NgbToastModule,
+    NgbProgressbarModule,
   ],
   exports: [
     CommonModule,
@@ -46,6 +48,7 @@ import { CustomToastComponent } from './custom-toast/custom-toast.component';
     NgbModalModule,
     NgxDatatableModule,
     NgbToastModule,
+    NgbProgressbarModule,
 
     LoadingIndicatorComponent,
     CustomToastComponent,

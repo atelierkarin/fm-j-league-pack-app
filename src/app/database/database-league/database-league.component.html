@@ -1,14 +1,11 @@
-<div class="container-fluid" *ngIf="league">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-12 col-md-6 col-lg-4 p-1" *ngFor="let clubId of clubs">
-        <button class="btn btn-block btn-outline-secondary club-button btn-parallelogram"
-          [ngClass]="'club-button-of-league-' + leagueId"
-          (click)="onClickClub(clubId)"
-          [ngStyle]="getClubStyle(clubId) ? getClubStyle(clubId) : null">
-          <span class="skew-fix">{{ getClubName(clubId) }}</span>
-        </button>        
-      </div>
-    </div>
-  </div>
+<div class="list-group" *ngIf="league">
+  <button *ngFor="let clubId of clubs" class="list-group-item list-group-item-action club-button btn-parallelogram my-1  d-flex justify-content-between align-items-center"
+    [ngClass]="'club-button-of-league-' + leagueId"
+    (click)="onClickClub(clubId)"
+    [ngStyle]="getClubStyle(clubId) ? getClubStyle(clubId) : null">
+    <span class="skew-fix club-name">{{ getClubName(clubId) }}</span>
+    <span class="skew-fix">
+      <app-club-status [clubStatus]="getClubStatus(clubId)" [league]="league"></app-club-status>
+    </span>
+  </button>
 </div>

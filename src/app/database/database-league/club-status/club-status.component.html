@@ -1,0 +1,18 @@
+<div class="row" *ngIf="clubStatus">
+  <span class="badge club-status-badge mx-1" [ngClass]="getStatusClass(clubStatus.overall)"
+    ><div class="text-light">ALL</div>
+    <h5 class="m-0">{{ clubStatus.overall ? clubStatus.overall : '--' }}</h5></span
+  >
+  <span class="badge club-status-badge mx-1" [ngClass]="getStatusClass(clubStatus.defence)"
+    ><div class="text-light">DEF</div>
+    <h5 class="m-0">{{ clubStatus.defence ? clubStatus.defence : '--' }}</h5></span
+  >
+  <span class="badge club-status-badge mx-1" [ngClass]="getStatusClass(clubStatus.midfield)"
+    ><div class="text-light">MID</div>
+    <h5 class="m-0">{{ clubStatus.midfield ? clubStatus.midfield : '--' }}</h5></span
+  >
+  <span class="badge club-status-badge mx-1" [ngClass]="getStatusClass(clubStatus.attack)"
+    ><div class="text-light">ATK</div>
+    <h5 class="m-0">{{ clubStatus.attack? clubStatus.attack : '--' }}</h5></span
+  >
+</div>

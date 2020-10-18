@@ -1,0 +1,13 @@
+.club-status-badge {
+  width: 55px;
+  margin-left: 5px;
+  background-image:
+    linear-gradient(to bottom, rgba(50, 50, 50, 0.2), rgba(50, 50, 50, 0));
+  transform: skew(-5deg);
+  text-shadow: 2px 2px 1px rgba(0,0,0,0.3);
+}
+
+.skew-fix {
+  display:inline-block;
+  transform: skew(5deg);
+}

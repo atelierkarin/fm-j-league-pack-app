@@ -5,6 +5,12 @@ export interface ClubData {
   clubNationality?: string;
   clubColor1?: string;
   clubColor2?: string;
+  status?: {
+    overall?: number;
+    attack?: number;
+    midfield?: number;
+    defence?: number;
+  }
 }
 
 export interface LeagueData {

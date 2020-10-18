@@ -25,9 +25,10 @@ import { RecordFormatterComponent } from './database-player/changelog/record-for
 import { DatabaseAllClubsComponent } from './database-main/database-all-clubs/database-all-clubs.component';
 import { DatabaseRecentUpdatesComponent } from './database-main/database-recent-updates/database-recent-updates.component';
 import { DatabaseMostAccessedComponent } from './database-main/database-most-accessed/database-most-accessed.component';
+import { ClubStatusComponent } from './database-league/club-status/club-status.component';
 
 @NgModule({
-  declarations: [DatabaseComponent, DatabaseMainComponent, DatabaseLeagueComponent, DatabaseClubComponent, DatabasePlayerComponent, PositionImageComponent, PlayerDetailStatusComponent, PersonalDataComponent, DiscussAreaMainComponent, CommentFormComponent, DisplayCommentsComponent, ChangelogComponent, RecordFormatterComponent, DatabaseAllClubsComponent, DatabaseRecentUpdatesComponent, DatabaseMostAccessedComponent],
+  declarations: [DatabaseComponent, DatabaseMainComponent, DatabaseLeagueComponent, DatabaseClubComponent, DatabasePlayerComponent, PositionImageComponent, PlayerDetailStatusComponent, PersonalDataComponent, DiscussAreaMainComponent, CommentFormComponent, DisplayCommentsComponent, ChangelogComponent, RecordFormatterComponent, DatabaseAllClubsComponent, DatabaseRecentUpdatesComponent, DatabaseMostAccessedComponent, ClubStatusComponent],
   imports: [
     CommonModule,
     FormsModule,

@@ -9,10 +9,15 @@
 }
 
 .btn-parallelogram {
-  transform: skew(-20deg);
+  transform: skew(-5deg);
 }
 
 .skew-fix {
   display:inline-block;
-  transform: skew(20deg);
+  transform: skew(5deg);
+}
+
+.club-name {
+  font-size: 1.4rem;
+  text-shadow: 2px 2px 1px rgba(0,0,0,0.3);
 }

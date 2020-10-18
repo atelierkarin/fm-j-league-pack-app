@@ -21,6 +21,12 @@ query queryAllClubs {
     clubNationality
     clubColor1
     clubColor2
+    status {
+      overall
+      attack
+      midfield
+      defence
+    }
     createDate
     modifiedDate
   }
