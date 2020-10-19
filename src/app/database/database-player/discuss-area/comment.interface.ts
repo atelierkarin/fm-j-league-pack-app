@@ -1,8 +1,11 @@
 export interface Comment {
-  id?: string,
-  loginToken: string,
-  displayName: string,
-  targetPlayerId: string,
-  content: string,
-  createDate: Number
+  id?: Number,
+  username: string,
+  googleAccount?: string,
+  ipAddr?: string,
+  playerId?: Number,
+  clubId?: Number,
+  message: string,
+  createDate?: string,
+  modifiedDate?: string,
 }

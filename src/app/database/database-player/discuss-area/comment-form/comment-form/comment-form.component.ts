@@ -8,8 +8,7 @@ import { Comment } from '../../comment.interface';
 import * as fromApp from '../../../../../store/app.reducer';
 import * as AdminActions from '../../../../../admin/store/admin.actions';
 import * as DisucssAreaActions from '../../store/discuss-area.actions';
-
-import * as moment from 'moment';
+import * as SharedActions from "../../../../../shared/store/shared.actions";
 
 @Component({
   selector: 'app-comment-form',
@@ -18,7 +17,7 @@ import * as moment from 'moment';
 })
 export class CommentFormComponent implements OnInit, OnDestroy {
 
-  @Input() playerId: string;
+  @Input() playerId: number;
   @Output() reload = new EventEmitter<boolean>();
 
   public displayName: string;
@@ -42,11 +41,14 @@ export class CommentFormComponent implements OnInit, OnDestroy {
     });
     this.discussAreaSubscription = this.store.select('discussArea').subscribe(discussAreaState => {
       this.loading = discussAreaState.loading;
-      this.errString = discussAreaState.errMsg;
-      if (this.submitting) {
+      this.errString = discussAreaState.errMsg;      
+      if (this.submitting && !this.loading) {
         this.comment = "";
         this.submitting = false;
-        this.reload.emit(true);
+        this.store.dispatch(new SharedActions.SetToastContent({
+          content: "コメント成功しました",
+          style: "success"
+        }));
       }
     });
   }
@@ -72,11 +74,10 @@ export class CommentFormComponent implements OnInit, OnDestroy {
 
   onComment() {
     let newComment: Comment = {
-      loginToken: this.user.uuid,
-      displayName: this.displayName,
-      targetPlayerId: this.playerId,
-      content: this.comment,
-      createDate: moment().valueOf()
+      username: this.displayName,
+      googleAccount: this.user.uuid,
+      playerId: this.playerId,
+      message: this.comment,
     };
     this.submitting = true;
     this.store.dispatch(

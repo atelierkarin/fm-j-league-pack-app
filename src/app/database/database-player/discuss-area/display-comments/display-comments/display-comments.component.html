@@ -1,12 +1,25 @@
 <div class="container-fluid">
-  <div class="card" *ngFor="let comment of comments; let i=index">
+  <div class="card" *ngFor="let comment of comments; let i = index">
     <div class="card-body">
       <div class="row">
-        <div class="col card-title"><b>{{ comment.displayName }}</b> - <small class="text-muted">{{ formatDate(comment.createDate) }}</small></div>
-        <div class="col-auto text-muted text-right"># {{ (i + 1) }}</div>
-        <div class="col-auto" *ngIf="checkIfOwnComment(comment) && comment.id"><button class="btn btn-sm btn-outline-danger" (click)="onDelete(confirmDelete, comment.id)"><i class="fas fa-times"></i></button></div>
+        <div class="col card-title">
+          <b>{{ comment.username }}</b
+          ><span *ngIf="comment.ipAddr">({{ comment.ipAddr }})</span> -
+          <small class="text-muted">{{
+            formatDate(comment.modifiedDate)
+          }}</small>
+        </div>
+        <div class="col-auto text-muted text-right"># {{ comment.id }}</div>
+        <div class="col-auto" *ngIf="(checkIfOwnComment(comment) && comment.id) || admin">
+          <button
+            class="btn btn-sm btn-outline-danger"
+            (click)="onDelete(confirmDelete, comment.id)"
+          >
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
       </div>
-      <p class="card-text">{{ comment.content }}</p>
+      <p class="card-text">{{ comment.message }}</p>
     </div>
   </div>
 </div>
@@ -15,11 +28,21 @@
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">削除を確認</h4>
   </div>
-  <div class="modal-body">
-    このコメントを削除しますか？
-  </div>
+  <div class="modal-body">このコメントを削除しますか？</div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-outline-danger" (click)="modal.close(true)">はい</button>
-    <button type="button" class="btn btn-outline-secondary" (click)="modal.close(false)">いいえ</button>
+    <button
+      type="button"
+      class="btn btn-outline-danger"
+      (click)="modal.close(true)"
+    >
+      はい
+    </button>
+    <button
+      type="button"
+      class="btn btn-outline-secondary"
+      (click)="modal.close(false)"
+    >
+      いいえ
+    </button>
   </div>
 </ng-template>

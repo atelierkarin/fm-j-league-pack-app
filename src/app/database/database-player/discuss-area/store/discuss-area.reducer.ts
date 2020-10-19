@@ -28,16 +28,21 @@ export function discussAreaReducer(
         comments: [...action.payload],
         loading: false,
       };
-    case DiscussAreaActions.FETCH_COMMENTS:
+    case DiscussAreaActions.FETCH_COMMENTS_BY_PLAYER_ID:
       return {
         ...state,
-        searchPlayers: null,
+        comments: null,
+        loading: true,
+      };
+    case DiscussAreaActions.FETCH_COMMENTS_BY_CLUB_ID:
+      return {
+        ...state,
+        comments: null,
         loading: true,
       };
     case DiscussAreaActions.UPDATE_SUCCESS:
       return {
         ...state,
-        editPlayer: null,
         updateError: null,
         loading: false
       };

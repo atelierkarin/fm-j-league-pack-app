@@ -5,13 +5,12 @@ import { Store } from '@ngrx/store';
 import { User } from '../../../../../admin/user.model';
 import { Comment } from '../../comment.interface';
 
-import * as fromApp from '../../../../../store/app.reducer';
-
-import * as DisucssAreaActions from '../../store/discuss-area.actions';
-
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import * as moment from 'moment';
+
+import * as fromApp from '../../../../../store/app.reducer';
+import * as DisucssAreaActions from '../../store/discuss-area.actions';
 
 @Component({
   selector: 'app-display-comments',
@@ -20,13 +19,14 @@ import * as moment from 'moment';
 })
 export class DisplayCommentsComponent implements OnInit, OnDestroy {
 
-  @Input() playerId: string;
+  @Input() playerId: number;
 
   public comments: Comment[];
 
   public user: User;
 
   private deleting: boolean = false;
+  public admin: boolean = false;
 
   private adminAuthSubscription: Subscription;
   private discussAreaSubscription: Subscription;
@@ -36,16 +36,17 @@ export class DisplayCommentsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.adminAuthSubscription = this.store.select('admin').subscribe(adminState => {
       this.user = adminState.user;
+      this.admin = adminState.isAdmin;
     });
     this.discussAreaSubscription = this.store.select('discussArea').subscribe(discussAreaState => {
       let loading = discussAreaState.loading;
-      let comments = discussAreaState.comments;
+      let comments = discussAreaState.comments ? [...discussAreaState.comments] : null;
       if (comments) {
         this.comments = comments.sort((a, b) => {
-          return b.createDate.valueOf() - a.createDate.valueOf()
+          return moment(b.modifiedDate).valueOf() - moment(a.modifiedDate).valueOf()
         })
       } else {
-        this.comments = []
+        this.comments = null;
       }
 
       if (!loading && this.deleting) {
@@ -65,7 +66,7 @@ export class DisplayCommentsComponent implements OnInit, OnDestroy {
   }
 
   checkIfOwnComment(comment: Comment) {
-    return this.user !== null && comment.loginToken === this.user.uuid
+    return this.user !== null && comment.googleAccount === this.user.uuid
   }
 
   formatDate(date: Date) {
@@ -80,18 +81,18 @@ export class DisplayCommentsComponent implements OnInit, OnDestroy {
     });
   }
 
-  onConfirmDelete(deleteId: string) {
+  onConfirmDelete(deleteId: number) {
     if (deleteId) {
       this.deleting = true;
       this.store.dispatch(
-        new DisucssAreaActions.DeleteComment(deleteId)
+        new DisucssAreaActions.DeleteComment({ id: deleteId, playerId: this.playerId })
       );
     }
   }
 
   onReload() {
     this.store.dispatch(
-      new DisucssAreaActions.FetchComments(this.playerId)
+      new DisucssAreaActions.FetchCommentsByPlayerId({id: this.playerId, admin: this.admin})
     );
   }
 }
