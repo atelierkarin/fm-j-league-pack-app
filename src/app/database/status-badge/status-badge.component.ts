@@ -46,7 +46,6 @@ export class StatusBadgeComponent implements OnInit {
       else if (this.value >= this.max * 0.25) return "badge-info";
       else return "badge-success"
     } else if (this.max > 0) {
-      console.log(this.value, this.max)
       if (this.value >= this.max * 0.75) return "badge-success";
       else if (this.value >= this.max * 0.5) return "badge-info";
       else if (this.value >= this.max * 0.25) return "badge-warning";

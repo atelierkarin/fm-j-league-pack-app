@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Location } from '@angular/common';
 import { Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
 import { Router, ActivatedRoute } from "@angular/router";
@@ -61,7 +62,8 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
     private store: Store<fromApp.AppState>,
     private route: ActivatedRoute,
     private router: Router,
-    private titleService: Title
+    private titleService: Title,
+    private location: Location
   ) {}
 
   ngOnInit() {
@@ -169,6 +171,13 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
   onEditPlayer() {
     if (this.isAdmin) {
       this.router.navigate(["/admin/playerDb/" + this.playerId]);
+    }
+  }
+
+  onDeletePlayer() {
+    if (this.isAdmin) {
+      this.store.dispatch(new DatabaseActions.DeletePlayer(this.playerId));
+      this.location.back();
     }
   }
 

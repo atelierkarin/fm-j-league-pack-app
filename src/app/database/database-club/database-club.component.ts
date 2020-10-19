@@ -16,6 +16,7 @@ import { PlayerType } from "../../shared/player-type.enum";
 import { getCurrentLeague } from "../../shared/common";
 
 import * as moment from 'moment';
+import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: "app-database-club",
@@ -75,6 +76,13 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    if (localStorage) {
+      const tempTab = localStorage.getItem("database-club-tab");
+      if (tempTab) {
+        this.activeTabId = parseInt(tempTab);
+      };
+    }
+
     this.innerWidth = window.innerWidth;
 
     this.staff = [];
@@ -229,6 +237,12 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
           }
         : null;
     return null;
+  }
+
+  onNavChange(changeEvent: NgbNavChangeEvent) {
+    if (localStorage) {
+      localStorage.setItem("database-club-tab", changeEvent.nextId);
+    }
   }
 
   @HostListener('window:resize', ['$event'])

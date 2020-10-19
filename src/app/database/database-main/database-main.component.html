@@ -1,21 +1,23 @@
 <app-loading-indicator *ngIf="loading"></app-loading-indicator>
 
-<nav ngbNav #nav="ngbNav" class="nav-tabs j-league-pack-database-main">
-  <ng-container ngbNavItem>
-    <a ngbNavLink>最近の人気選手</a>
+<nav ngbNav #nav="ngbNav" class="nav-tabs j-league-pack-database-main" [(activeId)]="activeId" (navChange)="onNavChange($event)">
+  <ng-container [ngbNavItem]="1">
+    <a ngbNavLink>最近の記録</a>
     <ng-template ngbNavContent>
-      <app-database-most-accessed></app-database-most-accessed>
+      <div class="row mx-2">
+        <div class="col-12 col-md-6">
+          <h4 class="text-muted">最新の人気選手</h4>
+          <app-database-most-accessed></app-database-most-accessed>
+        </div>
+        <div class="col-12 col-md-6">
+          <h4 class="text-muted">最新更新された選手・スタッフ</h4>
+          <app-database-recent-updates></app-database-recent-updates>
+        </div>
+      </div>      
     </ng-template>
   </ng-container>
 
-  <ng-container ngbNavItem>
-    <a ngbNavLink>最新更新された選手・スタッフ</a>
-    <ng-template ngbNavContent>
-      <app-database-recent-updates></app-database-recent-updates>
-    </ng-template>
-  </ng-container>
-
-  <ng-container ngbNavItem>
+  <ng-container [ngbNavItem]="2">
     <a ngbNavLink>クラブから選択</a>
     <ng-template ngbNavContent>
       <app-database-all-clubs></app-database-all-clubs>

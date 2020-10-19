@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import * as fromApp from '../../store/app.reducer';
 
 import { ClubData, LeagueData } from '../../shared/database-filetype'
+import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-database-main',
@@ -19,6 +20,8 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
   public latestUpdatePlayers: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[];
   public mostAccessedPlayers: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[];
 
+  public activeId;
+
   private clubList: ClubData[];  
 
   private coreSubscription: Subscription;
@@ -26,9 +29,16 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
 
   private season: number;
 
-  constructor(private store: Store<fromApp.AppState>, private router: Router) { }
+  constructor(private store: Store<fromApp.AppState>, private router: Router) {}
 
   ngOnInit() {
+    if (localStorage) {
+      const tempTab = localStorage.getItem("database-main-tab");
+      if (tempTab) {
+        this.activeId = parseInt(tempTab);
+      };
+    }
+
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
       this.clubList = coreState.clubs;
       this.leagues = coreState.leagues;
@@ -76,5 +86,11 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
 
   onNavigateToPlayers(player: {id: string, name: string, dob?: string}) {
     this.router.navigate(['/database/player/' + player.id]);
+  }
+
+  onNavChange(changeEvent: NgbNavChangeEvent) {
+    if (localStorage) {
+      localStorage.setItem("database-main-tab", changeEvent.nextId);
+    }
   }
 }

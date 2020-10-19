@@ -31,6 +31,12 @@
             (click)="onEditPlayer()"
             *ngIf="isAdmin">編集
           </button>
+          <button
+            class="ml-2 btn btn-outline-danger"
+            type="button"
+            (click)="onDeletePlayer()"
+            *ngIf="isAdmin">削除
+          </button>
         </h3>
       </div>
     </div>
