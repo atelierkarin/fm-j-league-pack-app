@@ -22,6 +22,7 @@
       <p class="card-text">{{ comment.message }}</p>
     </div>
   </div>
+  <button class="btn btn-primary btn-block" (click)="onLoadMore()" *ngIf="!loading && lastCommentIndex > 0 && lastCommentIndex % 10 === 0">コメントをもっと読み込む</button>
 </div>
 
 <ng-template #confirmDelete let-modal>

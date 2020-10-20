@@ -5,22 +5,28 @@ import { switchMap, map, catchError } from 'rxjs/operators';
 
 import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
-import { messagesByPlayerId, messagesByLatestUpdate, mutationInsertMessage, mutationDeleteMessage, messagesByClubId, messagesByPlayerIdAdmin } from './discuss-area-queries';
+import { messagesByPlayerId, messagesByLatestUpdate, mutationInsertMessage, mutationDeleteMessage, messagesByClubId, messagesByPlayerIdAdmin, messagesByClubIdAdmin } from './discuss-area-queries';
 
 import * as DiscussAreaActions from './discuss-area.actions';
 
 @Injectable()
 export class DiscussAreaEffects {
 
+  private temp: any = null;
+
   @Effect()
   fetchComments = this.actions$.pipe(
     ofType(DiscussAreaActions.FETCH_COMMENTS_BY_PLAYER_ID),
     switchMap((action: DiscussAreaActions.FetchCommentsByPlayerId) => {
       const isAdmin = action.payload.admin ? action.payload.admin : false;
+      this.temp = {
+        loadMore: (action.payload.startIndex && action.payload.startIndex > 0)
+      }
       return this.apollo.watchQuery<any>({
         query: isAdmin ? messagesByPlayerIdAdmin : messagesByPlayerId,
         variables: {
-          id: action.payload.id
+          id: action.payload.id,
+          startIndex: action.payload.startIndex
         }
       }).valueChanges;
     }),
@@ -29,9 +35,33 @@ export class DiscussAreaEffects {
       if (result && result.data && result.data.messagesByPlayerId) {
         comments = result.data.messagesByPlayerId.map(v => v)
       }
-      return new DiscussAreaActions.SetComments(comments);
+      return this.temp && this.temp.loadMore ? new DiscussAreaActions.SetMoreComments(comments) : new DiscussAreaActions.SetComments(comments);
     }),
     catchError((err, caught) => {
+      this.temp = null;
+      console.error(err);
+      this.store.dispatch(new DiscussAreaActions.UpdateFail("SERVER FAIL"));
+      return caught;
+    })
+  )
+
+  @Effect()
+  fetchLatestComments = this.actions$.pipe(
+    ofType(DiscussAreaActions.FETCH_LATEST_COMMENTS),
+    switchMap(() => {
+      return this.apollo.watchQuery<any>({
+        query: messagesByLatestUpdate
+      }).valueChanges;
+    }),
+    map((result: ApolloQueryResult<any>) => {
+      let comments = [];
+      if (result && result.data && result.data.messagesByLatestUpdate) {
+        comments = result.data.messagesByLatestUpdate.map(v => v)
+      }
+      return new DiscussAreaActions.SetLatestComments(comments);
+    }),
+    catchError((err, caught) => {
+      this.temp = null;
       console.error(err);
       this.store.dispatch(new DiscussAreaActions.UpdateFail("SERVER FAIL"));
       return caught;
@@ -42,17 +72,18 @@ export class DiscussAreaEffects {
   addComment = this.actions$.pipe(
     ofType(DiscussAreaActions.ADD_COMMENT),
     switchMap((action: DiscussAreaActions.AddComment) => {
-      const insertPlayer = action.payload.playerId ? true : false;
+      const insertPlayer = action.payload.comment.playerId ? true : false;
+      const isAdmin = action.payload.admin ? action.payload.admin : false;
       return this.apollo.mutate<any>({
         mutation: mutationInsertMessage,
         variables: {
-          message: action.payload
+          message: action.payload.comment
         },
         refetchQueries: [
           {
-            query: insertPlayer ? messagesByPlayerId : messagesByClubId,
+            query: insertPlayer ? (isAdmin ? messagesByPlayerIdAdmin : messagesByPlayerId) : (isAdmin ? messagesByClubIdAdmin : messagesByClubId),
             variables: {
-              id: insertPlayer ? action.payload.playerId : action.payload.clubId
+              id: insertPlayer ? action.payload.comment.playerId : action.payload.comment.clubId
             }
           },
         ],
@@ -73,6 +104,7 @@ export class DiscussAreaEffects {
     ofType(DiscussAreaActions.DELETE_COMMENT),
     switchMap((action: DiscussAreaActions.DeleteComment) => {
       const deletePlayer = action.payload.playerId ? true : false;
+      const isAdmin = action.payload.admin ? action.payload.admin : false;
       return this.apollo.mutate<any>({
         mutation: mutationDeleteMessage,
         variables: {
@@ -80,7 +112,7 @@ export class DiscussAreaEffects {
         },
         refetchQueries: [
           {
-            query: deletePlayer ? messagesByPlayerId : messagesByClubId,
+            query: deletePlayer ? (isAdmin ? messagesByPlayerIdAdmin : messagesByPlayerId) : (isAdmin ? messagesByClubIdAdmin : messagesByClubId),
             variables: {
               id: deletePlayer ? action.payload.playerId : action.payload.clubId
             }

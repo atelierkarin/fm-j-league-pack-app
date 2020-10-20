@@ -25,6 +25,9 @@ export class DisplayCommentsComponent implements OnInit, OnDestroy {
 
   public user: User;
 
+  public lastCommentIndex: number = 0;
+
+  public loading: boolean = false;
   private deleting: boolean = false;
   public admin: boolean = false;
 
@@ -39,17 +42,11 @@ export class DisplayCommentsComponent implements OnInit, OnDestroy {
       this.admin = adminState.isAdmin;
     });
     this.discussAreaSubscription = this.store.select('discussArea').subscribe(discussAreaState => {
-      let loading = discussAreaState.loading;
-      let comments = discussAreaState.comments ? [...discussAreaState.comments] : null;
-      if (comments) {
-        this.comments = comments.sort((a, b) => {
-          return moment(b.modifiedDate).valueOf() - moment(a.modifiedDate).valueOf()
-        })
-      } else {
-        this.comments = null;
-      }
-
-      if (!loading && this.deleting) {
+      this.loading = discussAreaState.loading;
+      this.comments = discussAreaState.comments;
+      this.lastCommentIndex = this.comments ? this.comments.length : 0;
+      
+      if (!this.loading && this.deleting) {
         this.deleting = false;
         this.onReload();
       }
@@ -85,12 +82,20 @@ export class DisplayCommentsComponent implements OnInit, OnDestroy {
     if (deleteId) {
       this.deleting = true;
       this.store.dispatch(
-        new DisucssAreaActions.DeleteComment({ id: deleteId, playerId: this.playerId })
+        new DisucssAreaActions.DeleteComment({ id: deleteId, playerId: this.playerId, admin: this.admin })
       );
     }
   }
 
+  onLoadMore() {
+    console.log("LoadMore");
+    this.store.dispatch(
+      new DisucssAreaActions.FetchCommentsByPlayerId({id: this.playerId, startIndex: this.lastCommentIndex, admin: this.admin})
+    );
+  }
+
   onReload() {
+    console.log("Reload");
     this.store.dispatch(
       new DisucssAreaActions.FetchCommentsByPlayerId({id: this.playerId, admin: this.admin})
     );

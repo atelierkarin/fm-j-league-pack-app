@@ -25,8 +25,8 @@ query messagesByClubId($id: Int!) {
 }`;
 
 export const messagesByPlayerIdAdmin = gql`
-query messagesByPlayerId($id: Int!) {
-  messagesByPlayerId(id: $id) {
+query messagesByPlayerId($id: Int!, $startIndex: Int) {
+  messagesByPlayerId(id: $id, startIndex: $startIndex) {
     id
     username
     googleAccount
@@ -38,8 +38,8 @@ query messagesByPlayerId($id: Int!) {
 }`;
 
 export const messagesByClubIdAdmin = gql`
-query messagesByClubId($id: Int!) {
-  messagesByClubId(id: $id) {
+query messagesByClubId($id: Int!, $startIndex: Int) {
+  messagesByClubId(id: $id, startIndex: $startIndex) {
     id
     username
     googleAccount

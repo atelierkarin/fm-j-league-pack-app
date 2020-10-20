@@ -5,6 +5,7 @@ import { Comment } from "../comment.interface";
 export interface State {
   
   comments: Comment[];
+  latestComments: Comment[];
 
   errMsg: string;
   loading: boolean;
@@ -12,6 +13,7 @@ export interface State {
 
 const initialState: State = {
   comments: null,
+  latestComments: null,
 
   errMsg: null,
   loading: false,
@@ -28,16 +30,42 @@ export function discussAreaReducer(
         comments: [...action.payload],
         loading: false,
       };
-    case DiscussAreaActions.FETCH_COMMENTS_BY_PLAYER_ID:
+    case DiscussAreaActions.SET_MORE_COMMENTS:
       return {
+        ...state,
+        comments: state.comments ? [
+          ...state.comments,
+          ...action.payload,
+        ] : [...action.payload],
+        loading: false,
+      };
+    case DiscussAreaActions.SET_LATEST_COMMENTS:
+      return {
+        ...state,
+        latestComments: [...action.payload],
+        loading: false,
+      };
+    case DiscussAreaActions.FETCH_COMMENTS_BY_PLAYER_ID:
+      return !(action.payload.startIndex > 0) ? {
         ...state,
         comments: null,
         loading: true,
+      } : {
+        ...state,
+        loading: true,
       };
     case DiscussAreaActions.FETCH_COMMENTS_BY_CLUB_ID:
-      return {
+      return !(action.payload.startIndex > 0) ? {
         ...state,
         comments: null,
+        loading: true,
+      } : {
+        ...state,
+        loading: true,
+      };
+    case DiscussAreaActions.FETCH_LATEST_COMMENTS:
+      return {
+        ...state,
         loading: true,
       };
     case DiscussAreaActions.UPDATE_SUCCESS:

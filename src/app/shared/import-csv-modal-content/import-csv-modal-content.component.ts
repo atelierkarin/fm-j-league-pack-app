@@ -93,7 +93,8 @@ export class ImportCsvModalContentComponent implements OnInit {
   private isPlayer(): boolean {
     if (this.checkNotEmpty("clubJob")) {
       const playerTypes = getPlayerType(this.data["clubJob"]);
-      return playerTypes ? PlayerType.選手 in playerTypes : false;
+      const findPlayersJob = playerTypes ? playerTypes.find(pt => pt === PlayerType.選手) : null;
+      return findPlayersJob !== null && findPlayersJob !== undefined ? true : false;
     } else {
       return (
         (this.checkNotEmpty("ca")) ||
