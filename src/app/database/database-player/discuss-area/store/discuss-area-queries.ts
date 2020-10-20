@@ -55,9 +55,10 @@ query messagesByLatestUpdate {
   messagesByLatestUpdate {
     id
     username
-    googleAccount
     playerId
+    playerName
     clubId
+    clubName
     message
     modifiedDate
   }

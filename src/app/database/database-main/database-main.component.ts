@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from "rxjs";
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
+import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 import * as fromApp from '../../store/app.reducer';
@@ -14,6 +15,11 @@ import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./database-main.component.css']
 })
 export class DatabaseMainComponent implements OnInit, OnDestroy {
+
+  admin$ = this.store.pipe(
+    select('admin'),
+    map((state) => state.isAdmin)
+  );
 
   public loading: boolean;
   public leagues: LeagueData[];
@@ -46,7 +52,6 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
     this.databaseSubscription = this.store
       .select("database")
       .subscribe(databaseState => {
-        console.log(databaseState)
         this.latestUpdatePlayers = databaseState.latestPlayers;
         this.mostAccessedPlayers = databaseState.mostAccessedPlayers;
         this.season = databaseState.season;

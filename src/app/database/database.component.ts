@@ -3,6 +3,7 @@ import { Store } from '@ngrx/store';
 
 import * as fromApp from '../store/app.reducer';
 import * as DatabaseActions from '../database/store/database.actions';
+import * as DiscussAreaActions from './database-player/discuss-area/store/discuss-area.actions';
 
 @Component({
   selector: 'app-database',
@@ -18,6 +19,7 @@ export class DatabaseComponent implements OnInit {
   ngOnInit() {
     this.store.dispatch(new DatabaseActions.LoadLatestUpdatePlayers());
     this.store.dispatch(new DatabaseActions.LoadMostAccessedPlayers());
+    this.store.dispatch(new DiscussAreaActions.FetchLatestComments());
   }
 
   onClearCache() {
