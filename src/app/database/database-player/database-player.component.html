@@ -188,10 +188,10 @@
             </div>
           </div>
           <div class="row" *ngIf="player.basicInfo.isNonPlayer">
-            <div class="col-4">
+            <div class="col-12 col-md-4">
               <app-personal-data [personal]="player.personalData"></app-personal-data>
             </div>
-            <div class="col-2">
+            <div class="col">
               <div *ngIf="player.nonPlayerData.ca">
                 <small class="text-secondary">現在能力</small>
                 <div><app-status-badge [value]="player.nonPlayerData.ca" [league]="league"></app-status-badge></div>

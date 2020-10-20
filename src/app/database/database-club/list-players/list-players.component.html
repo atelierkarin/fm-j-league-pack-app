@@ -73,6 +73,10 @@
       prop="updateDate"
       [flexGrow]="1"
       *ngIf="innerWidth > 768"
-    ></ngx-datatable-column>
+    >
+      <ng-template let-value="value" ngx-datatable-cell-template>
+        <small>{{ value }}</small>
+      </ng-template>
+    </ngx-datatable-column>
   </ngx-datatable>
 </div>
