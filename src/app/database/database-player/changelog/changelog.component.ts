@@ -90,11 +90,13 @@ export class ChangelogComponent implements OnInit, OnDestroy {
         newValue: this.formatValue(record.newValue, record.recordField)
       };
     } else if (Object.keys(this.numberUpdateRecords).includes(tag)) {
-      return {
+      const oldValue = record.oldValue ? parseInt(record.oldValue) : 0;
+      const newValue = record.newValue ? parseInt(record.newValue) : 0;
+      if (oldValue !== newValue) return {
         title: this.numberUpdateRecords[tag],
         type: "number",
-        oldValue: record.oldValue ? parseInt(record.oldValue) : 0,
-        newValue: record.newValue ? parseInt(record.newValue) : 0
+        oldValue,
+        newValue,
       };
     } else {
       return null;
