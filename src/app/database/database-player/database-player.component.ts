@@ -196,7 +196,7 @@ export class DatabasePlayerComponent implements OnInit, OnDestroy {
           this.loanClub = this.clubs.find(
             (c) => c.id === this.loanClubContract.id
           );
-          this.league = getCurrentLeague(this.leagues, this.loanClub.id);
+          this.league = this.loanClub ? getCurrentLeague(this.leagues, this.loanClub.id) : null;
         }
         this.titleService.setTitle(
           this.player.basicInfo.name + " - Football Manager Jリーグデータパック"
