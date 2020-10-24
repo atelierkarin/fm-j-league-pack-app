@@ -30,7 +30,7 @@
   <table class="table table-striped">
     <thead>
       <tr>
-        <th scope="col">ID</th>
+        <th scope="col" class="table_id">ID</th>
         <th scope="col">名前</th>
         <th scope="col"></th>
       </tr>
@@ -39,7 +39,14 @@
       <tr *ngFor="let phni of playerHistoryNameInfo">
         <td><input type="number" class="form-control" [(ngModel)]="idList[phni.playerName]"></td>
         <td>{{ phni.playerName }}</td>
-        <td><button type="button" class="btn btn-primary mx-2" (click)="onUpdate(phni.playerName)" [disabled]="!idList[phni.playerName]">更新</button></td>
+        <td>
+          <div class="btn-group">
+            <button type="button" class="btn btn-outline-primary" (click)="onUpdate(phni.playerName)" [disabled]="!idList[phni.playerName]">更新</button>
+            <ng-container *ngIf="findRecommendPlayerId(phni.playerName)">
+              <button type="button" class="btn btn-outline-primary" (click)="onUpdateByDefault(phni.playerName)">デフォルトIDを利用</button>
+            </ng-container>
+          </div>
+        </td>
       </tr>
     </tbody>
   </table>

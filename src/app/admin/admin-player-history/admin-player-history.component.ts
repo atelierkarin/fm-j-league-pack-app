@@ -25,6 +25,12 @@ export class AdminPlayerHistoryComponent implements OnInit, OnDestroy {
   public leagueId: number;
   public season: number;
 
+  public players: {
+    id: number;
+    squadNo: number;
+    name: string;
+  }[];
+
   public idList: number[];
 
   public playerHistoryNameInfo: {playerId?: number, playerName: string}[];
@@ -46,6 +52,11 @@ export class AdminPlayerHistoryComponent implements OnInit, OnDestroy {
           this.idList[d.playerName] = d.playerId;
         })
       }
+      this.players = state.searchPlayers ? state.searchPlayers.filter(p => p.isPlayer).map(p => ({
+        id: p.id,
+        squadNo: p.squadNo,
+        name: p.name
+      })) : null;
     });
   }
 
@@ -61,6 +72,7 @@ export class AdminPlayerHistoryComponent implements OnInit, OnDestroy {
   onSearch() {
     this.idList = [];
     this.store.dispatch(new DatabaseActions.LoadPlayerHistoryName({season: this.season, clubId: this.clubId, leagueId: this.leagueId}));
+    this.store.dispatch(new DatabaseActions.SearchPlayersByClub(this.clubId));
   }
 
   onUpdate(name: string) {
@@ -72,6 +84,28 @@ export class AdminPlayerHistoryComponent implements OnInit, OnDestroy {
       playerName: name
     }
     this.store.dispatch(new DatabaseActions.UpdatePlayerHistoryName(data));
+  }
+
+  onUpdateByDefault(name: string) {
+    const id = this.findRecommendPlayerId(name);
+    if (id) {
+      let data: {season: number, clubId: number, leagueId: number, playerId: number, playerName: string} = {
+        season: this.season,
+        clubId: this.clubId,
+        leagueId: this.leagueId,
+        playerId: id,
+        playerName: name
+      }
+      this.store.dispatch(new DatabaseActions.UpdatePlayerHistoryName(data));
+    }
+  }
+
+  findRecommendPlayerId(name: string) {
+    if (this.players) {
+      const recommendPlayer = this.players.find(p => p.name === name);
+      return recommendPlayer ? recommendPlayer.id : null
+    }
+    return null;
   }
 
 }
