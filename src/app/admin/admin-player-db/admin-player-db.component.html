@@ -126,13 +126,19 @@
         <div class="form-row">
           <div class="form-group col-md-3">
             <label for="clubInfoId">クラブ</label>
-            <ng-select
-              id="clubInfoId"
-              [items]="clubList"
-              bindLabel="clubName"
-              bindValue="id"
-              formControlName="id"
-            ></ng-select>
+            <div class="input-group">
+              <ng-select *ngIf="!useCustomClubId"
+                id="clubInfoId"
+                [items]="clubList"
+                bindLabel="clubName"
+                bindValue="id"
+                formControlName="id"
+              ></ng-select>
+              <input class="form-control" type="number" id="clubInfoId" formControlName="id" *ngIf="useCustomClubId" />
+              <div class="input-group-append">
+                <button class="btn btn-outline-primary" type="button" (click)="useCustomClubId = !useCustomClubId">エディット</button>
+              </div>
+            </div>
           </div>
           <div class="form-group col-md-3" *ngIf="playerForm.value.clubInfo.id">
             <label for="clubInfoDateJoined">加入時期</label>

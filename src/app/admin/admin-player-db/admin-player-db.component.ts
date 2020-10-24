@@ -234,6 +234,8 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
 
   public formList = f;
 
+  public useCustomClubId: boolean = false;
+
   public loading: boolean = false;
   public updateError: string;
 
@@ -422,6 +424,10 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
 
   onDelete() {
     this.store.dispatch(new DatabaseActions.DeletePlayer(this.editPlayerId));
+  }
+
+  onChangeClub() {
+    console.log("CLUB", this.playerForm.value.clubInfo.id)
   }
 
   private resetForm() {
