@@ -258,7 +258,7 @@ query playerHistory ($id: Int!) {
 }`;
 
 export const getPlayerHistoryNameByInfo = gql`
-query getPlayerHistoryNameByInfo ($season: Int!, $clubId: Int!, $leagueId: Int!) {
+query getPlayerHistoryNameByInfo ($season: Int!, $clubId: Int, $leagueId: Int!) {
   getPlayerHistoryNameByInfo(season: $season, clubId: $clubId, leagueId: $leagueId) {
     playerId
     playerName

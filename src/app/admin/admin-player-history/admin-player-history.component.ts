@@ -18,7 +18,7 @@ export class AdminPlayerHistoryComponent implements OnInit, OnDestroy {
   public leagues: LeagueData[];
 
   public seasons: number[] = [
-    2020, 2019
+    2020, 2019, 2018, 2017
   ];
 
   public clubId: number;
@@ -72,7 +72,7 @@ export class AdminPlayerHistoryComponent implements OnInit, OnDestroy {
   onSearch() {
     this.idList = [];
     this.store.dispatch(new DatabaseActions.LoadPlayerHistoryName({season: this.season, clubId: this.clubId, leagueId: this.leagueId}));
-    this.store.dispatch(new DatabaseActions.SearchPlayersByClub(this.clubId));
+    if (this.clubId) this.store.dispatch(new DatabaseActions.SearchPlayersByClub(this.clubId));
   }
 
   onUpdate(name: string) {
