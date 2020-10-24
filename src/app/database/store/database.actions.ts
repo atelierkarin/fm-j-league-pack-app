@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store';
 
 import { PlayerData, PlayerDataSimple } from "../../data/fmJDatabase/PlayerData.interface";
+import { PlayerHistory } from '../../shared/database-filetype';
 
 export const SET_SEASON = '[Database] Set Season';
 
@@ -20,6 +21,13 @@ export const SET_LATEST_UPDATE_PLAYERS = '[Database] Set Latest Update Players';
 
 export const LOAD_MOST_ACCESSED_PLAYERS = '[Database] Load Most Accessed Players';
 export const SET_MOST_ACCESSED_PLAYERS = '[Database] Set Most Accessed Players';
+
+export const LOAD_PLAYER_HISTORY = '[Database] Load Player History';
+export const SET_PLAYER_HISTORY = '[Database] Set Player History';
+
+export const LOAD_PLAYER_HISTORY_NAME = '[Database] Load Player History Name';
+export const SET_PLAYER_HISTORY_NAME = '[Database] Set Player History Name';
+export const UPDATE_PLAYER_HISTORY_NAME = '[Database] Update Player History Name';
 
 export const LOAD_SUCCESS = '[Database] Load Success';
 export const LOAD_FAIL = '[Database] Load Fail';
@@ -95,6 +103,33 @@ export class SetMostAccessedPlayers implements Action {
   constructor(public payload: {id: string, name: string, dob?: string, nationality?: string, ca?: number, pa?: number, updateDate: string, clubId?: number}[]) {}
 }
 
+export class LoadPlayerHistory implements Action {
+  readonly type = LOAD_PLAYER_HISTORY;
+
+  constructor(public payload: number) {}
+}
+export class SetPlayerHistory implements Action {
+  readonly type = SET_PLAYER_HISTORY;
+
+  constructor(public payload: PlayerHistory[]) {}
+}
+
+export class LoadPlayerHistoryName implements Action {
+  readonly type = LOAD_PLAYER_HISTORY_NAME;
+
+  constructor(public payload: {season: number, clubId: number, leagueId: number}) {}
+}
+export class SetPlayerHistoryName implements Action {
+  readonly type = SET_PLAYER_HISTORY_NAME;
+
+  constructor(public payload: {playerId?: number, playerName: string}[]) {}
+}
+export class UpdatePlayerHistoryName implements Action {
+  readonly type = UPDATE_PLAYER_HISTORY_NAME;
+
+  constructor(public payload: {season: number, clubId: number, leagueId: number, playerId: number, playerName: string}) {}
+}
+
 export class LoadSuccess implements Action {
   readonly type = LOAD_SUCCESS;
 }
@@ -129,6 +164,11 @@ export type DatabaseActions =
   | SetLatestUpdatePlayers
   | LoadMostAccessedPlayers
   | SetMostAccessedPlayers
+  | LoadPlayerHistory
+  | SetPlayerHistory
+  | LoadPlayerHistoryName
+  | SetPlayerHistoryName
+  | UpdatePlayerHistoryName
   | LoadSuccess
   | LoadFail
   | UpdateSuccess

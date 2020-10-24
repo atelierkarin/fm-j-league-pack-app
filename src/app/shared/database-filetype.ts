@@ -19,3 +19,13 @@ export interface LeagueData {
   seasons?: { season: number; teams: number[] }[];
   leagueCaGuideline?: number[];
 }
+
+export interface PlayerHistory {
+  season: number;
+  clubId: number;
+  clubName: string;
+  leagueId: number;
+  leagueName: string;
+  totalApp: number;
+  totalGoals: number;
+}

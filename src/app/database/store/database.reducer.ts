@@ -1,6 +1,7 @@
 import * as DatabaseActions from './database.actions';
 
 import { PlayerData, PlayerDataSimple } from "../../data/fmJDatabase/PlayerData.interface";
+import { PlayerHistory } from '../../shared/database-filetype';
 
 import { currentSeason } from '../../shared/common';
 
@@ -8,6 +9,9 @@ export interface State {
   season: number;
 
   players: PlayerData[];
+  playerHistory: PlayerHistory[];
+
+  playerHistoryNameInfo: {playerId?: number, playerName: string}[];
 
   searchPlayers: PlayerDataSimple[];
   latestPlayers: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[];
@@ -17,6 +21,7 @@ export interface State {
   errMsg: string;
   loading: boolean;
   loadingPlayer: boolean;
+  loadingHistory: boolean;
 
   mostAccessedPlayers: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[];
   loadingMostAccessedPlayers: boolean;
@@ -26,6 +31,9 @@ const initialState: State = {
   season: currentSeason,
 
   players: null,
+  playerHistory: null,
+
+  playerHistoryNameInfo: null,
 
   searchPlayers: null,
   latestPlayers: null,
@@ -35,6 +43,7 @@ const initialState: State = {
   errMsg: null,
   loading: false,
   loadingPlayer: false,
+  loadingHistory: false,
 
   mostAccessedPlayers: null,
   loadingMostAccessedPlayers: false,
@@ -116,6 +125,35 @@ export function databaseReducer(
         mostAccessedPlayers: [...action.payload],
         loadingMostAccessedPlayers: false,
       };
+    case DatabaseActions.LOAD_PLAYER_HISTORY:
+      return {
+        ...state,
+        playerHistory: null,
+        loadingHistory: true
+      };
+    case DatabaseActions.SET_PLAYER_HISTORY:
+      return {
+        ...state,
+        playerHistory: [...action.payload],
+        loadingHistory: false
+      };
+    case DatabaseActions.LOAD_PLAYER_HISTORY_NAME:
+      return {
+        ...state,
+        playerHistoryNameInfo: null,
+        loading: true
+      };
+    case DatabaseActions.SET_PLAYER_HISTORY_NAME:
+      return {
+        ...state,
+        playerHistoryNameInfo: [...action.payload],
+        loading: false
+      };
+    case DatabaseActions.UPDATE_PLAYER_HISTORY_NAME:
+      return {
+        ...state,
+        loading: true
+      };
     case DatabaseActions.LOAD_SUCCESS:
       return {
         ...state,
@@ -126,7 +164,9 @@ export function databaseReducer(
       return {
         ...state,
         errMsg: action.payload,
-        loading: false
+        loading: false,
+        loadingMostAccessedPlayers: false,
+        loadingHistory: false
       };
     case DatabaseActions.UPDATE_SUCCESS:
       return {

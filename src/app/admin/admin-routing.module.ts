@@ -8,6 +8,7 @@ import { AdminHistoryComponent } from './admin-history/admin-history.component';
 import { AdminPlayerUpdateComponent } from './admin-player-update/admin-player-update.component';
 import { AdminPlayerDbComponent } from './admin-player-db/admin-player-db.component';
 import { AdminCsvImportComponent } from './admin-csv-import/admin-csv-import.component';
+import { AdminPlayerHistoryComponent } from './admin-player-history/admin-player-history.component';
 
 const adminRoutes: Routes = [
   { path: '', component: AdminMainComponent, canActivate: [AdminGuard], children: [
@@ -16,6 +17,7 @@ const adminRoutes: Routes = [
     { path: 'playerDb', component: AdminPlayerDbComponent },
     { path: 'playerDb/:id', component: AdminPlayerDbComponent },
     { path: 'import', component: AdminCsvImportComponent },
+    { path: 'playerHistory', component: AdminPlayerHistoryComponent },
   ] },
   { path: 'login', component: AdminLoginComponent },  
 ];

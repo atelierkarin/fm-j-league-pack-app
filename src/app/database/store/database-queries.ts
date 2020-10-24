@@ -242,3 +242,31 @@ mutation deletePlayer ($id: Int!) {
   deletePlayer(id: $id)
 }
 `
+
+
+export const getPlayerHistory = gql`
+query playerHistory ($id: Int!) {
+  playerHistory(id: $id) {
+    season
+    clubId
+    clubName
+    leagueId
+    leagueName
+    totalApp
+    totalGoals
+  }
+}`;
+
+export const getPlayerHistoryNameByInfo = gql`
+query getPlayerHistoryNameByInfo ($season: Int!, $clubId: Int!, $leagueId: Int!) {
+  getPlayerHistoryNameByInfo(season: $season, clubId: $clubId, leagueId: $leagueId) {
+    playerId
+    playerName
+  }
+}`;
+
+export const updatePlayerIdByPlayerInfo = gql`
+mutation updatePlayerIdByPlayerInfo ($data: PlayerHistoryPlayerInput!) {
+  updatePlayerIdByPlayerInfo(data: $data)
+}
+`
