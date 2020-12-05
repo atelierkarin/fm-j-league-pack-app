@@ -1,0 +1,20 @@
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th scope="col">シーズン</th>
+    <th scope="col">クラブ</th>
+    <th scope="col">リーグ</th>
+    <th scope="col">出場</th>
+    <th scope="col">得点</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let ph of playerHistory; index as i">
+    <td>{{ ph.season }}</td>
+    <td><a [routerLink]="['/database/club/' + ph.clubId]">{{ ph.clubName }}</a></td>
+    <td>{{ ph.leagueName }}</td>
+    <td>{{ ph.totalApp | number }}</td>
+    <td>{{ ph.totalGoals | number }}</td>
+  </tr>
+  </tbody>
+</table>

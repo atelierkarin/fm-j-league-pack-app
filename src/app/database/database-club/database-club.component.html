@@ -6,97 +6,34 @@
   </div>
 </ng-container>
 <ng-template #elseLoadedTemplate>
-  <div class="container-fluid" *ngIf="club">
-    <h3 class="club-name-col" [ngStyle]="getClubStyle()">{{ club.clubName }}</h3>
-    <div class="card mb-2">
-      <div class="card-header">スタッフ</div>
-      <div class="card-body" *ngIf="staff && staff.length > 0">
-        <div class="container-fluid">
-          <div class="row" *ngFor="let staffMember of staff">
-            <div class="col-12 col-sm-3">{{ getJobType(staffMember.job) }}</div>
-            <div class="col-12 col-sm-9">
-              <a
-              [routerLink]="['/database/player/']"
-              [queryParams]="{name: staffMember.name, id: staffMember.id, dob: staffMember.dob}">{{ staffMember.name }}</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-header">選手</div>
-      <div class="card-body player-table-div" *ngIf="players && players.length > 0">
-          <ngx-datatable
-          class="bootstrap fullscreen player-table"
-          [rows]="players"
-          [columnMode]="'flex'"
-          [rowHeight]="'auto'"
-          [rowClass]="getRowClass"
-          [sorts]="[{
-            prop: 'squardNo',
-            dir: 'asc'
-          }]"
-        >
-          <ngx-datatable-column
-            name="背番号"
-            prop="squardNo"
-            [flexGrow]="1"
-            [comparator]="sortSquadNo"
-          ></ngx-datatable-column>
-          <ngx-datatable-column name="名前" prop="name" [flexGrow]="4">
-            <ng-template
-              let-row="row"
-              let-value="value"
-              ngx-datatable-cell-template
-            >
-              <a
-                [routerLink]="['/database/player/']"
-                [queryParams]="{name: row.name, id: row.id, dob: row.dob}"
-                >{{ value }}</a
-              >&nbsp;
-              <span class="badge badge-info badge-pill" *ngIf="row.loanIn">期間付移籍中</span>
-              <span class="badge badge-info badge-pill" *ngIf="row.loanOut">期間付移籍中</span>
-              <span class="badge badge-warning badge-pill" *ngIf="row.updateThisWeek">更新</span>
-            </ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column
-            name="ポジション"
-            prop="position"
-            [flexGrow]="2"
-          ></ngx-datatable-column>
-          <ngx-datatable-column name="国" prop="nationality" [flexGrow]="1">
-            <ng-template let-value="value" ngx-datatable-cell-template>
-              <span [class]="getFlag(value)"></span>&nbsp;{{ value }}
-            </ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column
-            name="生年月日"
-            prop="dob"
-            [flexGrow]="1"
-          ></ngx-datatable-column>
-          <ngx-datatable-column name="現在能力" prop="ca" [flexGrow]="1">
-            <ng-template let-value="value" ngx-datatable-cell-template>
-              <h5>
-                <span class="badge player-ability-badge" [ngClass]="getCAClass(value)">{{ value }}</span>
-              </h5>
-            </ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column name="潜在能力" prop="pa" [flexGrow]="1">
-            <ng-template let-value="value" ngx-datatable-cell-template>
-              <h5>
-                <span class="badge player-ability-badge avereage-ca">{{ value }}</span>
-              </h5>
-            </ng-template>
-          </ngx-datatable-column>
-          <ngx-datatable-column
-            name="更新時間"
-            prop="updateDate"
-            [flexGrow]="1"
-            *ngIf="innerWidth > 768"
-          ></ngx-datatable-column>
-        </ngx-datatable>
-      </div>
-    </div>
+  <div class="club-title" [ngStyle]="getClubStyle() ? getClubStyle() : null">
+    <h3 class="heading">{{ club ? club.clubName : "" }}</h3>
   </div>
+  <nav
+    ngbNav
+    #nav="ngbNav"
+    [(activeId)]="activeTabId"
+    class="nav-tabs database-club-nav-tabs"
+    (navChange)="onNavChange($event)"
+  >
+    <ng-container ngbNavItem [ngbNavItem]="1">
+      <a ngbNavLink>スタッフ</a>
+      <ng-template ngbNavContent>
+        <app-list-staff [staff]="staff"></app-list-staff>
+      </ng-template>
+    </ng-container>
+    <ng-container ngbNavItem [ngbNavItem]="2">
+      <a ngbNavLink>選手</a>
+      <ng-template ngbNavContent>
+        <app-list-players [players]="players" [league]="league" [innerWidth]="innerWidth"></app-list-players>
+      </ng-template>
+    </ng-container>
+    <ng-container ngbNavItem [ngbNavItem]="3">
+      <a ngbNavLink>他チームに期限付き移籍中の選手</a>
+      <ng-template ngbNavContent>
+        <app-list-players [players]="players" [league]="league" [innerWidth]="innerWidth" [loanout]="true"></app-list-players>
+      </ng-template>
+    </ng-container>
+  </nav>
+  <div [ngbNavOutlet]="nav" class="mt-2"></div>
 </ng-template>

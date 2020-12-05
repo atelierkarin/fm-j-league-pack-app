@@ -14,9 +14,11 @@ import * as DisucssAreaActions from '../store/discuss-area.actions';
 })
 export class DiscussAreaMainComponent implements OnInit, OnDestroy {
 
-  @Input() playerId: string;
+  @Input() playerId: number;
 
   public user: User;
+
+  private admin: boolean = false;
 
   private adminAuthSubscription: Subscription;
 
@@ -25,6 +27,7 @@ export class DiscussAreaMainComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.adminAuthSubscription = this.store.select('admin').subscribe(adminState => {
       this.user = adminState.user;
+      this.admin = adminState.isAdmin;
     });
     this.onReload();
   }
@@ -37,7 +40,7 @@ export class DiscussAreaMainComponent implements OnInit, OnDestroy {
 
   onReload() {
     this.store.dispatch(
-      new DisucssAreaActions.FetchComments(this.playerId)
+      new DisucssAreaActions.FetchCommentsByPlayerId({id: this.playerId, admin: this.admin})
     );
   }
 

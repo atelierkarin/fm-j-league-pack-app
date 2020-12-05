@@ -26,6 +26,7 @@ export interface VersionData {
 }
 
 export const fmVersionList: string[] = [
+  "FM2021",
   "FM2020",
   "FM2019",
   "FM2018",
@@ -33,6 +34,35 @@ export const fmVersionList: string[] = [
 ];
 
 export const fmVersionDataList: VersionData[] = [
+  {
+    fmVersion: "FM2021",
+    content: {
+      home: {
+        title: "Football Manager 2021 Jリーグデータパック",
+        subtitle: "Football Manager 2021向け、J1から地域リーグまでのデータパック",
+        latest: {
+          url: "https://drive.google.com/open?id=1LKPChwb7UNYmcJAGrmp6XXR3bwW3A3a8",
+          version: "v1.0.0",
+          updateDate: "2020/12/06",
+        },
+        otherVersion: {
+          url: "https://drive.google.com/open?id=1HhBR-47aUW7fXfkmLz5Wkgh5gWNZUj-L"
+        },
+        mainContent: `<p>FM2021向け、Jリーグパックです。J1から地域リーグまでのデータを収録しています。</p>
+        <p><span style="color: #ff0000;"><strong>同梱されたJリーグ構成は一応地域リーグ１部まではプレイ可能ですが、自分はアドバンスドルールが不得意なので、調整があまり良くない場合もあります。</strong></span>もし他のところに良いJリーグ構成があったら、本パックのデータだけを利用し、他の構成を使うのも構いません。</p>`,
+        note: `<p>ダウンロードはZipファイルをダウンロードするだけでオーケーです。フォルダ内と同一内容です。</p>
+        <p>製作中フォルダは文字通り製作中のものですが、今どこまで出来たのか気になる方はどうぞチェックしてください。こちらは基本不定期更新です。</p>
+        <p>本パックは商業利用ではない限り、使用は基本自由です。</p>
+        <hr />
+        <p>FM関連リンク</p>
+        <p>ajopya氏：<a target="_blank" href="http://fmjp12.blogspot.com/">週末ジレンマ</a></p>
+        <p>osaru1597氏：<a target="_blank" href="http://hw001.spaaqs.ne.jp/osaru1597/">Underdogs</a></p>
+        <p>dosukoi氏：<a target="_blank" href="https://dosukoi.bulog.jp/">Dosukoi Press</a></p>
+        <p>あまーり氏：<a target="_blank" href="https://www.amari-fm.com/">あまーりのゲーム日記</a></p>
+        <p>EST Touiro氏：<a target="_blank" href="http://estouiro.wp.xdomain.jp/2019/12/25/j-league-facepack-footballmanager-2020/">EST Games （フェイスパック）</a></p>`,
+      }
+    }
+  },
   {
     fmVersion: "FM2020",
     content: {

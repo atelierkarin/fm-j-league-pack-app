@@ -1,28 +1,39 @@
 import * as DatabaseActions from './database.actions';
 
-import { PlayerData } from "../../data/fmJDatabase/PlayerData.interface";
+import { PlayerData, PlayerDataSimple } from "../../data/fmJDatabase/PlayerData.interface";
+import { PlayerHistory } from '../../shared/database-filetype';
 
-import * as moment from 'moment';
+import { currentSeason } from '../../shared/common';
 
 export interface State {
   season: number;
 
   players: PlayerData[];
+  playerHistory: PlayerHistory[];
 
-  searchPlayers: {player: PlayerData, id: string}[];
-  latestPlayers: {id: string, name: string, dob?: string, updateDate: string, club?: number}[];
+  playerHistoryNameInfo: {playerId?: number, playerName: string}[];
 
-  editPlayer: {player: PlayerData, id: string};
+  searchPlayers: PlayerDataSimple[];
+  latestPlayers: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[];
+
+  editPlayer: PlayerData;
 
   errMsg: string;
   loading: boolean;
   loadingPlayer: boolean;
+  loadingHistory: boolean;
+
+  mostAccessedPlayers: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[];
+  loadingMostAccessedPlayers: boolean;
 }
 
 const initialState: State = {
-  season: 2020,
+  season: currentSeason,
 
   players: null,
+  playerHistory: null,
+
+  playerHistoryNameInfo: null,
 
   searchPlayers: null,
   latestPlayers: null,
@@ -32,6 +43,10 @@ const initialState: State = {
   errMsg: null,
   loading: false,
   loadingPlayer: false,
+  loadingHistory: false,
+
+  mostAccessedPlayers: null,
+  loadingMostAccessedPlayers: false,
 };
 
 export function databaseReducer(
@@ -49,18 +64,6 @@ export function databaseReducer(
         ...state,
         players: [...action.payload],
         loading: false,
-      };
-    case DatabaseActions.FETCH_PLAYERS:
-      return {
-        ...state,
-        loading: true,
-      };
-
-    case DatabaseActions.SEARCH_PLAYERS:
-      return {
-        ...state,
-        searchPlayers: null,
-        loading: true,
       };
     case DatabaseActions.SEARCH_PLAYERS_BY_CLUB:
       return {
@@ -88,13 +91,18 @@ export function databaseReducer(
         loading: false,
         loadingPlayer: false,
       };
-
+    case DatabaseActions.BROWSE_PLAYER:
+      return state;
     case DatabaseActions.UPDATE_PLAYER:
       return {
         ...state,
         loading: true,
-      };  
-      
+      };
+    case DatabaseActions.DELETE_PLAYER:
+      return {
+        ...state,
+        loading: true,
+      };
     case DatabaseActions.LOAD_LATEST_UPDATE_PLAYERS:
       return {
         ...state,
@@ -106,26 +114,79 @@ export function databaseReducer(
         latestPlayers: [...action.payload],
         loading: false,
       };
-
+    case DatabaseActions.LOAD_MOST_ACCESSED_PLAYERS:
+      return {
+        ...state,
+        loadingMostAccessedPlayers: true,
+      };
+    case DatabaseActions.SET_MOST_ACCESSED_PLAYERS:
+      return {
+        ...state,
+        mostAccessedPlayers: [...action.payload],
+        loadingMostAccessedPlayers: false,
+      };
+    case DatabaseActions.LOAD_PLAYER_HISTORY:
+      return {
+        ...state,
+        playerHistory: null,
+        loadingHistory: true
+      };
+    case DatabaseActions.SET_PLAYER_HISTORY:
+      return {
+        ...state,
+        playerHistory: [...action.payload],
+        loadingHistory: false
+      };
+    case DatabaseActions.LOAD_PLAYER_HISTORY_NAME:
+      return {
+        ...state,
+        playerHistoryNameInfo: null,
+        loading: true
+      };
+    case DatabaseActions.SET_PLAYER_HISTORY_NAME:
+      return {
+        ...state,
+        playerHistoryNameInfo: [...action.payload],
+        loading: false
+      };
+    case DatabaseActions.UPDATE_PLAYER_HISTORY_NAME:
+      return {
+        ...state,
+        loading: true
+      };
+    case DatabaseActions.LOAD_SUCCESS:
+      return {
+        ...state,
+        errMsg: null,
+        loading: false
+      };
+    case DatabaseActions.LOAD_FAIL:
+      return {
+        ...state,
+        errMsg: action.payload,
+        loading: false,
+        loadingMostAccessedPlayers: false,
+        loadingHistory: false
+      };
     case DatabaseActions.UPDATE_SUCCESS:
       return {
         ...state,
         editPlayer: null,
-        updateError: null,
+        errMsg: null,
         loading: false
       };
     case DatabaseActions.UPDATE_FAIL:
       return {
         ...state,
-        updateError: action.payload,
+        errMsg: action.payload,
         loading: false
       };
-    case DatabaseActions.RESET_SEARCH:
+    case DatabaseActions.RESET:
       return {
         ...state,
         searchPlayers: null,
         editPlayer: null,
-        updateError: null,
+        errMsg: null,
         loading: false,
         loadingPlayer: false,
       };

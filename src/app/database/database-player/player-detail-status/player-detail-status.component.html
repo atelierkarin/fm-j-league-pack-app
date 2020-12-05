@@ -4,9 +4,9 @@
       <div class="col-12 col-md-4">
         <small class="text-secondary">ゴールキーパー</small>
         <ul class="list-group list-status">
-          <li class="p-1 list-group-item d-flex justify-content-between align-items-center small" *ngFor="let skillStatus of goalkeepingList">
+          <li class="p-1 list-group-item d-flex justify-content-between align-items-center" *ngFor="let skillStatus of goalkeepingList">
             {{ skillStatus.name }}
-            <span class="badge player-ability-badge" [ngClass]="getStatusClass(getStatusValue(skillStatus), skillStatus.anti)">{{ getStatusValue(skillStatus) }}</span>
+            <app-status-badge [value]="getStatusValue(skillStatus)" [max]="20" [invert]="skillStatus.anti"></app-status-badge>
           </li>
         </ul>
       </div>
@@ -16,9 +16,9 @@
       <div class="col-12 col-md-4">
         <small class="text-secondary">スキル</small>
         <ul class="list-group list-status">
-          <li class="p-1 list-group-item d-flex justify-content-between align-items-center small" *ngFor="let skillStatus of skillList">
+          <li class="p-1 list-group-item d-flex justify-content-between align-items-center" *ngFor="let skillStatus of skillList">
             {{ skillStatus.name }}
-            <span class="badge player-ability-badge" [ngClass]="getStatusClass(getStatusValue(skillStatus), skillStatus.anti)">{{ getStatusValue(skillStatus) }}</span>
+            <app-status-badge [value]="getStatusValue(skillStatus)" [max]="20" [invert]="skillStatus.anti"></app-status-badge>
           </li>
         </ul>
       </div>
@@ -27,9 +27,9 @@
     <div class="col-12 col-md-4">
       <small class="text-secondary">メンタル</small>
       <ul class="list-group list-status">
-        <li class="p-1 list-group-item d-flex justify-content-between align-items-center small" *ngFor="let skillStatus of mentalList">
+        <li class="p-1 list-group-item d-flex justify-content-between align-items-center" *ngFor="let skillStatus of mentalList">
           {{ skillStatus.name }}
-          <span class="badge player-ability-badge" [ngClass]="getStatusClass(getStatusValue(skillStatus), skillStatus.anti)">{{ getStatusValue(skillStatus) }}</span>
+          <app-status-badge [value]="getStatusValue(skillStatus)" [max]="20" [invert]="skillStatus.anti"></app-status-badge>
         </li>
       </ul>
     </div>
@@ -37,17 +37,17 @@
     <div class="col-12 col-md-4">
       <small class="text-secondary">フィジカル</small>
       <ul class="list-group list-status">
-        <li class="p-1 list-group-item d-flex justify-content-between align-items-center small" *ngFor="let skillStatus of physicalList">
+        <li class="p-1 list-group-item d-flex justify-content-between align-items-center" *ngFor="let skillStatus of physicalList">
           {{ skillStatus.name }}
-          <span class="badge player-ability-badge" [ngClass]="getStatusClass(getStatusValue(skillStatus), skillStatus.anti)">{{ getStatusValue(skillStatus) }}</span>
+          <app-status-badge [value]="getStatusValue(skillStatus)" [max]="20" [invert]="skillStatus.anti"></app-status-badge>
         </li>
       </ul>
       <ng-container *ngIf="isGoalKeeper;">
         <small class="text-secondary">スキル</small>
         <ul class="list-group list-status">
-          <li class="p-1 list-group-item d-flex justify-content-between align-items-center small" *ngFor="let skillStatus of goalkeepingSkillList">
+          <li class="p-1 list-group-item d-flex justify-content-between align-items-center" *ngFor="let skillStatus of goalkeepingSkillList">
             {{ skillStatus.name }}
-            <span class="badge player-ability-badge" [ngClass]="getStatusClass(getStatusValue(skillStatus), skillStatus.anti)">{{ getStatusValue(skillStatus) }}</span>
+            <app-status-badge [value]="getStatusValue(skillStatus)" [max]="20" [invert]="skillStatus.anti"></app-status-badge>
           </li>
         </ul>
       </ng-container>

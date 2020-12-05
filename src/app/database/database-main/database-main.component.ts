@@ -1,15 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from "rxjs";
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
+import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 import * as fromApp from '../../store/app.reducer';
 
-import * as Leagues from '../../data/fmJDatabase/Leagues.data'
-
-import * as moment from 'moment';
-
-import { ClubData } from '../../shared/database-filetype'
+import { ClubData, LeagueData } from '../../shared/database-filetype'
+import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-database-main',
@@ -18,31 +16,46 @@ import { ClubData } from '../../shared/database-filetype'
 })
 export class DatabaseMainComponent implements OnInit, OnDestroy {
 
+  admin$ = this.store.pipe(
+    select('admin'),
+    map((state) => state.isAdmin)
+  );
+
   public loading: boolean;
+  public leagues: LeagueData[];
+  public latestUpdatePlayers: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[];
+  public mostAccessedPlayers: {id: string, name: string, dob?: string, updateDate: string, clubId?: number}[];
 
-  public leagues: Leagues.LeagueData[] = Leagues.Leagues;
+  public activeId;
 
-  public latestUpdatePlayers: {id: string, name: string, dob?: string}[];
-
-  private clubList: ClubData[];
+  private clubList: ClubData[];  
 
   private coreSubscription: Subscription;
   private databaseSubscription: Subscription;
 
   private season: number;
 
-  constructor(private store: Store<fromApp.AppState>, private router: Router) { }
+  constructor(private store: Store<fromApp.AppState>, private router: Router) {}
 
   ngOnInit() {
+    if (localStorage) {
+      const tempTab = localStorage.getItem("database-main-tab");
+      if (tempTab) {
+        this.activeId = parseInt(tempTab);
+      };
+    }
+
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
       this.clubList = coreState.clubs;
+      this.leagues = coreState.leagues;
     })
     this.databaseSubscription = this.store
       .select("database")
       .subscribe(databaseState => {
         this.latestUpdatePlayers = databaseState.latestPlayers;
+        this.mostAccessedPlayers = databaseState.mostAccessedPlayers;
         this.season = databaseState.season;
-        this.loading = databaseState.loading;
+        this.loading = databaseState.loading || databaseState.loadingMostAccessedPlayers;
       });
   }
 
@@ -58,7 +71,7 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
   getTeamCounts(leagueId) {
     try {
       const targetLeague = this.leagues.find(l => l.id === leagueId);
-      const targetLeagueSeason = targetLeague.seasons.find(s => s.year === this.season);
+      const targetLeagueSeason = targetLeague.seasons.find(s => s.season === this.season);
       return targetLeagueSeason.teams.length;
     } catch (err) {}
     return 0;    
@@ -77,6 +90,12 @@ export class DatabaseMainComponent implements OnInit, OnDestroy {
   }
 
   onNavigateToPlayers(player: {id: string, name: string, dob?: string}) {
-    this.router.navigate(['/database/player/'], { queryParams: {name: player.name, id: player.id, dob: player.dob} });
+    this.router.navigate(['/database/player/' + player.id]);
+  }
+
+  onNavChange(changeEvent: NgbNavChangeEvent) {
+    if (localStorage) {
+      localStorage.setItem("database-main-tab", changeEvent.nextId);
+    }
   }
 }

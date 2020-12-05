@@ -1,22 +1,22 @@
 import { Component, OnInit, OnDestroy, HostListener } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
-import { Router, ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 import { Title } from "@angular/platform-browser";
 
 import * as fromApp from "../../store/app.reducer";
 import * as DatabaseActions from "../store/database.actions";
 
-import * as Leagues from '../../data/fmJDatabase/Leagues.data'
-import { ClubData } from '../../shared/database-filetype'
+import { ClubData, LeagueData } from '../../shared/database-filetype'
 import * as Players from "../../data/fmJDatabase/Players.data";
-import { PlayerData } from "../../data/fmJDatabase/PlayerData.interface";
+import { PlayerDataSimple } from "../../data/fmJDatabase/PlayerData.interface";
 
 import { PlayerType } from "../../shared/player-type.enum";
 
-import { nationality } from "../../shared/nationality";
+import { getCurrentLeague } from "../../shared/common";
 
 import * as moment from 'moment';
+import { NgbNavChangeEvent } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: "app-database-club",
@@ -27,14 +27,15 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   public clubAlias: string;
   public club: ClubData;
   public clubs: ClubData[];
-  public league: Leagues.LeagueData;
+  public league: LeagueData;
+  public leagues: LeagueData[];
 
   public loading: boolean = true;
 
-  public dbPlayers: {player: PlayerData, id: string}[];
+  public dbPlayers: PlayerDataSimple[];
 
   public staff: {
-    id: string;
+    id: number;
     name: string;
     nameEng: string;
     nationality: string;
@@ -43,8 +44,8 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   }[];
 
   public players: {
-    id: string;
-    squardNo: number;
+    id: number;
+    squadNo: number;
     name: string;
     nameEng: string;
     nationality: string;
@@ -52,6 +53,7 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
     position: string;
     loanOut?: boolean;
     loanIn?: boolean;
+    loanClubId?: number;
     ca?: number;
     pa?: number;
     updateThisWeek: boolean;
@@ -61,7 +63,11 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   private coreSubscription: Subscription;
   private databaseSubscription: Subscription;
 
+  private coreLoading: boolean = false;
+
   public innerWidth: any;
+
+  public activeTabId: number = 2;
 
   constructor(
     private store: Store<fromApp.AppState>,
@@ -70,6 +76,13 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit() {
+    if (localStorage) {
+      const tempTab = localStorage.getItem("database-club-tab");
+      if (tempTab) {
+        this.activeTabId = parseInt(tempTab);
+      };
+    }
+
     this.innerWidth = window.innerWidth;
 
     this.staff = [];
@@ -79,14 +92,17 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
     });
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
       this.clubs = coreState.clubs;
-      this.loadSeasonInfo();
+      this.leagues = coreState.leagues;
+      this.coreLoading = coreState.loading;
+      if (!this.coreLoading) {
+        this.loadSeasonInfo();
+      }
     })
     this.databaseSubscription = this.store
       .select("database")
       .subscribe(databaseState => {
         this.dbPlayers = databaseState.searchPlayers;
         this.loading = databaseState.loading;
-
         if (this.dbPlayers) {
           this.getPlayersList();
           this.getStaffList();
@@ -106,50 +122,56 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
   loadSeasonInfo() {
     if (this.clubs && this.clubAlias) {
       this.club = this.clubs.find(c => (c.id === parseInt(this.clubAlias) || c.clubName === this.clubAlias || c.clubShortname === this.clubAlias));
-      this.league = Leagues.getCurrentLeague(this.club.id, moment().year());
+      this.league = getCurrentLeague(this.leagues, this.club.id);
       this.store.dispatch(new DatabaseActions.SearchPlayersByClub(this.club.id));
       this.titleService.setTitle(this.club.clubName + " - Football Manager Jリーグデータパック");
+      this.loading = true;
     } 
   }
 
   getPlayersList() {
     this.players = this.dbPlayers
-      ? this.dbPlayers.map(({player, id}) => {
-          const currentClub = player.clubInfo;
-          if (player.basicInfo.isPlayer) {
-            const currentLoan = player.loanInfo;
+      ? this.dbPlayers.map((player) => {
+          const id = player.id;
+          const currentClubId = player.clubId;
+          if (player.isPlayer) {
+            const currentLoanClubId = player.loanClubId;
             const loanOut =
-              currentClub && currentLoan ? currentClub.id === this.club.id : false;
+              currentClubId && currentLoanClubId ? currentClubId === this.club.id : false;
             const loanIn =
-              currentClub && currentLoan ? currentLoan.id === this.club.id : false;
+              currentClubId && currentLoanClubId ? currentLoanClubId === this.club.id : false;
             
-            const ca = player.playerData && player.playerData.general && player.playerData.general.ca ? player.playerData.general.ca : null;
-            const pa = player.playerData && player.playerData.general && player.playerData.general.pa ? player.playerData.general.pa : null;
+            let loanClubId = null;
+            if (loanOut) {
+              loanClubId = currentLoanClubId;
+            }
+            
+            const ca = player.ca;
+            const pa = player.pa;
 
-            let squardNo = null;
-            if (loanIn && currentLoan.squardNumber) squardNo = currentLoan.squardNumber;
-            if (!currentLoan && currentClub.squardNumber) squardNo = currentClub.squardNumber;
+            let squadNo = player.squadNo;
 
             let updateThisWeek = false;
-            if (player.basicInfo.updateDate) {
-              const updateFrom = moment().diff(moment(player.basicInfo.updateDate), 'days');
+            if (player.updateDate) {
+              const updateFrom = moment().diff(moment(player.updateDate), 'days');
               updateThisWeek = updateFrom < 7;
             }
 
             return {
               id,
-              squardNo,
-              name: player.basicInfo.name,
-              nameEng: player.basicInfo.nameEng,
-              nationality: player.basicInfo.nationality,
-              dob: player.basicInfo.dob,
-              position: Players.getPlayerPosition(player),
+              squadNo,
+              name: player.name,
+              nameEng: player.nameEng,
+              nationality: player.nationality,
+              dob: player.dob,
+              position: Players.getPlayerPosition(player.positions),
               loanOut,
               loanIn,
+              loanClubId,
               ca,
               pa,
               updateThisWeek,
-              updateDate: player.basicInfo.updateDate
+              updateDate: player.updateDate
             };
           } else return null
         }).filter(v => v)
@@ -158,16 +180,16 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
 
   getStaffList() {
     const allStaff = this.dbPlayers
-    ? this.dbPlayers.map(({player, id}) => {
-        const currentClub = player.clubInfo;
-          if (player.basicInfo.isNonPlayer) {
+    ? this.dbPlayers.map((player) => {
+        const currentClubId = player.clubId;
+          if (player.isNonPlayer) {
             return {
-              id,
-              name: player.basicInfo.name,
-              nameEng: player.basicInfo.nameEng,
-              nationality: player.basicInfo.nationality,
-              dob: player.basicInfo.dob,
-              job: currentClub.job
+              id: player.id,
+              name: player.name,
+              nameEng: player.nameEng,
+              nationality: player.nationality,
+              dob: player.dob,
+              job: player.job
             };
           } else return null
         }).filter(v => v)
@@ -206,52 +228,21 @@ export class DatabaseClubComponent implements OnInit, OnDestroy {
     this.staff = staff;
   }
 
-  getJobType(job: PlayerType) {
-    return PlayerType[job]
-  }
-
   getClubStyle() {
-    return this.club.clubColor1
-      ? {
-          backgroundColor: this.club.clubColor2,
-          color: this.club.clubColor1
-        }
-      : null;
+    if (this.club)
+      return this.club.clubColor1
+        ? {
+            backgroundColor: this.club.clubColor2,
+            color: this.club.clubColor1
+          }
+        : null;
+    return null;
   }
 
-  getFlag(nat) {
-    const targetNationality = nationality.find(n => n.code === nat);
-    if (targetNationality) {
-      return targetNationality.iso
-        ? "flag-icon flag-icon-" + targetNationality.iso
-        : "";
+  onNavChange(changeEvent: NgbNavChangeEvent) {
+    if (localStorage) {
+      localStorage.setItem("database-club-tab", changeEvent.nextId);
     }
-    return "";
-  }
-
-  getRowClass(row): string {
-    if (row.loanOut) return "loan-out";
-    if (row.loanIn) return "loan-in";
-    return "";
-  }
-
-  getCAClass(ca) {    
-    if (!this.league) return "avereage-ca";
-    const leagueGuideline = this.league.caGuideline;
-    if (leagueGuideline.length !== 4) return "avereage-ca";
-    if (ca >= leagueGuideline[0]) return "overrate-ca";
-    else if (ca >= leagueGuideline[1]) return "good-ca";
-    else if (ca >= leagueGuideline[2]) return "avereage-ca";
-    else if (ca >= leagueGuideline[3]) return "poor-ca";
-    else return "bad-ca"
-  }
-
-  sortSquadNo(valueA, valueB, rowA, rowB, sortDirection) {
-    let defaultEmptyValue = sortDirection === "asc" ? 99999 : 0;
-    let sortValueA = valueA ? parseInt(valueA) : defaultEmptyValue;
-    let sortValueB = valueB ? parseInt(valueB) : defaultEmptyValue;
-
-    return sortValueA > sortValueB ? 1 : sortValueA < sortValueB ? -1 : 0;
   }
 
   @HostListener('window:resize', ['$event'])

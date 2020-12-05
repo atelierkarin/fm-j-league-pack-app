@@ -1,33 +1,35 @@
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-8 col-12">
-      <div class="content-league mb-5" *ngFor="let league of leagues">
-        <h2 class="league-title">{{ league.name }}</h2>
-        <app-database-league [leagueId]="league.id"></app-database-league>
-      </div>
-    </div>
-    <div class="col-md-4 col-12">
-      <h5>最新更新された選手・スタッフ</h5>
-      <ng-container *ngIf="loading; else elseTemplate">
-        <div class="d-flex justify-content-center">
-          <div class="spinner-border m-5" role="status">
-            <span class="sr-only">データ読み込み中</span>
-          </div>
+<app-loading-indicator *ngIf="loading"></app-loading-indicator>
+
+<nav ngbNav #nav="ngbNav" class="nav-tabs j-league-pack-database-main" [(activeId)]="activeId" (navChange)="onNavChange($event)">
+  <ng-container [ngbNavItem]="2">
+    <a ngbNavLink>クラブから選択</a>
+    <ng-template ngbNavContent>
+      <app-database-all-clubs></app-database-all-clubs>
+    </ng-template>
+  </ng-container>
+
+  <ng-container [ngbNavItem]="1">
+    <a ngbNavLink>最近の記録</a>
+    <ng-template ngbNavContent>
+      <div class="row mx-2">
+        <div class="col-12 col-md-6">
+          <h4 class="text-muted">最新の人気選手</h4>
+          <app-database-most-accessed></app-database-most-accessed>
         </div>
-      </ng-container>
-      <ng-template #elseTemplate>
-        <div class="list-group">
-          <button type="button" (click)="onNavigateToPlayers(players)"
-            class="list-group-item list-group-item-action"
-            *ngFor="let players of latestUpdatePlayers">
-            <div class="d-flex w-100 justify-content-between">
-              <h5 class="mb-1">{{ players.name }}</h5>
-              <small class="text-mute">{{ getClub(players.club) }}</small>
-            </div>
-            <small>{{ players.updateDate }}</small>
-          </button>
+        <div class="col-12 col-md-6">
+          <h4 class="text-muted">最新更新された選手・スタッフ</h4>
+          <app-database-recent-updates></app-database-recent-updates>
         </div>
-      </ng-template>
-    </div>
-  </div>
-</div>
+      </div>      
+    </ng-template>
+  </ng-container>
+
+  <ng-container [ngbNavItem]="3" *ngIf="(admin$ | async)">
+    <a ngbNavLink>最近の話題選手</a>
+    <ng-template ngbNavContent>
+      <app-database-recent-commented></app-database-recent-commented>
+    </ng-template>
+  </ng-container>
+</nav>
+
+<div [ngbNavOutlet]="nav" class="mt-2"></div>

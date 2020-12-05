@@ -100,34 +100,16 @@ export class PlayerDetailStatusComponent implements OnInit {
     this.isGoalKeeper = this.position !== undefined && this.position.goalkeeper !== undefined && this.position.goalkeeper > 0;
   }
 
-  getStatusValue(status: Status): number | string {
+  getStatusValue(status: Status): number {
     if (status.type === "technical") {
-      return this.technical && status.value in this.technical ?this.technical[status.value] : "-"
+      return this.technical && status.value in this.technical && this.technical[status.value] ? this.technical[status.value] : null
     } else if (status.type === "mental") {
-      return this.mental && status.value in this.mental ? this.mental[status.value] : "-"
+      return this.mental && status.value in this.mental && this.mental[status.value] ? this.mental[status.value] : null
     } else if (status.type === "physical") {
-      return this.physical && status.value in this.physical ? this.physical[status.value] : "-"
+      return this.physical && status.value in this.physical && this.physical[status.value] ? this.physical[status.value] : null
     } else if (status.type === "goalkeeping") {
-      return this.goalkeeping && status.value in this.goalkeeping ? this.goalkeeping[status.value] : "-"
+      return this.goalkeeping && status.value in this.goalkeeping && this.goalkeeping[status.value] ? this.goalkeeping[status.value] : null
     } 
-    return "-"
+    return null;
   }
-
-  getStatusClass(val: number | string, anti = false) {
-    if (val === "-") return "avereage-status";
-    else {
-      if (anti) {
-        if (val > 15) return "poor-status";
-        else if (val > 10) return "avereage-status";
-        else if (val > 5) return "good-status";
-        else return "overrate-status";
-      } else {    
-        if (val > 15) return "overrate-status";
-        else if (val > 10) return "good-status";
-        else if (val > 5) return "avereage-status";
-        else return "poor-status";
-      }
-    }
-  }
-
 }

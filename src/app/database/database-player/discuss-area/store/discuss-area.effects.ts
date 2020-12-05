@@ -1,78 +1,138 @@
 import { Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Actions, Effect, ofType } from '@ngrx/effects';
-import { switchMap, map, catchError, take } from 'rxjs/operators';
-import { from, of, throwError } from "rxjs";
+import { switchMap, map, catchError } from 'rxjs/operators';
 
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Apollo } from 'apollo-angular';
+import { ApolloQueryResult } from 'apollo-client';
+import { messagesByPlayerId, messagesByLatestUpdate, mutationInsertMessage, mutationDeleteMessage, messagesByClubId, messagesByPlayerIdAdmin, messagesByClubIdAdmin } from './discuss-area-queries';
 
 import * as DiscussAreaActions from './discuss-area.actions';
-import { Comment } from "../comment.interface";
 
 @Injectable()
 export class DiscussAreaEffects {
 
-  private useServer: boolean;
+  private temp: any = null;
 
   @Effect()
   fetchComments = this.actions$.pipe(
-    ofType(DiscussAreaActions.FETCH_COMMENTS),
-    switchMap((fetchComments: DiscussAreaActions.FetchComments) => {
-      this.useServer = false;
-      const collectionReference = ref => ref.where('targetPlayerId', '==', fetchComments.payload);
-
-      return this.db.collection<Comment>('playerUserComments', collectionReference)
-        .get({ source: "server" })
-    }),
-    map((docs: firebase.firestore.QuerySnapshot) => {
-      let comments = [];
-      docs.forEach(doc => {
-        const comment = {
-          id: doc.id,
-          ...doc.data()
+    ofType(DiscussAreaActions.FETCH_COMMENTS_BY_PLAYER_ID),
+    switchMap((action: DiscussAreaActions.FetchCommentsByPlayerId) => {
+      const isAdmin = action.payload.admin ? action.payload.admin : false;
+      this.temp = {
+        loadMore: (action.payload.startIndex && action.payload.startIndex > 0)
+      }
+      return this.apollo.watchQuery<any>({
+        query: isAdmin ? messagesByPlayerIdAdmin : messagesByPlayerId,
+        variables: {
+          id: action.payload.id,
+          startIndex: action.payload.startIndex
         }
-        comments.push(comment)
-      })
-      return new DiscussAreaActions.SetComments(comments);
+      }).valueChanges;
     }),
-    catchError(() => {
-      return of(new DiscussAreaActions.UpdateFail("SERVER FAIL"))
+    map((result: ApolloQueryResult<any>) => {
+      let comments = [];
+      if (result && result.data && result.data.messagesByPlayerId) {
+        comments = result.data.messagesByPlayerId.map(v => v)
+      }
+      return this.temp && this.temp.loadMore ? new DiscussAreaActions.SetMoreComments(comments) : new DiscussAreaActions.SetComments(comments);
+    }),
+    catchError((err, caught) => {
+      this.temp = null;
+      console.error(err);
+      this.store.dispatch(new DiscussAreaActions.UpdateFail("SERVER FAIL"));
+      return caught;
+    })
+  )
+
+  @Effect()
+  fetchLatestComments = this.actions$.pipe(
+    ofType(DiscussAreaActions.FETCH_LATEST_COMMENTS),
+    switchMap(() => {
+      return this.apollo.watchQuery<any>({
+        query: messagesByLatestUpdate
+      }).valueChanges;
+    }),
+    map((result: ApolloQueryResult<any>) => {
+      let comments = [];
+      if (result && result.data && result.data.messagesByLatestUpdate) {
+        comments = result.data.messagesByLatestUpdate.map(v => v)
+      }
+      return new DiscussAreaActions.SetLatestComments(comments);
+    }),
+    catchError((err, caught) => {
+      this.temp = null;
+      console.error(err);
+      this.store.dispatch(new DiscussAreaActions.UpdateFail("SERVER FAIL"));
+      return caught;
     })
   )
 
   @Effect()
   addComment = this.actions$.pipe(
     ofType(DiscussAreaActions.ADD_COMMENT),
-    switchMap((addComment: DiscussAreaActions.AddComment) => {     
-      const newComment = {
-        ...addComment.payload
-      }
-      return from(this.db.collection<Comment>('playerUserComments').add(newComment))
+    switchMap((action: DiscussAreaActions.AddComment) => {
+      const insertPlayer = action.payload.comment.playerId ? true : false;
+      const isAdmin = action.payload.admin ? action.payload.admin : false;
+      return this.apollo.mutate<any>({
+        mutation: mutationInsertMessage,
+        variables: {
+          message: action.payload.comment
+        },
+        refetchQueries: [
+          {
+            query: insertPlayer ? (isAdmin ? messagesByPlayerIdAdmin : messagesByPlayerId) : (isAdmin ? messagesByClubIdAdmin : messagesByClubId),
+            variables: {
+              id: insertPlayer ? action.payload.comment.playerId : action.payload.comment.clubId
+            }
+          },
+        ],
+      });
     }),
     map(() => {
       return new DiscussAreaActions.UpdateSuccess()
     }),
-    catchError(() => {
-      return of(new  DiscussAreaActions.UpdateFail("SERVER FAIL"))
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DiscussAreaActions.UpdateFail("SERVER FAIL"));
+      return caught;
     })
   )
 
   @Effect()
   deleteComment = this.actions$.pipe(
     ofType(DiscussAreaActions.DELETE_COMMENT),
-    switchMap((deleteComment: DiscussAreaActions.DeleteComment) => {     
-      const deleteId = deleteComment.payload;
-      return from(this.db.collection<Comment>('playerUserComments').doc(deleteId).delete())
+    switchMap((action: DiscussAreaActions.DeleteComment) => {
+      const deletePlayer = action.payload.playerId ? true : false;
+      const isAdmin = action.payload.admin ? action.payload.admin : false;
+      return this.apollo.mutate<any>({
+        mutation: mutationDeleteMessage,
+        variables: {
+          id: action.payload.id
+        },
+        refetchQueries: [
+          {
+            query: deletePlayer ? (isAdmin ? messagesByPlayerIdAdmin : messagesByPlayerId) : (isAdmin ? messagesByClubIdAdmin : messagesByClubId),
+            variables: {
+              id: deletePlayer ? action.payload.playerId : action.payload.clubId
+            }
+          },
+        ],
+      });
     }),
     map(() => {
       return new DiscussAreaActions.UpdateSuccess()
     }),
-    catchError(() => {
-      return of(new  DiscussAreaActions.UpdateFail("SERVER FAIL"))
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DiscussAreaActions.UpdateFail("SERVER FAIL"));
+      return caught;
     })
   )
   
   constructor(
+    private store: Store,
     private actions$: Actions,
-    private db: AngularFirestore
+    private apollo: Apollo
   ) {}
 }

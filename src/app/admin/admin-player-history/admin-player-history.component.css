@@ -1,0 +1,18 @@
+.search-form .form-control {
+  width: 100px;
+  font-size: 0.85rem;
+}
+
+.ng-select {
+  width: 200px;
+  font-size: 0.85rem;
+}
+
+.table .form-control {
+  width: 150px;
+  font-size: 0.85rem;
+}
+
+.table .table_id {
+  width: 80px;
+}

@@ -8,23 +8,35 @@
 <ng-template #elseLoadedTemplate>
   <div class="container-fluid" *ngIf="player; else elsePlayerTemplate">
     <div class="row">
-      <div class="col-12">
+      <div class="col">
         <h3 class="player-name-col" [ngStyle]="getClubStyle()">
           <span
             *ngIf="
-              loanClub && loanClubContract && loanClubContract.squardNumber;
-              else elseSquardNumberTemplate
+              loanClub && loanClubContract && loanClubContract.squadNumber;
+              else elsesquadNumberTemplate
             "
           >
-            <b>{{ loanClubContract.squardNumber }}. </b>
+            <b>{{ loanClubContract.squadNumber }}. </b>
           </span>
-          <ng-template #elseSquardNumberTemplate>
-            <span *ngIf="club && clubContract && clubContract.squardNumber">
-              <b>{{ clubContract.squardNumber }}. </b>
+          <ng-template #elsesquadNumberTemplate>
+            <span *ngIf="club && clubContract && clubContract.squadNumber">
+              <b>{{ clubContract.squadNumber }}. </b>
             </span>
           </ng-template>
           {{ player.basicInfo.name }}
           <span class="h6">{{ player.basicInfo.nameEng }}</span>
+          <button
+            class="ml-2 btn btn-outline-dark"
+            type="button"
+            (click)="onEditPlayer()"
+            *ngIf="isAdmin">編集
+          </button>
+          <button
+            class="ml-2 btn btn-outline-danger"
+            type="button"
+            (click)="onDeletePlayer()"
+            *ngIf="isAdmin">削除
+          </button>
         </h3>
       </div>
     </div>
@@ -47,59 +59,60 @@
             <span *ngIf="!club">フリー／クラブデータ無し</span>
           </ng-template>
           <span
-            >&nbsp;(ID: {{ player.location.id }}
-            {{ getDatapackFiletype(player.location.file) }})</span
+            >&nbsp;(ID: {{ player.id }}
+            {{ getDatapackFiletype(player.basicInfo.file) }})</span
           >
         </small>
       </div>
     </div>
-    <hr />
-    <div class="row my-2">
-      <div class="col-5 col-md-4">
-        <h6 *ngIf="player.basicInfo.nationality">
-          <span [class]="getFlag(player.basicInfo.nationality)"></span>
-          {{ getNationalityName(player.basicInfo.nationality) }}
-        </h6>
-        <h6 *ngIf="player.basicInfo.dob">
-          <span class="h5"
-            ><b>{{ getAge() }}</b
-            >歳</span
-          >
-          ( {{ player.basicInfo.dob }} )
-        </h6>
-      </div>
-      <div class="col-5 col-md-4">
-        <div *ngIf="loanClub; else elseContractTemplate">
-          <div *ngIf="club"><a [routerLink]="['/database/club/' + club.id]">{{ club.clubName }}</a> から期間付移籍中</div>
-          <div *ngIf="!club">期間付移籍中</div>
-          <div class="small">
-            <span>{{ loanClubContract.dateStart }} から {{ loanClubContract.dateEnd }} まで</span>
-          </div>
+    <div class="alert alert-secondary">
+      <div class="row">
+        <div class="col-5 col-md-4">
+          <h6 *ngIf="player.basicInfo.nationality">
+            <span [class]="getFlag(player.basicInfo.nationality)"></span>
+            {{ getNationalityName(player.basicInfo.nationality) }}
+          </h6>
+          <h6 *ngIf="player.basicInfo.dob">
+            <span class="h5"
+              ><b>{{ getAge() }}</b
+              >歳</span
+            >
+            ( {{ player.basicInfo.dob }} )
+          </h6>
         </div>
-        <ng-template #elseContractTemplate>
-          <div *ngIf="club && clubContract">
-            <div><a [routerLink]="['/database/club/' + club.id]">{{ club.clubName }}</a> と契約中</div>
+        <div class="col-5 col-md-4">
+          <div *ngIf="loanClub; else elseContractTemplate">
+            <div *ngIf="club"><a [routerLink]="['/database/club/' + club.id]">{{ club.clubName }}</a> から期間付移籍中</div>
+            <div *ngIf="!club">期間付移籍中</div>
             <div class="small">
-              <span>{{ clubContract.dateJoined }} 加入</span>
-              <span *ngIf="clubContract.dateRenew">、{{ clubContract.dateRenew }} 契約更新</span>
-            </div>
-            <div class="small" *ngIf="clubContract.salaryPerYear">
-              <span>年俸 ¥ {{ clubContract.salaryPerYear }}</span>
+              <span>{{ loanClubContract.dateStart }} から {{ loanClubContract.dateEnd }} まで</span>
             </div>
           </div>
-          <span *ngIf="!club">フリー／クラブデータ無し</span>
-        </ng-template>
-      </div>
-      <div class="col-12 col-md-4 text-right" *ngIf="player.location.jleagueId">
-        <a class="btn btn-sm btn-outline-secondary mx-1" [href]="'https://www.jleague.jp/player/'+ player.location.jleagueId +'/'" target="_blank" rel="noreferrer">Jリーグ公式サイト</a>
-        <a class="btn btn-sm btn-outline-secondary mx-1" [href]="'https://www.football-lab.jp/player/'+ player.location.jleagueId +'/'" target="_blank" rel="noreferrer">Football LAB</a>
+          <ng-template #elseContractTemplate>
+            <div *ngIf="club && clubContract">
+              <div><a [routerLink]="['/database/club/' + club.id]">{{ club.clubName }}</a> と契約中</div>
+              <div class="small">
+                <span>{{ clubContract.dateJoined }} 加入</span>
+                <span *ngIf="clubContract.dateRenew">、{{ clubContract.dateRenew }} 契約更新</span>
+              </div>
+              <div class="small" *ngIf="clubContract.salaryPerYear">
+                <span>年俸 ¥ {{ clubContract.salaryPerYear }}</span>
+              </div>
+            </div>
+            <span *ngIf="!club">フリー／クラブデータ無し</span>
+          </ng-template>
+        </div>
+        <div class="col-12 col-md-4 text-right" *ngIf="player.basicInfo.jleagueId">
+          <a class="btn btn-sm btn-outline-secondary mx-1" [href]="'https://www.jleague.jp/player/'+ player.basicInfo.jleagueId +'/'" target="_blank" rel="noreferrer">Jリーグ公式サイト</a>
+          <a class="btn btn-sm btn-outline-secondary mx-1" [href]="'https://www.football-lab.jp/player/'+ player.basicInfo.jleagueId +'/'" target="_blank" rel="noreferrer">Football LAB</a>
+        </div>
       </div>
     </div>
-    <hr />
-    <ngb-tabset [destroyOnHide]="false">
-      <ngb-tab title="基本ステータス">
-        <ng-template ngbTabContent>
-          <div class="row" *ngIf="player.basicInfo.isPlayer">      
+    <nav ngbNav #nav="ngbNav" class="nav-tabs" [destroyOnHide]="false">
+      <ng-container ngbNavItem>
+        <a ngbNavLink>基本ステータス</a>
+        <ng-template ngbNavContent>
+          <div class="row" *ngIf="player.basicInfo.isPlayer && initDone">      
             <div class="col-12 col-md-4">
               <div class="m-2">
                 <h6 class="text-muted">ポジション</h6>
@@ -126,19 +139,11 @@
             <div class="col-12 col-md-2">
               <div *ngIf="player.playerData.general && player.playerData.general.ca">
                 <small class="text-secondary">現在能力</small>
-                <h5>
-                  <span class="badge player-ability-badge" [ngClass]="getCAClass()">{{
-                    player.playerData.general.ca
-                  }}</span>
-                </h5>
+                <div><app-status-badge [value]="player.playerData.general.ca" [league]="league"></app-status-badge></div>
               </div>
               <div *ngIf="player.playerData.general && player.playerData.general.pa">
                 <small class="text-secondary">潜在能力</small>
-                <h5>
-                  <span class="badge player-ability-badge avereage-ca">{{
-                    player.playerData.general.pa
-                  }}</span>
-                </h5>
+                <div><app-status-badge [value]="player.playerData.general.pa" [league]="league"></app-status-badge></div>
               </div>
               <div
                 *ngIf="
@@ -148,103 +153,75 @@
                 "
               >
                 <small class="text-secondary">左足／右足</small>
-                <h5>
-                  <span
-                    class="badge player-ability-badge"
-                    [ngClass]="getNormalValueClass(player.playerData.general.leftFoot)"
-                    >{{ player.playerData.general.leftFoot ? player.playerData.general.leftFoot : '-' }}</span
-                  >
-                  /
-                  <span
-                    class="badge player-ability-badge"
-                    [ngClass]="getNormalValueClass(player.playerData.general.rightFoot)"
-                    >{{ player.playerData.general.rightFoot ? player.playerData.general.rightFoot : '-' }}</span
-                  >
-                </h5>
+                <div><app-status-badge [value]="player.playerData.general.leftFoot" [max]="20"></app-status-badge> / 
+                  <app-status-badge [value]="player.playerData.general.rightFoot" [max]="20"></app-status-badge></div>
               </div>
               <div
                 *ngIf="player.playerData.general && player.playerData.general.height"
               >
                 <small class="text-secondary">身長</small>
-                <h5>
-                  <span class="badge player-ability-badge avereage-ca"
-                    >{{ player.playerData.general.height }} cm</span
-                  >
-                </h5>
+                <div><app-status-badge [value]="player.playerData.general.height"></app-status-badge> cm</div>
               </div>
               <div
                 *ngIf="player.playerData.general && player.playerData.general.weight"
               >
                 <small class="text-secondary">体重</small>
-                <h5>
-                  <span class="badge player-ability-badge avereage-ca"
-                    >{{ player.playerData.general.weight }} kg</span
-                  >
-                </h5>
+                <div><app-status-badge [value]="player.playerData.general.weight"></app-status-badge> kg</div>
               </div>
               <div
                 *ngIf="player.playerData.general && player.playerData.general.currentReputation"
               >
                 <small class="text-secondary">現在の知名度</small>
-                <h5>
-                  <span class="badge player-ability-badge avereage-ca"
-                    >{{ player.playerData.general.currentReputation }}</span
-                  >
-                </h5>
+                <div><app-status-badge [value]="player.playerData.general.currentReputation" [max]="200"></app-status-badge></div>
               </div>
               <div
                 *ngIf="player.playerData.general && player.playerData.general.homeReputation"
               >
                 <small class="text-secondary">ホームでの知名度</small>
-                <h5>
-                  <span class="badge player-ability-badge avereage-ca"
-                    >{{ player.playerData.general.homeReputation }}</span
-                  >
-                </h5>
+                <div><app-status-badge [value]="player.playerData.general.homeReputation" [max]="200"></app-status-badge></div>
               </div>
               <div
                 *ngIf="player.playerData.general && player.playerData.general.worldReputation"
               >
                 <small class="text-secondary">世界での知名度</small>
-                <h5>
-                  <span class="badge player-ability-badge avereage-ca"
-                    >{{ player.playerData.general.worldReputation }}</span
-                  >
-                </h5>
+                <div><app-status-badge [value]="player.playerData.general.worldReputation" [max]="200"></app-status-badge></div>
               </div>
             </div>
           </div>
           <div class="row" *ngIf="player.basicInfo.isNonPlayer">
-            <div class="col-4">
+            <div class="col-12 col-md-4">
               <app-personal-data [personal]="player.personalData"></app-personal-data>
             </div>
-            <div class="col-2">
+            <div class="col">
               <div *ngIf="player.nonPlayerData.ca">
                 <small class="text-secondary">現在能力</small>
-                <h5>
-                  <span class="badge player-ability-badge avereage-ca">{{
-                    player.nonPlayerData.ca
-                  }}</span>
-                </h5>
+                <div><app-status-badge [value]="player.nonPlayerData.ca" [league]="league"></app-status-badge></div>
               </div>
               <div *ngIf="player.nonPlayerData.pa">
                 <small class="text-secondary">潜在能力</small>
-                <h5>
-                  <span class="badge player-ability-badge avereage-ca">{{
-                    player.nonPlayerData.pa
-                  }}</span>
-                </h5>
+                <div><app-status-badge [value]="player.nonPlayerData.pa" [league]="league"></app-status-badge></div>
               </div>
             </div>
           </div>
         </ng-template>
-      </ngb-tab>
-      <ngb-tab title="更新履歴">
-        <ng-template ngbTabContent>
-          <app-changelog [playerId]="playerId"></app-changelog>
+      </ng-container>
+
+      <ng-container ngbNavItem>
+        <a ngbNavLink>プレイ履歴</a>
+        <ng-template ngbNavContent>
+          <app-player-history [playerId]="playerId"></app-player-history>
         </ng-template>
-      </ngb-tab>
-    </ngb-tabset>
+      </ng-container>
+      
+      <ng-container ngbNavItem>
+        <a ngbNavLink>更新履歴</a>
+        <ng-template ngbNavContent>
+          <app-changelog [playerId]="playerId" [player]="player"></app-changelog>
+        </ng-template>
+      </ng-container>
+      
+    </nav>
+    <div [ngbNavOutlet]="nav" class="mt-2"></div>
     <hr />
 
     <app-discuss-area-main [playerId]="playerId"></app-discuss-area-main>

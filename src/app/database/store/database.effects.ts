@@ -1,222 +1,272 @@
-import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
-import { switchMap, map, catchError, take } from 'rxjs/operators';
-import { from, of, throwError, Observable } from "rxjs";
+import { Injectable } from "@angular/core";
+import { Store } from "@ngrx/store";
+import { Actions, Effect, ofType } from "@ngrx/effects";
+import { switchMap, map, catchError } from "rxjs/operators";
 
-import { Apollo } from 'apollo-angular';
-import { ApolloQueryResult } from 'apollo-client';
-import gql from 'graphql-tag';
+import { Apollo } from "apollo-angular";
+import { ApolloQueryResult } from "apollo-client";
+import {
+  getPlayersByLatestUpdate,
+  getPlayersByMostAccessed,
+  getPlayersByClub,
+  getPlayer,
+  mutationDeletePlayer,
+  mutationBrowsePlayer,
+  mutationUpdatePlayer,
+  getPlayerHistory,
+  getPlayerHistoryNameByInfo,
+  updatePlayerIdByPlayerInfo,
+} from "./database-queries";
 
-import { AngularFirestore, QueryFn } from '@angular/fire/firestore';
-
-import { HttpClient } from '@angular/common/http';
-
-import * as DatabaseActions from './database.actions';
-import { PlayerData } from "../../data/fmJDatabase/PlayerData.interface";
-
-import * as moment from 'moment';
-
-const getLatestDatabaseUpdate = gql`
-query {
-  latestDatabaseUpdate {
-    id
-    name
-    dob
-    updateDate
-    club
-  }
-}`;
+import * as DatabaseActions from "./database.actions";
 
 @Injectable()
 export class DatabaseEffects {
-
-  private tempPlayers: {player: PlayerData, id: string}[];
-  private tempSearchPlayers: DatabaseActions.SearchPlayersByClub
-
-  private collectionReference: QueryFn;
-
-  @Effect()
-  fetchPlayers = this.actions$.pipe(
-    ofType(DatabaseActions.FETCH_PLAYERS),
-    switchMap(() => {
-      this.collectionReference = null;      
-      return this.db.collection<{player: PlayerData, id: string}>('playerDb')
-        .get({ source: "server" })
-    }),
-    map((docs: firebase.firestore.QuerySnapshot) => {
-      let players = [];
-      docs.forEach(doc => {
-        players.push(doc.data())
-      })
-      return new DatabaseActions.SetPlayers(players.map(p => p.player));
-    }),
-    catchError(() => {
-      return of(new DatabaseActions.UpdateFail("SERVER FAIL"))
-    })
-  )
-
-  @Effect()
-  searchPlayers = this.actions$.pipe(
-    ofType(DatabaseActions.SEARCH_PLAYERS),
-    switchMap((searchPlayers: DatabaseActions.SearchPlayers) => {
-      this.collectionReference = ref => ref.where('player.basicInfo.name', '==', searchPlayers.payload);
-
-      return this.db.collection<{player: PlayerData, id: string}>('playerDb', this.collectionReference)
-        .get({ source: "server" })
-    }),
-    map((docs: firebase.firestore.QuerySnapshot) => {
-      let players = [];
-      docs.forEach(doc => {
-        players.push(doc.data())
-      })
-      return new DatabaseActions.SetSearchPlayers(players);
-    }),
-    catchError(() => {
-      return of(new DatabaseActions.UpdateFail("SERVER FAIL"))
-    })
-  )
-
   @Effect()
   searchPlayersByClub = this.actions$.pipe(
     ofType(DatabaseActions.SEARCH_PLAYERS_BY_CLUB),
-    switchMap((searchPlayers: DatabaseActions.SearchPlayersByClub) => {
-      this.tempPlayers = [];
-      this.tempSearchPlayers = searchPlayers;
-      return this.searchPlayersByClubFromServer(this.tempSearchPlayers.payload);
+    switchMap((action: DatabaseActions.SearchPlayersByClub) => {
+      return this.apollo.watchQuery<any>({
+        query: getPlayersByClub,
+        variables: {
+          clubId: action.payload,
+        },
+      }).valueChanges;
     }),
-    map((players: {player: PlayerData, id: string}[]) => {
+    map((result: ApolloQueryResult<any>) => {
+      let players = [];
+      if (result && result.data && result.data.playersByClub) {
+        players = result.data.playersByClub.map((v) => v);
+      }
       return new DatabaseActions.SetSearchPlayers(players);
     }),
-    catchError(() => {
-      return of(new DatabaseActions.UpdateFail("SERVER FAIL"))
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.LoadFail("SERVER FAIL"));
+      return caught;
     })
-  )
+  );
 
   @Effect()
   loadPlayer = this.actions$.pipe(
     ofType(DatabaseActions.LOAD_PLAYER),
-    switchMap((loadPlayer: DatabaseActions.LoadPlayer) => {
-      this.collectionReference = null;
-      if (loadPlayer.payload.id) {
-        this.collectionReference = ref => ref.where('id', '==', loadPlayer.payload.id).limit(1);
-      } else if (loadPlayer.payload.name && loadPlayer.payload.dob) {
-        this.collectionReference = ref => ref
-          .where('player.basicInfo.name', '==', loadPlayer.payload.name)
-          .where('player.basicInfo.dob', '==', loadPlayer.payload.dob).limit(1);
-      } else if (loadPlayer.payload.name) {
-        this.collectionReference = ref => ref
-          .where('player.basicInfo.name', '==', loadPlayer.payload.name).limit(1);
+    switchMap((action: DatabaseActions.LoadPlayer) => {
+      return this.apollo.watchQuery<any>({
+        query: getPlayer,
+        variables: {
+          id: action.payload,
+        },
+      }).valueChanges;
+    }),
+    map((result: ApolloQueryResult<any>) => {
+      let player = null;
+      if (result && result.data && result.data.player) {
+        player = result.data.player;
+        return new DatabaseActions.SetLoadPlayer(player);
       } else {
-        throw "NOT ENOUGH INFORMATION"
+        return new DatabaseActions.LoadFail("PLAYER NOT FOUND");
       }
-      return this.db.collection<{player: PlayerData, id: string}>('playerDb', this.collectionReference)
-        .get({ source: "server" })
     }),
-    map((docs: firebase.firestore.QuerySnapshot) => {
-      let players = [];
-      docs.forEach(doc => {
-        players.push(doc.data())
-      })
-      if (players.length > 0)
-        return new DatabaseActions.SetLoadPlayer(players[0]);
-      else
-        return new DatabaseActions.SetLoadPlayer(null);
-    }),
-    
-    catchError(() => {
-      return of(new DatabaseActions.UpdateFail("SERVER FAIL"))
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.LoadFail("SERVER FAIL"));
+      return caught;
     })
-  )
+  );
 
   @Effect()
   updatePlayer = this.actions$.pipe(
     ofType(DatabaseActions.UPDATE_PLAYER),
-    switchMap((updatePlayer: DatabaseActions.UpdatePlayer) => {
-      let id = null;
-      if (updatePlayer.payload.id) {
-        id = updatePlayer.payload.id;
-      } else {
-        id = this.db.createId();
-      }
-      const changelog = updatePlayer.payload.changeLog;
-      const item = {
-        player: updatePlayer.payload.player,
-        id: id
-      }
-      return from((this.db.collection<PlayerData>('playerDb').doc(id).set(item)).then(() => {
-        if (changelog) {
-          const changelogItem = {
-            changelog: JSON.stringify(changelog),
-            updateDate: moment().valueOf(),
-            id: id
-          }
-          return this.db.collection<{changelog: string, updateDate: number, id: string}>('playerDbChangelog').add(changelogItem).then(() => Promise.resolve());          
-        } else {
-          return Promise.resolve();
-        }
-      }).catch(err => {
-        console.error(err);
-        throw err
-      }));
+    switchMap((action: DatabaseActions.UpdatePlayer) => {
+      return this.apollo.mutate<any>({
+        mutation: mutationUpdatePlayer,
+        variables: {
+          player: action.payload,
+        },
+      });
     }),
     map(() => {
-      return new DatabaseActions.UpdateSuccess()
+      return new DatabaseActions.UpdateSuccess();
     }),
-    catchError(() => {
-      return of(new DatabaseActions.UpdateFail("SERVER FAIL"))
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.UpdateFail("SERVER FAIL"));
+      return caught;
     })
-  )
+  );
 
   @Effect()
   loadLatestUpdatePlayers = this.actions$.pipe(
     ofType(DatabaseActions.LOAD_LATEST_UPDATE_PLAYERS),
     switchMap(() => {
       return this.apollo.watchQuery<any>({
-        query: getLatestDatabaseUpdate
+        query: getPlayersByLatestUpdate,
       }).valueChanges;
     }),
     map((result: ApolloQueryResult<any>) => {
       let latestUpdatePlayers = [];
-      if (result && result.data && result.data.latestDatabaseUpdate) {
-        latestUpdatePlayers = result.data.latestDatabaseUpdate.map(v => v)
+      if (result && result.data && result.data.playersByLatestUpdate) {
+        latestUpdatePlayers = result.data.playersByLatestUpdate.map((v) => v);
       }
       return new DatabaseActions.SetLatestUpdatePlayers(latestUpdatePlayers);
     }),
-    catchError(() => {
-      return of(new DatabaseActions.UpdateFail("SERVER FAIL"))
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.LoadFail("SERVER FAIL"));
+      return caught;
     })
-  )
+  );
 
-  searchPlayersByClubFromServer(clubId: number) {
-    let players = [];
-    const basicCollectionReference = ref => ref.where('player.clubInfo.id', '==', clubId);
-    const loanCollectionReference = ref => ref.where('player.loanInfo.id', '==', clubId);
+  @Effect()
+  loadLatestMostAccessed = this.actions$.pipe(
+    ofType(DatabaseActions.LOAD_MOST_ACCESSED_PLAYERS),
+    switchMap(() => {
+      return this.apollo.watchQuery<any>({
+        query: getPlayersByMostAccessed,
+      }).valueChanges;
+    }),
+    map((result: ApolloQueryResult<any>) => {
+      let playersByMostAccessed = [];
+      if (result && result.data && result.data.playersByMostAccessed) {
+        playersByMostAccessed = result.data.playersByMostAccessed.map((v) => v);
+      }
+      return new DatabaseActions.SetMostAccessedPlayers(playersByMostAccessed);
+    }),
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.LoadFail("SERVER FAIL"));
+      return caught;
+    })
+  );
 
-    const basicQuery = this.db.collection<{player: PlayerData, id: string}>('playerDb', basicCollectionReference)
-      .get({ source: "server" })
-    const loanQuery = this.db.collection<{player: PlayerData, id: string}>('playerDb', loanCollectionReference)
-      .get({ source: "server" })
+  @Effect()
+  browsePlayer = this.actions$.pipe(
+    ofType(DatabaseActions.BROWSE_PLAYER),
+    switchMap((action: DatabaseActions.BrowsePlayer) => {
+      return this.apollo.mutate<any>({
+        mutation: mutationBrowsePlayer,
+        variables: {
+          id: action.payload,
+        },
+      });
+    }),
+    map(() => {
+      return new DatabaseActions.LoadSuccess();
+    }),
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.LoadFail("SERVER FAIL"));
+      return caught;
+    })
+  );
 
-    return basicQuery.pipe(
-      switchMap((docs: firebase.firestore.QuerySnapshot) => {
-        docs.forEach(doc => {
-          players.push(doc.data())
-        })
-        return loanQuery
-      }),
-      map((docs: firebase.firestore.QuerySnapshot) => {
-        docs.forEach(doc => {
-          players.push(doc.data())
-        })
-        return players
-      })
-    )
-  }
+  @Effect()
+  deletePlayer = this.actions$.pipe(
+    ofType(DatabaseActions.DELETE_PLAYER),
+    switchMap((action: DatabaseActions.DeletePlayer) => {
+      return this.apollo.mutate<any>({
+        mutation: mutationDeletePlayer,
+        variables: {
+          id: action.payload,
+        },
+      });
+    }),
+    map(() => {
+      return new DatabaseActions.UpdateSuccess();
+    }),
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.UpdateFail("SERVER FAIL"));
+      return caught;
+    })
+  );
+
+  @Effect()
+  loadPlayerHistory = this.actions$.pipe(
+    ofType(DatabaseActions.LOAD_PLAYER_HISTORY),
+    switchMap((action: DatabaseActions.LoadPlayerHistory) => {
+      return this.apollo.watchQuery<any>({
+        query: getPlayerHistory,
+        variables: {
+          id: action.payload,
+        },
+      }).valueChanges;
+    }),
+    map((result: ApolloQueryResult<any>) => {
+      let playerHistory = [];
+      if (result && result.data && result.data.playerHistory) {
+        playerHistory = result.data.playerHistory.map((v) => v);
+      }
+      return new DatabaseActions.SetPlayerHistory(playerHistory);
+    }),
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.LoadFail("SERVER FAIL"));
+      return caught;
+    })
+  );
+
+  @Effect()
+  loadPlayerHistoryNameByInfo = this.actions$.pipe(
+    ofType(DatabaseActions.LOAD_PLAYER_HISTORY_NAME),
+    switchMap((action: DatabaseActions.LoadPlayerHistoryName) => {
+      return this.apollo.watchQuery<any>({
+        query: getPlayerHistoryNameByInfo,
+        variables: {
+          ...action.payload,
+        },
+      }).valueChanges;
+    }),
+    map((result: ApolloQueryResult<any>) => {
+      let list = [];
+      if (result && result.data && result.data.getPlayerHistoryNameByInfo) {
+        list = result.data.getPlayerHistoryNameByInfo.map((v) => v);
+      }
+      return new DatabaseActions.SetPlayerHistoryName(list);
+    }),
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.LoadFail("SERVER FAIL"));
+      return caught;
+    })
+  );
+
+  @Effect()
+  updatePlayerIdByPlayerInfo = this.actions$.pipe(
+    ofType(DatabaseActions.UPDATE_PLAYER_HISTORY_NAME),
+    switchMap((action: DatabaseActions.UpdatePlayerHistoryName) => {
+      return this.apollo.mutate<any>({
+        mutation: updatePlayerIdByPlayerInfo,
+        variables: {
+          data: {
+            ...action.payload
+          }
+        },
+        refetchQueries: [
+          {
+            query: getPlayerHistoryNameByInfo,
+            variables: {
+              season: action.payload.season,
+              clubId: action.payload.clubId,
+              leagueId: action.payload.leagueId
+            }
+          }
+        ]
+      });
+    }),
+    map(() => {
+      return new DatabaseActions.UpdateSuccess();
+    }),
+    catchError((err, caught) => {
+      console.error(err);
+      this.store.dispatch(new DatabaseActions.UpdateFail("SERVER FAIL"));
+      return caught;
+    })
+  );
 
   constructor(
+    private store: Store,
     private actions$: Actions,
-    private http: HttpClient,
-    private db: AngularFirestore,
     private apollo: Apollo
   ) {}
 }

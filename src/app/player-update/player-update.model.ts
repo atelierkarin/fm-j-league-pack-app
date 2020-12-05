@@ -29,7 +29,6 @@ export interface PlayerUpdatePlayer {
 
 export interface PlayerUpdate {
   id?: string,
-  fmVersion: string,
   player: PlayerUpdatePlayer,
   updateType: PlayerUpdateType,
   activeDate: string,
@@ -43,4 +42,5 @@ export interface PlayerUpdate {
     transferDate: string
   },
   remarks?: string,
+  dbPlayerId?: number
 }

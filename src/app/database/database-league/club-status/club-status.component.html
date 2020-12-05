@@ -1,0 +1,6 @@
+<div class="row" *ngIf="clubStatus">
+  <app-status-badge [value]="clubStatus.overall" [subtitle]="'ALL'" [league]="league"></app-status-badge>
+  <app-status-badge [value]="clubStatus.defence" [subtitle]="'DEF'" [league]="league"></app-status-badge>
+  <app-status-badge [value]="clubStatus.midfield" [subtitle]="'MID'" [league]="league"></app-status-badge>
+  <app-status-badge [value]="clubStatus.attack" [subtitle]="'ATK'" [league]="league"></app-status-badge>
+</div>

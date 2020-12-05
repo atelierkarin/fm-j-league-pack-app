@@ -124,7 +124,6 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
   onReloadPlayerUpdateRecords() {
     this.loadingData = true;
     this.store.dispatch(new PlayerUpdateActions.FetchPlayerUpdate({
-      fmVersion: this.fmVersion,
       startDate: this.dateSelected.startDate.format("YYYY-MM-DD"),
       endDate: this.dateSelected.endDate.format("YYYY-MM-DD"),
     })); 

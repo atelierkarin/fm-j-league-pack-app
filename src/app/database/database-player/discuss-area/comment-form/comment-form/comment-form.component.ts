@@ -8,8 +8,7 @@ import { Comment } from '../../comment.interface';
 import * as fromApp from '../../../../../store/app.reducer';
 import * as AdminActions from '../../../../../admin/store/admin.actions';
 import * as DisucssAreaActions from '../../store/discuss-area.actions';
-
-import * as moment from 'moment';
+import * as SharedActions from "../../../../../shared/store/shared.actions";
 
 @Component({
   selector: 'app-comment-form',
@@ -18,13 +17,14 @@ import * as moment from 'moment';
 })
 export class CommentFormComponent implements OnInit, OnDestroy {
 
-  @Input() playerId: string;
-  @Output() reload = new EventEmitter<boolean>();
+  @Input() playerId: number;
+  @Output('reload') reload = new EventEmitter<boolean>();
 
   public displayName: string;
   public comment: string;
 
   public user: User;
+  private isAdmin: boolean;
 
   public submitting: boolean;
   public loading: boolean;
@@ -36,16 +36,28 @@ export class CommentFormComponent implements OnInit, OnDestroy {
   constructor(private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
+    if (localStorage) {
+      const tempUsername = localStorage.getItem("default-user-name");
+      if (tempUsername) {
+        this.displayName = tempUsername;
+      }
+    }
     this.adminAuthSubscription = this.store.select('admin').subscribe(adminState => {
       this.user = adminState.user;
-      if (this.user) this.displayName = this.user.displayName;      
+      this.isAdmin = adminState.isAdmin;
+      if (this.user && !this.displayName) this.displayName = this.user.displayName;      
     });
     this.discussAreaSubscription = this.store.select('discussArea').subscribe(discussAreaState => {
       this.loading = discussAreaState.loading;
-      this.errString = discussAreaState.errMsg;
-      if (this.submitting) {
+      this.errString = discussAreaState.errMsg;      
+      if (this.submitting && !this.loading) {
         this.comment = "";
         this.submitting = false;
+        this.store.dispatch(new SharedActions.SetToastContent({
+          content: "コメント成功しました",
+          style: "success"
+        }));
+        console.log("SUBMITTED");
         this.reload.emit(true);
       }
     });
@@ -71,16 +83,18 @@ export class CommentFormComponent implements OnInit, OnDestroy {
   }
 
   onComment() {
+    if (localStorage) {
+      localStorage.setItem("default-user-name", this.displayName);
+    }
     let newComment: Comment = {
-      loginToken: this.user.uuid,
-      displayName: this.displayName,
-      targetPlayerId: this.playerId,
-      content: this.comment,
-      createDate: moment().valueOf()
+      username: this.displayName,
+      googleAccount: this.user.uuid,
+      playerId: this.playerId,
+      message: this.comment,
     };
     this.submitting = true;
     this.store.dispatch(
-      new DisucssAreaActions.AddComment(newComment)
+      new DisucssAreaActions.AddComment({ comment: newComment, admin: this.isAdmin})
     );
   }
 

@@ -1,0 +1,23 @@
+<div *ngIf="record !== null && record !== undefined">
+  <span *ngIf="record.type === 'normal'">
+    <b class="text-secondary">{{ record.title }}</b
+    >&nbsp;&nbsp; {{ record.oldValue }} →
+    {{ record.newValue }}
+  </span>
+  <span *ngIf="record.type === 'number'">
+    <b class="text-secondary">{{ record.title }}</b
+    >&nbsp;&nbsp;
+    <ng-container *ngIf="record.oldValue < record.newValue; else elseTemplate">
+      <span class="text-success">
+        {{ record.oldValue }} ↑
+        {{ record.newValue }}
+      </span>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <span class="text-danger" #elseTemplate>
+        {{ record.oldValue }} ↓
+        {{ record.newValue }}
+      </span>
+    </ng-template>
+  </span>
+</div>

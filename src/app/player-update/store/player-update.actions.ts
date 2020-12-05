@@ -20,7 +20,7 @@ export class FetchPlayerUpdate implements Action {
   readonly type = FETCH_PLAYER_UPDATE;
 
   constructor(public payload: {
-    fmVersion: string, startDate: string, endDate: string
+    startDate: string, endDate: string
   }) {}
 }
 

@@ -1,0 +1,22 @@
+<div class="list-group list-group-flush" *ngIf="comments">
+  <button
+    type="button"
+    (click)="onNavigate(comment)"
+    class="list-group-item list-group-item-action"
+    *ngFor="let comment of comments; index as i"
+  >
+    <div class="media">
+      <span class="badge badge-pill badge-info badge-date mx-4">{{
+        comment.modifiedDate
+      }}</span>
+      <div class="media-body">
+        <small class="text-mute">{{ comment.username }}</small>
+        <div class="alert alert-secondary">{{ comment.message }}</div>
+        <p class="text-mute">
+          <span *ngIf="comment.playerId">{{ comment.playerName }}</span>
+          <span *ngIf="comment.clubId">{{ comment.clubName }}</span>
+        </p>
+      </div>
+    </div>
+  </button>
+</div>

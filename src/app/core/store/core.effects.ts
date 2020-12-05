@@ -10,8 +10,10 @@ import gql from 'graphql-tag';
 
 import * as CoreActions from './core.actions';
 
+import { currentSeason } from '../../shared/common';
+
 const queryAllClubs = gql`
-query {
+query queryAllClubs {
   clubs {
     id
     clubName
@@ -19,8 +21,27 @@ query {
     clubNationality
     clubColor1
     clubColor2
+    status {
+      overall
+      attack
+      midfield
+      defence
+    }
     createDate
     modifiedDate
+  }
+}`;
+
+const queryLeagues = gql`
+query queryLeagues($season: Int!) {
+  leaguesBySeason(season: $season) {
+    id,
+    leagueName,
+    leagueCaGuideline,
+    seasons {
+      season,
+      teams
+    }
   }
 }`;
 
@@ -39,16 +60,29 @@ export class CoreEffects {
   };
 
   @Effect()
-  loadClubs = this.actions$.pipe(
-    ofType(CoreActions.LOAD_CLUBS),
-    switchMap((action: CoreActions.LoadClubs) => {
+  loadBasicData = this.actions$.pipe(
+    ofType(CoreActions.LOAD_BASIC_DATA),
+    switchMap((action: CoreActions.LoadBasicData) => {
       return this.apollo.query<any>({
         query: queryAllClubs
       });
     }),
     switchMap((result: ApolloQueryResult<any>) => {
       if (result && result.data && result.data.clubs) {
-        return [new CoreActions.SetClubs(result.data.clubs), new CoreActions.ApiSuccess()]
+        this.store.dispatch(new CoreActions.SetClubs(result.data.clubs));
+        return this.apollo.query<any>({
+          query: queryLeagues,
+          variables: {
+            season: currentSeason
+          }
+        });
+      } else {
+        throw 'QUERY_EXECUTE_FAILURE';
+      }
+    }),
+    switchMap((result: ApolloQueryResult<any>) => {
+      if (result && result.data && result.data.leaguesBySeason) {
+        return [new CoreActions.SetLeagues(result.data.leaguesBySeason), new CoreActions.ApiSuccess()]
       } else {
         throw 'QUERY_EXECUTE_FAILURE';
       }
@@ -59,7 +93,7 @@ export class CoreEffects {
       return caught;
     })
   )
-
+  
   constructor(
     private store: Store,
     private actions$: Actions,

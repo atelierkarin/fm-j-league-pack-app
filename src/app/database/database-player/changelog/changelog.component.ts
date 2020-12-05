@@ -3,31 +3,34 @@ import { Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
 
 import * as fromApp from "../../../store/app.reducer";
-import * as ChangelogActions from "./store/changelog.actions";
 
 import { ClubData } from '../../../shared/database-filetype'
 import { nationality } from '../../../shared/nationality';
 
-import { PlayerDataChangelog } from "../../../data/fmJDatabase/PlayerDataChangelog.interface";
-
-import { playerDataGeneralForm, nonPlayerDataGeneralForm, personalDataForm, playerDataMentalForm, playerDataPhysicalForm, playerDataTechnicalForm, playerDataGoalkeepingForm, playerDataPositionForm } from "../../../admin/admin-player-db/form.data";
+import { PlayerData } from 'src/app/data/fmJDatabase/PlayerData.interface';
 
 import * as moment from 'moment';
 
-const defaultChangelogData = [
-  {
-    tag: ["basicInfo","isPlayer"],
-    name: "プレイヤー？"
-  },
-  {
-    tag: ["basicInfo","isNonPlayer"],
-    name: "ノンプレイヤー？"
-  },
-  {
-    tag: ["clubInfo"],
-    name: "クラブデータ"
-  },
-]
+import { personalDataForm, playerDataGeneralForm, playerDataPositionForm, playerDataMentalForm, playerDataPhysicalForm, playerDataTechnicalForm, playerDataGoalkeepingForm, nonPlayerDataGeneralForm } from '../../../admin/admin-player-db/form.data';
+
+const normalUpdateRecords = {
+  "player|player_name": "名前",
+  "player|player_name_eng": "ローマ名前",
+  "player|player_dob": "生年月日",
+  "player|player_nationality": "国籍",
+  "player|datapack_file": "ファイル",
+  "player|is_player": "プレイヤー",
+  "player|is_non_player": "ノンプレイヤー",
+  "player_club|club_id": "所属クラブ",
+  "player_club|date_joined": "加入時期",
+  "player_club|date_renew": "契約更新時期",
+  "player_club|job": "職種",
+  "player_club|squad_number": "背番号",
+  "player_loan_club|club_id": "レンタルクラブ",
+  "player_loan_club|date_start": "レンタル開始日",
+  "player_loan_club|date_end": "レンタル終結日",
+  "player_loan_club|squad_number": "レンタル先背番号",
+}
 
 @Component({
   selector: 'app-changelog',
@@ -37,144 +40,84 @@ const defaultChangelogData = [
 export class ChangelogComponent implements OnInit, OnDestroy {
 
   @Input() playerId: string;
-  
-  public changelog: PlayerDataChangelog[];
-
-  private loadedPlayerId: string;
-  private changelogSubscription: Subscription;
+  @Input() player: PlayerData;
 
   private clubs: ClubData[];
 
   private coreSubscription: Subscription;
 
-  private changelogData;
+  private numberUpdateRecords;
 
   constructor(private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
-    if (this.playerId && this.playerId !== this.loadedPlayerId) {
-      this.store.dispatch(new ChangelogActions.LoadPlayerChangelog(this.playerId))
-    }
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
       this.clubs = coreState.clubs;
     })
-    this.changelogSubscription = this.store
-      .select("changelog")
-      .subscribe(changelogState => {
-        this.changelog = changelogState.changelog ? changelogState.changelog.sort((a,b) => b.updateDate - a.updateDate) : []
-      });
-
-    this.changelogData = [
-      ...defaultChangelogData,
-      ...playerDataGeneralForm.map(d => ({
-        tag: ["playerData","general",d.key],
-        name: "基本能力 " + d.name
-      })),
-      ...nonPlayerDataGeneralForm.map(d => ({
-        tag: ["playerData","general",d.key],
-        name: "基本能力 " + d.name
-      })),
-      ...personalDataForm.map(d => ({
-        tag: ["personalData",d.key],
-        name: "性格 " + d.name
-      })),
-      ...playerDataMentalForm.map(d => ({
-        tag: ["playerData","mental",d.key],
-        name: "メンタル " + d.name
-      })),
-      ...playerDataPhysicalForm.map(d => ({
-        tag: ["playerData","physical",d.key],
-        name: "フィジカル " + d.name
-      })),
-      ...playerDataTechnicalForm.map(d => ({
-        tag: ["playerData","technical",d.key],
-        name: "スキル " + d.name
-      })),
-      ...playerDataGoalkeepingForm.map(d => ({
-        tag: ["playerData","goalkeeping",d.key],
-        name: "ゴールキーピング " + d.name
-      })),
-      ...playerDataPositionForm.map(d => ({
-        tag: ["playerData","positions",d.key],
-        name: "ポジション " + d.name
-      })),      
-    ]
+    this.setNumberTags();
   }
 
   ngOnDestroy() {
-    this.store.dispatch(new ChangelogActions.ResetSearch());
     if (this.coreSubscription)
       this.coreSubscription.unsubscribe();
-    if (this.changelogSubscription) {
-      this.changelogSubscription.unsubscribe();
-    }
-    this.loadedPlayerId = null;
   }
 
   formatDateString(dateNum: number) {
     return moment(dateNum).format("YYYY-MM-DD HH:mm:ss");
   }
 
-  analyzeChangelog(changelogString: string) {
-    try {
-      const changelogObj = JSON.parse(changelogString);
-      let realChangelog = [];
-      changelogObj.forEach(cl => {
-        if (cl.kind === "N" && typeof cl.rhs === "object") {
-          for(let k of Object.keys(cl.rhs)) {
-            realChangelog.push({
-              ...cl,
-              path: [...cl.path, k],
-              rhs: cl.rhs[k]
-            });
-          }
-        } else {
-          realChangelog.push(cl);
-        }
-      })
-      return realChangelog.map(cl => {
-        const type = this.getChangelogType(cl.kind);
-        const updateName = this.getChangelogPathName(cl.path);
-        return {
-          type,
-          updateName,
-          before: this.getStatus(cl.path, cl.lhs),
-          after: cl.kind !== "D" ? this.getStatus(cl.path, cl.rhs) : null,
-          isNumeric: (typeof cl.lhs == 'number' || typeof cl.rhs == 'number')
-        }
-      }).filter(v => v.updateName)
-    } catch (err) {
+  formatValue(value: string, rule: string) {
+    if (rule === "club_id") {
+      const club = this.clubs.find(c => c.id === parseInt(value));
+      return club ? club.clubName : (value ? "所属不明" : "フリー")
+    } else {
+      return value;
+    }
+  }
+
+  formatUpdateRecord(record: {
+    recordTable: string
+    recordField: string
+    oldValue?: string
+    newValue?: string
+  }) {
+    const tag = record.recordTable + "|" + record.recordField;
+    if (Object.keys(normalUpdateRecords).includes(tag)) {
+      return {
+        title: normalUpdateRecords[tag],
+        type: "normal",
+        oldValue: this.formatValue(record.oldValue, record.recordField),
+        newValue: this.formatValue(record.newValue, record.recordField)
+      };
+    } else if (Object.keys(this.numberUpdateRecords).includes(tag)) {
+      const oldValue = record.oldValue ? parseInt(record.oldValue) : 0;
+      const newValue = record.newValue ? parseInt(record.newValue) : 0;
+      if (oldValue !== newValue) return {
+        title: this.numberUpdateRecords[tag],
+        type: "number",
+        oldValue,
+        newValue,
+      };
+    } else {
       return null;
-    }
+    }    
   }
 
-  getChangelogType(kind: string) {
-    if (kind === "E") return "変更";
-    if (kind === "D") return "削除";
-    if (kind === "N") return "追加";
-    return "不明";
+  private tagFormatter(v, tableName) {
+    const fieldName = v.key.replace(/\.?([A-Z]+)/g, '_$1').toLowerCase().replace(/^_/, "")
+    const tag = tableName + "|" + fieldName
+    this.numberUpdateRecords[tag] = v.name;
   }
 
-  getChangelogPathName(path: Array<string>) {
-    const pathString = JSON.stringify(path);
-    const findPathStringObj = this.changelogData.find(d => JSON.stringify(d.tag) === pathString);
-    return findPathStringObj ? findPathStringObj.name : null;
+  private setNumberTags() {
+    this.numberUpdateRecords = {};
+    personalDataForm.forEach(v => this.tagFormatter(v, "player_personal_data"))
+    playerDataGeneralForm.forEach(v => this.tagFormatter(v, "player_player_data_general"))
+    playerDataPositionForm.forEach(v => this.tagFormatter(v, "player_player_data_position"))
+    playerDataMentalForm.forEach(v => this.tagFormatter(v, "player_player_data_mental"))
+    playerDataPhysicalForm.forEach(v => this.tagFormatter(v, "player_player_data_physical"))
+    playerDataTechnicalForm.forEach(v => this.tagFormatter(v, "player_player_data_technical"))
+    playerDataGoalkeepingForm.forEach(v => this.tagFormatter(v, "player_player_data_goalkeeping"))
+    nonPlayerDataGeneralForm.forEach(v => this.tagFormatter(v, "player_non_player_data_general"))
   }
-
-  getStatus(path, value) {
-    const pathString = JSON.stringify(path);
-    if (pathString === JSON.stringify(["clubInfo"])) {
-      if (value === {}) return "なし";
-      else {
-        const targetClub = this.clubs.find(c => c.id === value.id);
-        return targetClub ? targetClub.clubName : "クラブデータ無し";
-      }
-    }
-    if (typeof value === "boolean") {
-      if (value) return "はい";
-      else return "いいえ";
-    }
-    return value;
-  }
-
 }

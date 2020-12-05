@@ -3,3 +3,13 @@
   right: 10px;
   bottom: 10px;
 }
+
+.player-status-form .form-control {
+  width: 100px;
+  font-size: 0.85rem;
+}
+
+.ng-select {
+  min-width: 150px;
+  font-size: 0.85rem;
+}

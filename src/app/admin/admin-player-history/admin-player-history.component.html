@@ -1,0 +1,53 @@
+<div class="container-fluid">
+  <div class="alert alert-secondary search-form">
+    <div class="form-inline">
+        <label class="mr-sm-2 ml-2" for="seasons">シーズン</label>
+        <ng-select
+          id="season"
+          [items]="seasons"
+          [(ngModel)]="season"
+        ></ng-select>
+        <label class="mr-sm-2 ml-2" for="clubId">クラブ</label>
+        <ng-select
+          id="clubId"
+          [items]="clubs"
+          bindLabel="clubName"
+          bindValue="id"
+          [(ngModel)]="clubId"
+        ></ng-select>
+        <label class="mr-sm-2 ml-2" for="leagueId">リーグ</label>
+        <ng-select
+          id="leagueId"
+          [items]="leagues"
+          bindLabel="leagueName"
+          bindValue="id"
+          [(ngModel)]="leagueId"
+        ></ng-select>
+        <button type="button" class="btn btn-primary mx-2" (click)="onSearch()" [disabled]="!season || !leagueId">検索</button>
+    </div>
+  </div>
+  <hr />
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col" class="table_id">ID</th>
+        <th scope="col">名前</th>
+        <th scope="col"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let phni of playerHistoryNameInfo">
+        <td><input type="number" class="form-control" [(ngModel)]="idList[phni.playerName]"></td>
+        <td>{{ phni.playerName }}</td>
+        <td>
+          <div class="btn-group">
+            <button type="button" class="btn btn-outline-primary" (click)="onUpdate(phni.playerName)" [disabled]="!idList[phni.playerName]">更新</button>
+            <ng-container *ngIf="findRecommendPlayerId(phni.playerName)">
+              <button type="button" class="btn btn-outline-primary" (click)="onUpdateByDefault(phni.playerName)">デフォルトIDを利用</button>
+            </ng-container>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>

@@ -12,7 +12,7 @@ const adminRoutes: Routes = [
     { path: '', component: DatabaseMainComponent },
     { path: 'league/:id', component: DatabaseLeagueComponent },
     { path: 'club/:alias', component: DatabaseClubComponent },
-    { path: 'player', component: DatabasePlayerComponent },
+    { path: 'player/:id', component: DatabasePlayerComponent },
   ] },
   
 ];
