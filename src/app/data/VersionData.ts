@@ -41,15 +41,14 @@ export const fmVersionDataList: VersionData[] = [
         title: "Football Manager 2021 Jリーグデータパック",
         subtitle: "Football Manager 2021向け、J1から地域リーグまでのデータパック",
         latest: {
-          url: "https://drive.google.com/open?id=1HhBR-47aUW7fXfkmLz5Wkgh5gWNZUj-L",
-          version: "N/A",
-          updateDate: "N/A",
+          url: "https://drive.google.com/open?id=1LKPChwb7UNYmcJAGrmp6XXR3bwW3A3a8",
+          version: "v1.0.0",
+          updateDate: "2020/12/06",
         },
         otherVersion: {
           url: "https://drive.google.com/open?id=1HhBR-47aUW7fXfkmLz5Wkgh5gWNZUj-L"
         },
         mainContent: `<p>FM2021向け、Jリーグパックです。J1から地域リーグまでのデータを収録しています。</p>
-        <p>リリース前です。</p>
         <p><span style="color: #ff0000;"><strong>同梱されたJリーグ構成は一応地域リーグ１部まではプレイ可能ですが、自分はアドバンスドルールが不得意なので、調整があまり良くない場合もあります。</strong></span>もし他のところに良いJリーグ構成があったら、本パックのデータだけを利用し、他の構成を使うのも構いません。</p>`,
         note: `<p>ダウンロードはZipファイルをダウンロードするだけでオーケーです。フォルダ内と同一内容です。</p>
         <p>製作中フォルダは文字通り製作中のものですが、今どこまで出来たのか気になる方はどうぞチェックしてください。こちらは基本不定期更新です。</p>

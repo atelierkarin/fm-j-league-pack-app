@@ -13,7 +13,7 @@ export interface State {
 }
 
 const initialState: State = {
-  fmVersion: "FM2020",
+  fmVersion: "FM2021",
 
   clubs: [],
   leagues: [],
