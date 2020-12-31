@@ -130,6 +130,7 @@ export class DatabaseEffects {
       if (result && result.data && result.data.playersByMostAccessed) {
         playersByMostAccessed = result.data.playersByMostAccessed.map((v) => v);
       }
+      console.log(playersByMostAccessed)
       return new DatabaseActions.SetMostAccessedPlayers(playersByMostAccessed);
     }),
     catchError((err, caught) => {

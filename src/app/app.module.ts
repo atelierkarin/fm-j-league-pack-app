@@ -12,9 +12,9 @@ import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { NgxDaterangepickerMd } from "ngx-daterangepicker-material";
 
-import { ApolloModule, Apollo } from "apollo-angular";
-import { HttpLinkModule, HttpLink } from "apollo-angular-link-http";
-import { InMemoryCache } from "apollo-cache-inmemory";
+import { APOLLO_OPTIONS } from 'apollo-angular';
+import { HttpLink } from 'apollo-angular/http';
+import { InMemoryCache } from '@apollo/client/core';
 
 import { SharedModule } from "./shared/shared.module";
 import { CoreModule } from "./core/core.module";
@@ -69,8 +69,6 @@ if (environment.production) {
     NgbModule,
     FormsModule,
     NgSelectModule,
-    ApolloModule,
-    HttpLinkModule,
     NgxDaterangepickerMd.forRoot(),
     StoreModule.forRoot(fromApp.appReducer),
     EffectsModule.forRoot([
@@ -87,16 +85,20 @@ if (environment.production) {
     AngularFireAuthModule,
     AngularFirestoreModule.enablePersistence()
   ],
-  providers: [AngularFirestore, AngularFireAuth],
+  providers: [AngularFirestore, AngularFireAuth, {
+    provide: APOLLO_OPTIONS,
+    useFactory: (httpLink: HttpLink) => {
+      return {
+        cache: new InMemoryCache({
+          addTypename: false
+        }),
+        link: httpLink.create({
+          uri: apiDomain,
+        }),
+      };
+    },
+    deps: [HttpLink],
+  }],
   bootstrap: [AppComponent]
 })
-export class AppModule {
-  constructor(apollo: Apollo, httpLink: HttpLink) {
-    apollo.create({
-      link: httpLink.create({ uri: apiDomain }),
-      cache: new InMemoryCache({
-        addTypename: false
-      }),
-    });
-  }
-}
+export class AppModule {}
