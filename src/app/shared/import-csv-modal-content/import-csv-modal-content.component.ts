@@ -33,11 +33,18 @@ export class ImportCsvModalContentComponent implements OnInit {
     this.formattedData = this.genPlayerData();
   }
 
-  public genResultData() {
+  public genResultData(forceUpdate: boolean = false) {
     if (this.updateId) {
       let returnData = {
         ...this.formattedData,
         id: this.updateId
+      };
+      delete returnData["basicInfo"]["name"];
+      return returnData;
+    } else if (forceUpdate) {
+      let returnData = {
+        ...this.formattedData,
+        id: -1
       };
       delete returnData["basicInfo"]["name"];
       return returnData;
