@@ -82,7 +82,8 @@ export class AdminCsvImportComponent implements OnInit, OnDestroy {
 
     // filter our data
     const displayData = this.loadData.filter(function (d) {
-      return d.common_name.toLowerCase().indexOf(val) !== -1 || !val;
+      console.log(d);
+      return d.common_name.toLowerCase().indexOf(val) !== -1 || d.club == val || !val;
     });
 
     // update the rows
