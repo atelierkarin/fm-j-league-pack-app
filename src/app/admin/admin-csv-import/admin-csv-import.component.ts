@@ -10,7 +10,7 @@ import { ImportCsvModalContentComponent } from '../../shared/import-csv-modal-co
 
 import * as moment from 'moment';
 
-import getPlayerType from "../../shared/import-csv-modal-content/job-table-match-table";
+import { ClubData } from "../../shared/database-filetype";
 
 import * as fromApp from "../../store/app.reducer";
 import * as DatabaseActions from "../../database/store/database.actions";
@@ -23,6 +23,8 @@ import * as SharedActions from "../../shared/store/shared.actions";
 })
 export class AdminCsvImportComponent implements OnInit, OnDestroy {
 
+  public clubList: ClubData[];
+
   public loadData: Array<any> = null;
   public displayData: Array<any> = null;
 
@@ -34,8 +36,10 @@ export class AdminCsvImportComponent implements OnInit, OnDestroy {
   public datepackFileTypeList: { key: number; val: string }[];
 
   public filterValue: string = "";
+  public filterClub: number = null;
   public filterLimitToRecent: boolean = false;
 
+  private coreSubscription: Subscription;
   private databaseSubscription: Subscription;  
 
   constructor(private modal$: NgbModal, private store$: Store<fromApp.AppState>) { }
@@ -46,6 +50,9 @@ export class AdminCsvImportComponent implements OnInit, OnDestroy {
       .filter(Number.isInteger)
       .map((k) => ({ key: k, val: DatapackFiletype[k] }));
     
+    this.coreSubscription = this.store$.select("core").subscribe((coreState) => {
+      this.clubList = coreState.clubs;
+    });    
     this.databaseSubscription = this.store$
       .select("database")
       .subscribe((databaseState) => {
@@ -69,6 +76,9 @@ export class AdminCsvImportComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (this.coreSubscription) {
+      this.coreSubscription.unsubscribe();
+    }
     if (this.databaseSubscription) {
       this.databaseSubscription.unsubscribe();
     }
@@ -88,9 +98,11 @@ export class AdminCsvImportComponent implements OnInit, OnDestroy {
   updateFilter(event) {
     const val = this.filterValue.toLowerCase();
     const limit = this.filterLimitToRecent;
+    const filterClub = this.filterClub;
 
     // filter our data
     const displayData = this.loadData.filter(function (d) {
+      let club_filter = filterClub > 0 ? parseInt(d.club) === filterClub : true;
       let extra_filter = true;
       if (limit) {
         const clubDateRenewedMonth = moment().diff(moment(moment(d.clubDateRenewed)), 'month');
@@ -100,7 +112,7 @@ export class AdminCsvImportComponent implements OnInit, OnDestroy {
           extra_filter = clubDateRenewedMonth < 6 || loanDateStartMonth < 6;
         }
       }
-      return (d.common_name.toLowerCase().indexOf(val) !== -1 || d.club == val || !val) && extra_filter;
+      return d.common_name.toLowerCase().indexOf(val) !== -1 && club_filter && extra_filter
     });
 
     // update the rows

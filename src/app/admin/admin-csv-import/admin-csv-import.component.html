@@ -31,7 +31,20 @@
         <input type="number" [(ngModel)]="updateId" class="form-control" placeholder="更新ID" />
         <hr />
         <div class="row">
-          <div class="col-10">
+          <div class="col-4">
+            <div class="input-group">
+              <ng-select
+                class="filter-club-droplist"
+                [items]="clubList"
+                bindLabel="clubName"
+                bindValue="id"
+                aria-placeholder="クラブ"
+                [(ngModel)]="filterClub"
+                (change)="updateFilter($event)"
+              ></ng-select>
+            </div>
+          </div>
+          <div class="col-6">
             <input
               type="text"
               class="form-control"
