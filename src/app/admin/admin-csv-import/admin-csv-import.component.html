@@ -72,8 +72,13 @@
             </ng-template>
           </ngx-datatable-column>
           <ngx-datatable-column
-            name="DOB"
+            name="生年月日"
             prop="dob"
+            [flexGrow]="1"
+          ></ngx-datatable-column>
+          <ngx-datatable-column
+            name="契約更新日"
+            prop="clubDateRenewed"
             [flexGrow]="1"
           ></ngx-datatable-column>
           <ngx-datatable-column

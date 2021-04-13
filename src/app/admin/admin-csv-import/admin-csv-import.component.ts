@@ -10,6 +10,8 @@ import { ImportCsvModalContentComponent } from '../../shared/import-csv-modal-co
 
 import * as moment from 'moment';
 
+import getPlayerType from "../../shared/import-csv-modal-content/job-table-match-table";
+
 import * as fromApp from "../../store/app.reducer";
 import * as DatabaseActions from "../../database/store/database.actions";
 import * as SharedActions from "../../shared/store/shared.actions";
