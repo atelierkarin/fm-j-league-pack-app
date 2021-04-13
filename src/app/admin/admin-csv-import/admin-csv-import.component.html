@@ -30,11 +30,23 @@
         <hr />
         <input type="number" [(ngModel)]="updateId" class="form-control" placeholder="更新ID" />
         <hr />
-        <input
-          type="text"
-          class="form-control"
-          (keyup)="updateFilter($event)"
-        />
+        <div class="row">
+          <div class="col-10">
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="filterValue"
+              (keyup)="updateFilter($event)"
+            />
+          </div>
+          <div class="col-2">
+            <div class="form-group form-check p-2">
+              <input type="checkbox" class="form-check-limit-to-recent" id="limitToRecentCheck" [(ngModel)]="filterLimitToRecent" (change)="updateFilter($event)">
+              <label class="form-check-limit-to-recent-label" for="limitToRecentCheck">最近の記録のみ</label>
+            </div>
+          </div>
+        </div>
+        
         <ngx-datatable
           class="bootstrap fullscreen player-table"
           [rows]="displayData"
@@ -71,7 +83,10 @@
             [sortable]="false"
           >
             <ng-template let-row="row" ngx-datatable-cell-template>
-              <button class="btn btn-primary" (click)="onDoAnalysis(row)">
+              <button class="btn btn-primary mr-2" (click)="onDoAnalysis(row)">
+                確認
+              </button>
+              <button class="btn btn-primary" (click)="onDoAnalysis(row, true)">
                 更新
               </button>
             </ng-template>

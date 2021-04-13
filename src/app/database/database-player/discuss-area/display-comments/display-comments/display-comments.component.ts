@@ -88,14 +88,12 @@ export class DisplayCommentsComponent implements OnInit, OnDestroy {
   }
 
   onLoadMore() {
-    console.log("LoadMore");
     this.store.dispatch(
       new DisucssAreaActions.FetchCommentsByPlayerId({id: this.playerId, startIndex: this.lastCommentIndex, admin: this.admin})
     );
   }
 
   onReload() {
-    console.log("Reload");
     this.store.dispatch(
       new DisucssAreaActions.FetchCommentsByPlayerId({id: this.playerId, admin: this.admin})
     );

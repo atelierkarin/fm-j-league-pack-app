@@ -22,9 +22,6 @@ export const queryRegionalLeagueCA = (pos, clubPoints, matches, leagueRep, app, 
   instance.push(app / matches);
   instance.push(gls / matches);
 
-  console.log("queryRegionalLeagueCA instance")
-  console.log(instance)
-
   return new Promise((res, rej) => {
     jwtClient.authorize((err, tokens) => {
       if (err) {
@@ -36,8 +33,6 @@ export const queryRegionalLeagueCA = (pos, clubPoints, matches, leagueRep, app, 
         version: 'v1',
         auth: jwtClient
       });
-  
-      console.log("Auth success");
     
       return ml.projects.predict({
         name: 'projects/fm-j-league-pack/models/regional_league_model',
@@ -49,7 +44,6 @@ export const queryRegionalLeagueCA = (pos, clubPoints, matches, leagueRep, app, 
           console.log(err);
           return rej({ca: -1});
         } else {
-          console.log(result.data);
           if (result.data && result.data.predictions) {
             return res({ca: parseInt(result.data.predictions[0])});
           } else {

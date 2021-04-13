@@ -72,7 +72,6 @@ export class CalcCaComponent implements OnInit {
       pos: this.pos,
       leagueRep: this.leagueRep
     }
-    console.log(value);
     this.store.dispatch(new CalcCaActions.CalcCa(value)); 
   }
 

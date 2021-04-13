@@ -84,8 +84,6 @@ const queryCa = (parent, args, context, info) => {
   const app = args.app;
   const gls = args.gls;
 
-  console.log("queryCa")
-
   return queryRegionalLeagueCA(pos, clubPoints, matches, leagueRep, app, gls);
 }
 

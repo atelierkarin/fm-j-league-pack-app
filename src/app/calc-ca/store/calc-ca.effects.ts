@@ -23,7 +23,6 @@ export class CalcCaEffects {
   calcCa = this.actions$.pipe(
     ofType(CalcCaActions.CALC_CA),
     switchMap((cc: CalcCaActions.CalcCa) => {
-      console.log(cc.payload);
       return this.apollo.watchQuery<any>({
         query: queryCalcCa,
         variables: {
@@ -33,7 +32,6 @@ export class CalcCaEffects {
     }),
     map((result: ApolloQueryResult<any>) => {
       if (result && result.data && result.data["queryCa"] && result.data["queryCa"]["ca"]) {
-        console.log(result.data)
         return new CalcCaActions.SetCa(result.data["queryCa"]["ca"])
       } else {
         return new CalcCaActions.CalcFail("Failure")

@@ -57,7 +57,6 @@ export class CommentFormComponent implements OnInit, OnDestroy {
           content: "コメント成功しました",
           style: "success"
         }));
-        console.log("SUBMITTED");
         this.reload.emit(true);
       }
     });

@@ -24,6 +24,7 @@ export class ImportCsvModalContentComponent implements OnInit {
   @Input() data;
   @Input() datafileType;
   @Input() updateId;
+  @Input() directUpdate: boolean = false;
 
   public formattedData;
 
@@ -31,6 +32,10 @@ export class ImportCsvModalContentComponent implements OnInit {
 
   ngOnInit() {
     this.formattedData = this.genPlayerData();
+
+    if (this.directUpdate) {
+      this.activeModal.close(this.genResultData(true));
+    }
   }
 
   public genResultData(forceUpdate: boolean = false) {

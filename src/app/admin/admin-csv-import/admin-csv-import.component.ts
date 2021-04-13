@@ -8,6 +8,8 @@ import { DatapackFiletype } from "../../shared/datapack-filetype.enum";
 
 import { ImportCsvModalContentComponent } from '../../shared/import-csv-modal-content/import-csv-modal-content.component'
 
+import * as moment from 'moment';
+
 import * as fromApp from "../../store/app.reducer";
 import * as DatabaseActions from "../../database/store/database.actions";
 import * as SharedActions from "../../shared/store/shared.actions";
@@ -28,6 +30,9 @@ export class AdminCsvImportComponent implements OnInit, OnDestroy {
 
   public datepackFileType: number = 0;
   public datepackFileTypeList: { key: number; val: string }[];
+
+  public filterValue: string = "";
+  public filterLimitToRecent: boolean = false;
 
   private databaseSubscription: Subscription;  
 
@@ -73,28 +78,39 @@ export class AdminCsvImportComponent implements OnInit, OnDestroy {
 
     this.readFile(f).then((data) => {
       this.loadData = this.csvToJson(data);
+      this.loadData = this.loadData.filter(data => data.common_name || data.first_name || data.last_name);
       this.displayData = [...this.loadData];
     })
   }
 
   updateFilter(event) {
-    const val = event.target.value.toLowerCase();
+    const val = this.filterValue.toLowerCase();
+    const limit = this.filterLimitToRecent;
 
     // filter our data
     const displayData = this.loadData.filter(function (d) {
-      console.log(d);
-      return d.common_name.toLowerCase().indexOf(val) !== -1 || d.club == val || !val;
+      let extra_filter = true;
+      if (limit) {
+        const clubDateRenewedMonth = moment().diff(moment(moment(d.clubDateRenewed)), 'month');
+        extra_filter = clubDateRenewedMonth < 6;
+        if (d.loanDateStart != "") {
+          const loanDateStartMonth = moment().diff(moment(moment(d.loanDateStart)), 'month');
+          extra_filter = clubDateRenewedMonth < 6 || loanDateStartMonth < 6;
+        }
+      }
+      return (d.common_name.toLowerCase().indexOf(val) !== -1 || d.club == val || !val) && extra_filter;
     });
 
     // update the rows
     this.displayData = displayData;
   }
 
-  onDoAnalysis(data) {
+  onDoAnalysis(data, directUpdate = false) {
     const modalRef = this.modal$.open(ImportCsvModalContentComponent, { scrollable: true })
     modalRef.componentInstance.data = data;
     modalRef.componentInstance.datafileType = this.datepackFileType;
     modalRef.componentInstance.updateId = this.updateId;
+    modalRef.componentInstance.directUpdate = directUpdate;
     modalRef.result.then((result) => {
       this.isUpdating = true;
       this.store$.dispatch(new DatabaseActions.UpdatePlayer(result));
