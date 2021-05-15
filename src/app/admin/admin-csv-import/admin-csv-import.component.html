@@ -101,10 +101,13 @@
             [sortable]="false"
           >
             <ng-template let-row="row" ngx-datatable-cell-template>
-              <button class="btn btn-primary mr-2" (click)="onDoAnalysis(row)">
+              <button class="btn btn-primary btn-sm mr-2" (click)="onDoAnalysis(row)">
                 確認
               </button>
-              <button class="btn btn-primary" (click)="onDoAnalysis(row, true)">
+              <button class="btn btn-primary btn-sm mr-1" (click)="onDoAnalysis(row, true, true)">
+                追加
+              </button>
+              <button class="btn btn-primary btn-sm" (click)="onDoAnalysis(row, true)">
                 更新
               </button>
             </ng-template>
