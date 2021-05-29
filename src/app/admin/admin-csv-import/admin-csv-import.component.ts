@@ -119,12 +119,13 @@ export class AdminCsvImportComponent implements OnInit, OnDestroy {
     this.displayData = displayData;
   }
 
-  onDoAnalysis(data, directUpdate = false, forceCreate = false) {
+  onDoAnalysis(data, directUpdate = false, directCreate = false) {
     const modalRef = this.modal$.open(ImportCsvModalContentComponent, { scrollable: true })
     modalRef.componentInstance.data = data;
     modalRef.componentInstance.datafileType = this.datepackFileType;
-    modalRef.componentInstance.updateId = forceCreate ? 0 : this.updateId;
+    modalRef.componentInstance.updateId = this.updateId;
     modalRef.componentInstance.directUpdate = directUpdate;
+    modalRef.componentInstance.directCreate = directCreate;
     modalRef.result.then((result) => {
       this.isUpdating = true;
       this.store$.dispatch(new DatabaseActions.UpdatePlayer(result));
