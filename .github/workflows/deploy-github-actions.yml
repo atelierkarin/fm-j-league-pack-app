@@ -7,6 +7,12 @@ on:
       - master
 
 # environment variables
+env:
+  FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+  FIREBASE_APP_ID: ${{ secrets.FIREBASE_APP_ID }}
+  FIREBASE_MEASUREMENT_ID: ${{ secrets.FIREBASE_MEASUREMENT_ID }}
+  FIREBASE_MESSAGING_SENDER_ID: ${{ secrets.FIREBASE_MESSAGING_SENDER_ID }}
+  GOOGLE_ANAYLTICS_ID: ${{ secrets.GOOGLE_ANAYLTICS_ID }}
 
 # Jobs
 jobs:
@@ -17,3 +23,16 @@ jobs:
     - name: Print Hello World!
       run: |
         echo "Hello World!"
+  
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout Repo
+      uses: actions/checkout@master
+    - name: Install Dependencies
+      run: npm ci
+    - name: Test Build
+      run: npm run config
+    - name: Print
+      run: cat ./environments/environment.prod.ts
