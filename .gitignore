@@ -48,7 +48,8 @@ Thumbs.db
 
 # Firebase
 /.firebase
-src/environments/*
+src/environments/analytics.environment.ts
+src/environments/firebase.environment.ts
 
 # Custom
 src/assets/*
