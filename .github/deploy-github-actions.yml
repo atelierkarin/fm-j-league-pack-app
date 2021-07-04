@@ -1,0 +1,14 @@
+name: deploy-github-actions
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  test-job:
+    name: Test Job
+    runs-on: ubuntu-latest
+    steps:
+    - name: Print Hello World!
+      run: |
+        echo "Hello World!"
