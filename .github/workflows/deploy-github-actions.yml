@@ -1,9 +1,14 @@
 name: deploy-github-actions
+
+# When master branch updated, action will be carried on
 on:
   push:
     branches:
       - master
 
+# environment variables
+
+# Jobs
 jobs:
   test-job:
     name: Test Job
