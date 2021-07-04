@@ -3,9 +3,10 @@
   "version": "1.5.1",
   "scripts": {
     "ng": "ng",
+    "config": "ts-node -O '{\"module\": \"commonjs\"}' ./config.index.ts",
     "start": "ng serve",
-    "build": "ng build --prod",
-    "deploy-hosting": "ng build --prod && firebase deploy --only hosting",
+    "build": "npm run config && ng build --prod",
+    "deploy-hosting": "npm run config && ng build --prod && firebase deploy --only hosting",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
