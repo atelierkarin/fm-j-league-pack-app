@@ -16,14 +16,6 @@ env:
 
 # Jobs
 jobs:
-  test-job:
-    name: Test Job
-    runs-on: ubuntu-latest
-    steps:
-    - name: Print Hello World!
-      run: |
-        echo "Hello World!"
-  
   build:
     name: Build
     runs-on: ubuntu-latest
