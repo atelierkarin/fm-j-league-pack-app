@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { switchMap, map, catchError, take } from 'rxjs/operators';
-import { from, of, throwError, Observable } from "rxjs";
+import { switchMap, map, catchError } from 'rxjs/operators';
+import { of } from "rxjs";
 
 import { AngularFirestore, QueryFn } from '@angular/fire/firestore';
 
@@ -23,7 +23,7 @@ export class ChangelogEffects {
         return this.db.collection<PlayerDataChangelog>('playerDbChangelog', this.collectionReference)
           .get({ source: "server" })
       }),
-      map((docs: firebase.firestore.QuerySnapshot) => {
+      map(docs => {
         let changelog = [];
         docs.forEach(doc => {
           changelog.push(doc.data())

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { switchMap, map, catchError, take } from 'rxjs/operators';
-import { from, of, throwError } from "rxjs";
+import { switchMap, map, catchError } from 'rxjs/operators';
+import { from, of } from "rxjs";
 
 import { AngularFirestore } from '@angular/fire/firestore';
 
@@ -21,7 +21,7 @@ export class HistoryEffects {
         return this.db.collection<History>('history')
           .get({ source: "server" })
       }),
-      map((docs: firebase.firestore.QuerySnapshot) => {
+      map((docs) => {
         let history = [];
         docs.forEach(doc => {
           history.push(doc.data())
