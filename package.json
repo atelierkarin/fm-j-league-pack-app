@@ -1,6 +1,6 @@
 {
   "name": "fm-j-league-pack",
-  "version": "1.5.1",
+  "version": "1.5.2",
   "scripts": {
     "ng": "ng",
     "config": "ts-node -O '{\"module\": \"commonjs\"}' ./config.index.ts",
