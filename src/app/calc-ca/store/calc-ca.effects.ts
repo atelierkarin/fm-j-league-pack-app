@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Actions, Effect, ofType } from '@ngrx/effects';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { switchMap, map, catchError, take } from 'rxjs/operators';
 import { from, of, throwError } from "rxjs";
 
@@ -19,28 +19,29 @@ query ($pos: String!, $clubPoints: Int!, $matches: Int!, $leagueRep: Int!, $app:
 @Injectable()
 export class CalcCaEffects {
 
-  @Effect()
-  calcCa = this.actions$.pipe(
-    ofType(CalcCaActions.CALC_CA),
-    switchMap((cc: CalcCaActions.CalcCa) => {
-      return this.apollo.watchQuery<any>({
-        query: queryCalcCa,
-        variables: {
-          ...cc.payload
+  calcCa = createEffect(() =>
+    this.actions$.pipe(
+      ofType(CalcCaActions.CALC_CA),
+      switchMap((cc: CalcCaActions.CalcCa) => {
+        return this.apollo.watchQuery<any>({
+          query: queryCalcCa,
+          variables: {
+            ...cc.payload
+          }
+        }).valueChanges;
+      }),
+      map((result: ApolloQueryResult<any>) => {
+        if (result && result.data && result.data["queryCa"] && result.data["queryCa"]["ca"]) {
+          return new CalcCaActions.SetCa(result.data["queryCa"]["ca"])
+        } else {
+          return new CalcCaActions.CalcFail("Failure")
         }
-      }).valueChanges;
-    }),
-    map((result: ApolloQueryResult<any>) => {
-      if (result && result.data && result.data["queryCa"] && result.data["queryCa"]["ca"]) {
-        return new CalcCaActions.SetCa(result.data["queryCa"]["ca"])
-      } else {
-        return new CalcCaActions.CalcFail("Failure")
-      }
-    }),
-    catchError(() => {
-      return of(new CalcCaActions.CalcFail("Failure"))
-    })
-  )
+      }),
+      catchError(() => {
+        return of(new CalcCaActions.CalcFail("Failure"))
+      })
+    )
+  );
 
   constructor(
     private actions$: Actions,
