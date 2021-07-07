@@ -19,12 +19,12 @@
   font-size: 15px;
 }
 
-/deep/ .loan-out {
+::ng-deep .loan-out {
   background-color: lightblue;
   opacity: 0.3;
 }
 
-/deep/ .loan-in {
+::ng-deep .loan-in {
   background-color: lightblue !important;
 }
 
