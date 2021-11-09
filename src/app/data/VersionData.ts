@@ -26,6 +26,7 @@ export interface VersionData {
 }
 
 export const fmVersionList: string[] = [
+  "FM2022",
   "FM2021",
   "FM2020",
   "FM2019",
@@ -34,6 +35,31 @@ export const fmVersionList: string[] = [
 ];
 
 export const fmVersionDataList: VersionData[] = [
+  {
+    fmVersion: "FM2022",
+    content: {
+      home: {
+        title: "Football Manager 2022 Jリーグデータパック",
+        subtitle: "Football Manager 2022向け、J1から地域リーグまでのデータパック",
+        latest: {
+          url: "",
+          version: "",
+          updateDate: "",
+        },
+        mainContent: `<p>FM2022向け、Jリーグパックです。J1から地域リーグまでのデータを収録しています。</p>`,
+        note: `<p>ダウンロードはZipファイルをダウンロードするだけでオーケーです。フォルダ内と同一内容です。</p>
+        <p>製作中フォルダは文字通り製作中のものですが、今どこまで出来たのか気になる方はどうぞチェックしてください。こちらは基本不定期更新です。</p>
+        <p>本パックは商業利用ではない限り、使用は基本自由です。</p>
+        <hr />
+        <p>FM関連リンク</p>
+        <p>ajopya氏：<a target="_blank" href="http://fmjp12.blogspot.com/">週末ジレンマ</a></p>
+        <p>osaru1597氏：<a target="_blank" href="http://hw001.spaaqs.ne.jp/osaru1597/">Underdogs</a></p>
+        <p>dosukoi氏：<a target="_blank" href="https://dosukoi.bulog.jp/">Dosukoi Press</a></p>
+        <p>あまーり氏：<a target="_blank" href="https://www.amari-fm.com/">あまーりのゲーム日記</a></p>
+        <p>EST Touiro氏：<a target="_blank" href="http://estouiro.wp.xdomain.jp/2019/12/25/j-league-facepack-footballmanager-2020/">EST Games （フェイスパック）</a></p>`,
+      }
+    }
+  },
   {
     fmVersion: "FM2021",
     content: {
