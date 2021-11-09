@@ -1,6 +1,7 @@
 import { ClubData, LeagueData } from './database-filetype'
 
-export const currentSeason = 2022;
+// For database
+export const currentSeason = 2021;
 
 export const getCurrentLeague = (
   leagues: LeagueData[], clubId: number

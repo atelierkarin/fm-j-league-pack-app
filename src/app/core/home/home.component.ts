@@ -32,7 +32,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
+      console.log("CORE CHANGED")
       this.fmVersion = coreState.fmVersion;
+      console.log(this.fmVersion)
       this.currentVersionData = this.getCurrentVersionData();
       this.isOldVersion = this.currentVersionData ? this.currentVersionData.content.home.otherVersion !== undefined : false;
       this.isPreReleaseVersion = this.currentVersionData ? this.currentVersionData.content.home.betaVersion !== undefined : false;
@@ -56,45 +58,45 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngAfterViewInit(): void {
-    const textWrapper = document.querySelector('.page-title');
-    textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
-    const textWrapper2 = document.querySelector('.page-subtitle');
-    textWrapper2.innerHTML = textWrapper2.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+    // const textWrapper = document.querySelector('.page-title');
+    // textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+    // const textWrapper2 = document.querySelector('.page-subtitle');
+    // textWrapper2.innerHTML = textWrapper2.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
 
-    anime.timeline()
-      .add({
-        targets: '.page-title .letter',
-        scale: [4,1],
-        opacity: [0,1],
-        translateZ: 0,
-        easing: "easeOutExpo",
-        duration: 950,
-        delay: (el, i) => 40*i
-      })
-      .add({
-        targets: '.page-subtitle .letter',
-        scale: [4,1],
-        opacity: [0,1],
-        translateZ: 0,
-        easing: "easeOutExpo",
-        duration: 950,
-        delay: (el, i) => 40*i
-      })
+    // anime.timeline()
+    //   .add({
+    //     targets: '.page-title .letter',
+    //     scale: [4,1],
+    //     opacity: [0,1],
+    //     translateZ: 0,
+    //     easing: "easeOutExpo",
+    //     duration: 950,
+    //     delay: (el, i) => 40*i
+    //   })
+    //   .add({
+    //     targets: '.page-subtitle .letter',
+    //     scale: [4,1],
+    //     opacity: [0,1],
+    //     translateZ: 0,
+    //     easing: "easeOutExpo",
+    //     duration: 950,
+    //     delay: (el, i) => 40*i
+    //   })
 
-    anime.timeline({
-        easing: 'easeOutExpo',
-        duration: 750
-      })
-      .add({
-        targets: '.fm-j-league-pack-contents .basic',
-        translateX: [1000, 0],
-        opacity: [0, 1]
-      })
-      .add({
-        targets: '.fm-j-league-pack-contents .note',
-        translateX: [-1000, 0],
-        opacity: [0, 1]
-      })
+    // anime.timeline({
+    //     easing: 'easeOutExpo',
+    //     duration: 750
+    //   })
+    //   .add({
+    //     targets: '.fm-j-league-pack-contents .basic',
+    //     translateX: [1000, 0],
+    //     opacity: [0, 1]
+    //   })
+    //   .add({
+    //     targets: '.fm-j-league-pack-contents .note',
+    //     translateX: [-1000, 0],
+    //     opacity: [0, 1]
+    //   })
   }
 
   getTitle() {
