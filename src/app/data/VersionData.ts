@@ -42,14 +42,23 @@ export const fmVersionDataList: VersionData[] = [
         title: "Football Manager 2022 Jリーグデータパック",
         subtitle: "Football Manager 2022向け、J1から地域リーグまでのデータパック",
         latest: {
-          url: "",
-          version: "",
-          updateDate: "",
+          url: "https://drive.google.com/file/d/14SrtSO44RJjtzf7FbmQOwpUipt18fPz-/view?usp=sharing",
+          version: "v1.0.0",
+          updateDate: "2021/11/09",
+        },
+        otherVersion: {
+          url: "https://drive.google.com/drive/folders/13KOgMOWKWILdKHCuWNZ3dy63wB7AFHAi?usp=sharing"
         },
         mainContent: `<p>FM2022向け、Jリーグパックです。J1から地域リーグまでのデータを収録しています。</p>`,
-        note: `<p>ダウンロードはZipファイルをダウンロードするだけでオーケーです。フォルダ内と同一内容です。</p>
+        note: `<p>最新バージョンは「ダウンロード」ボタンでダウンロードできます。</p>
         <p>製作中フォルダは文字通り製作中のものですが、今どこまで出来たのか気になる方はどうぞチェックしてください。こちらは基本不定期更新です。</p>
         <p>本パックは商業利用ではない限り、使用は基本自由です。</p>
+        <hr />
+        <h3>リリーススケジュール</h3>
+        <h5>v1.0.x　リリース時期：FM2022リリース直後</h5>
+        <p>FM2021からの移植バージョンをリリース、選手のステータスなどの追加・変更はございません。</p>
+        <h5>v2.0.x　リリース時期：2022年2月か3月（公式の大型アップデート＝Winter Updateの後）</h5>
+        <p>シーズン2022向けの更新。選手の追加・調整などを行います。一般的に、こちらがメインとなります。</p>
         <hr />
         <p>FM関連リンク</p>
         <p>ajopya氏：<a target="_blank" href="http://fmjp12.blogspot.com/">週末ジレンマ</a></p>
