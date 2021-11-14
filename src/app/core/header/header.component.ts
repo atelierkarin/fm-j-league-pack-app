@@ -24,6 +24,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   public user: User;
   public isAdmin: boolean;
   public fmVersion: string;
+  public lang: string;
 
   public fmVersionList: string[] = VersionData.fmVersionList;
   public fmVersionDataList: VersionData.VersionData[] = VersionData.fmVersionDataList;
@@ -44,6 +45,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
       this.fmVersion = coreState.fmVersion;
+      this.lang = coreState.language;
+      this.fmVersionDataList = this.lang === 'en' ? VersionData.fmVersionDataEnList : VersionData.fmVersionDataList;
       this.currentVersionData = this.getCurrentVersionData();
       if (!this.currentVersionData) this.router.navigate(['/playerUpdate']);
     })
@@ -52,6 +55,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   onSetFMVersion(fmVersion: string) {
     this.gaService.sendEvent('User Action', 'click', 'Set FM Version', fmVersion);
     this.store.dispatch(new CoreActions.SetFMVersion(fmVersion));
+    this.onResetCollapse();
+  }
+
+  onSetLang(l: string) {
+    this.gaService.sendEvent('User Action', 'click', 'Set Language', l);
+    this.store.dispatch(new CoreActions.SetLanguage(l));
     this.onResetCollapse();
   }
 

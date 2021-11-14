@@ -6,13 +6,18 @@
     <h5 class="text-secondary page-subtitle">{{ getSubtitle() }}</h5>
     <div class="container">
       <div class="fm-j-league-buttons mt-5">
-        <button type="button" class="btn btn-lg btn-outline-primary m-1" [disabled]="currentVersionData.content.home.latest.url === null" (click)="onDownload()">最新バージョンをダウンロード</button>
-        <h6 class="text-muted mt-2">最新バージョンは{{ getLatestVersionNo() }} ({{ getLatestVersionDate() }})</h6>      
+        <button type="button" class="btn btn-lg btn-outline-primary m-1"
+          [disabled]="currentVersionData.content.home.latest.url === null"
+          (click)="onDownload()">最新バージョンをダウンロード</button>
+        <h6 class="text-muted mt-2">最新バージョンは{{ getLatestVersionNo() }} ({{ getLatestVersionDate() }})</h6>
       </div>
       <div class="fm-j-league-buttons">
-        <button *ngIf="isOldVersion" type="button" class="btn btn-outline-secondary m-1" (click)="onOldVersion()">ほかのバージョン</button>
-        <button *ngIf="isPreReleaseVersion" type="button" class="btn btn-outline-secondary m-1" (click)="onPreReleaseVersion()">製作中バージョン</button>
-        <button *ngIf="isBrowseUpdateHistory" type="button" class="btn btn-outline-secondary m-1" (click)="onBrowseUpdateHistory()">選手更新履歴（旧）</button>
+        <button *ngIf="isOldVersion" type="button" class="btn btn-outline-secondary m-1"
+          (click)="onOldVersion()">ほかのバージョン</button>
+        <button *ngIf="isPreReleaseVersion" type="button" class="btn btn-outline-secondary m-1"
+          (click)="onPreReleaseVersion()">製作中バージョン</button>
+        <button *ngIf="isBrowseUpdateHistory" type="button" class="btn btn-outline-secondary m-1"
+          (click)="onBrowseUpdateHistory()">選手更新履歴（旧）</button>
       </div>
     </div>
   </div>
@@ -23,5 +28,3 @@
   <hr />
   <div class="note text-secondary small" [innerHTML]="getNote()"></div>
 </div>
-
-

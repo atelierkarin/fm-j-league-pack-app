@@ -266,3 +266,129 @@ export const fmVersionDataList: VersionData[] = [
     }
   },
 ];
+
+export const fmVersionDataEnList: VersionData[] = [
+  {
+    fmVersion: "FM2022",
+    content: {
+      home: {
+        title: "Football Manager 2022 J League Data Pack",
+        subtitle: "Player and Staff data pack of J1 - Regional League of Japan, Version FM2022",
+        latest: {
+          url: "https://drive.google.com/file/d/14SrtSO44RJjtzf7FbmQOwpUipt18fPz-/view?usp=sharing",
+          version: "v1.0.0",
+          updateDate: "2021/11/09",
+        },
+        otherVersion: {
+          url: "https://drive.google.com/drive/folders/13KOgMOWKWILdKHCuWNZ3dy63wB7AFHAi?usp=sharing"
+        },
+        mainContent: `<p></p>`,
+        note: `<p></p>`,
+      }
+    }
+  },
+  {
+    fmVersion: "FM2021",
+    content: {
+      home: {
+        title: "Football Manager 2021 J League Data Pack",
+        subtitle: "Player and Staff data pack of J1 - Regional League of Japan, Version FM2021",
+        latest: {
+          url: "https://drive.google.com/file/d/1EtfJwXjwKB1w1PCsFrSSKQ8C_l-z8fFo/view?usp=sharing",
+          version: "v2.1.0",
+          updateDate: "2021/08/14",
+        },
+        otherVersion: {
+          url: "https://drive.google.com/open?id=1HhBR-47aUW7fXfkmLz5Wkgh5gWNZUj-L"
+        },
+        mainContent: `<p></p>`,
+        note: `<p></p>`,
+      }
+    }
+  },
+  {
+    fmVersion: "FM2020",
+    content: {
+      home: {
+        title: "Football Manager 2020 J League Data Pack",
+        subtitle: "Player and Staff data pack of J1 - Regional League of Japan, Version FM2020",
+        latest: {
+          url: "https://drive.google.com/open?id=19oeIh5B4V_RtRxT0FCbmktNTWVFsB3mW",
+          version: "v2.0.5",
+          updateDate: "2020/09/05",
+        },
+        otherVersion: {
+          url: "https://drive.google.com/open?id=1le3vQy7HNwH-77Y4lIrGgyy7FafQEfGI"
+        },
+        betaVersion: {
+          url: "https://drive.google.com/open?id=15ziJadXm9eCJFUM5mEQnArA0vU3eQwBr"
+        },
+        mainContent: `<p></p>`,
+        note: `<p></p>`,
+      }
+    }
+  },
+  {
+    fmVersion: "FM2019",
+    fmBlogUrl: "https://atelierkarin.hatenablog.jp/entry/2018/11/04/143955",
+    content: {
+      home: {
+        title: "Football Manager 2019 J League Data Pack",
+        subtitle: "Player and Staff data pack of J1 - Regional League of Japan, Version FM2019",
+        latest: {
+          url: "https://firebasestorage.googleapis.com/v0/b/fm-j-league-pack.appspot.com/o/v2.1.0.zip?alt=media&token=0c858636-27cf-4086-91d3-287b4bbdcebb",
+          version: "v2.1.0",
+          updateDate: "2019/08/18",
+        },
+        otherVersion: {
+          url: "https://drive.google.com/drive/folders/1EIeEQ6tQwImdCxVUCk8iIcqc8q4ruvXf/"
+        },
+        betaVersion: {
+          url: "https://drive.google.com/drive/folders/1Cu3yGFKQh4G2pMpMIL1Je_TuRD-nbBnG/"
+        },
+        playerUpdateHistory: {
+          url: "https://drive.google.com/open?id=1UZG2QprBr4UUPPsho1prL_yh2XyNlIsVUz24a35YOss"
+        },
+        mainContent: `<p></p>`,
+        note: `<p></p>`,
+      }
+    }
+  },
+  {
+    fmVersion: "FM2018",
+    fmBlogUrl: "https://atelierkarin.hatenablog.jp/entry/2018/01/02/012536",
+    content: {
+      home: {
+        title: "Football Manager 2018 J League Data Pack",
+        subtitle: "Player and Staff data pack of J1 - Regional League of Japan, Version FM2018",
+        latest: {
+          url: "https://drive.google.com/file/d/18KSwxePee74JDOr9ao-hCho68OZpcsQc/view",
+          version: "v1.0.14",
+          updateDate: "2018/09/15",
+        },
+        mainContent: `<p></p>`,
+        note: `<p></p>`,
+      }
+    }
+  },
+  {
+    fmVersion: "FM2017",
+    fmBlogUrl: "https://atelierkarin.hatenablog.jp/entry/2016/11/19/165712",
+    content: {
+      home: {
+        title: "Football Manager 2017 J League Data Pack",
+        subtitle: "Player and Staff data pack of J1 - Regional League of Japan, Version FM2017",
+        latest: {
+          url: "https://drive.google.com/file/d/0B19ZHUrJcoYNXzFmTzVOVVY2LWM/view",
+          version: "v2.0.11",
+          updateDate: "2017/08/20",
+        },
+        otherVersion: {
+          url: "https://drive.google.com/file/d/0B19ZHUrJcoYNVDFLZmdqSm16QkU/view"
+        },
+        mainContent: `<p></p>`,
+        note: `<p></p>`,
+      }
+    }
+  },
+];
