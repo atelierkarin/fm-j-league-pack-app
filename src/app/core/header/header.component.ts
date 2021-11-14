@@ -3,6 +3,8 @@ import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 
+import { TranslateService } from '@ngx-translate/core';
+
 import { GaService } from '../../shared/ga.service'
 
 import * as fromApp from '../../store/app.reducer';
@@ -35,7 +37,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   public isCollapsed: boolean = true;
 
-  constructor(private store: Store<fromApp.AppState>, private gaService: GaService, private router: Router) { }
+  constructor(private store: Store<fromApp.AppState>, private gaService: GaService, private router: Router, private translate: TranslateService) { }
 
   ngOnInit() {
     this.store.dispatch(new HistoryActions.FetchHistory());
@@ -45,11 +47,14 @@ export class HeaderComponent implements OnInit, OnDestroy {
     });
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
       this.fmVersion = coreState.fmVersion;
-      this.lang = coreState.language;
-      this.fmVersionDataList = this.lang === 'en' ? VersionData.fmVersionDataEnList : VersionData.fmVersionDataList;
+      this.fmVersionDataList = VersionData.fmVersionDataList;
       this.currentVersionData = this.getCurrentVersionData();
       if (!this.currentVersionData) this.router.navigate(['/playerUpdate']);
     })
+    this.translate.onLangChange.subscribe((event) => {
+      console.log(event)
+      this.lang = event.lang;
+    });
   }
 
   onSetFMVersion(fmVersion: string) {
@@ -60,8 +65,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   onSetLang(l: string) {
     this.gaService.sendEvent('User Action', 'click', 'Set Language', l);
-    this.store.dispatch(new CoreActions.SetLanguage(l));
-    this.onResetCollapse();
+    this.translate.use(l);
   }
 
   ngOnDestroy() {

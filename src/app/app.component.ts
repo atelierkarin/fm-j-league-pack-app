@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 
+import { TranslateService } from '@ngx-translate/core';
+
 import { Router, NavigationEnd } from '@angular/router';
 import { GaService } from './shared/ga.service';
 
@@ -24,8 +26,15 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<fromApp.AppState>,
     private router: Router,
-    private gaService: GaService
-  ) {}
+    private gaService: GaService,
+    private translate: TranslateService
+  ) {
+    // this language will be used as a fallback when a translation isn't found in the current language
+    translate.setDefaultLang('jp');
+
+    // the lang to use, if the lang isn't available, it will use the current loader to get them
+    translate.use('jp');
+  }
 
   ngOnInit() {
     this.loaded = true;

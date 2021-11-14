@@ -2,11 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
+import { TranslateService } from '@ngx-translate/core';
+
 import * as fromApp from '../../store/app.reducer';
 
 import * as VersionData from '../../data/VersionData';
 
-import anime from 'animejs';
 import { Meta } from '@angular/platform-browser';
 
 @Component({
@@ -25,30 +26,44 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   public isOldVersion: boolean = false;
   public isPreReleaseVersion: boolean = false;
-  public isBrowseUpdateHistory: boolean = false;
 
   private coreSubscription: Subscription;
 
-  constructor(private store: Store<fromApp.AppState>, private meta: Meta) {}
+  public param = {
+    fmYear: '',
+    latestVersion: '',
+    releaseDate: ''
+  };
+
+  constructor(private store: Store<fromApp.AppState>, private meta: Meta, private translate: TranslateService) {
+    translate.get('CORE.TITLE', this.param).subscribe((res: string) => {
+      this.meta.addTag({name: "twitter:title", content: res});
+    });
+    translate.get('CORE.SUBTITLE', this.param).subscribe((res: string) => {
+      this.meta.addTag({name: "description", content: res});
+      this.meta.addTag({name: "twitter:description", content: res});
+      this.meta.addTag({name: "twitter:text:description", content: res});
+    });
+  }
 
   ngOnInit() {
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
-      this.fmVersion = coreState.fmVersion;
+      this.fmVersion = coreState.fmVersion;      
       this.lang = coreState.language;
-      this.fmVersionDataList = this.lang === 'en' ? VersionData.fmVersionDataEnList : VersionData.fmVersionDataList;
+      this.fmVersionDataList = VersionData.fmVersionDataList;
       this.currentVersionData = this.getCurrentVersionData();
       this.isOldVersion = this.currentVersionData ? this.currentVersionData.content.home.otherVersion !== undefined : false;
       this.isPreReleaseVersion = this.currentVersionData ? this.currentVersionData.content.home.betaVersion !== undefined : false;
-      this.isBrowseUpdateHistory = this.currentVersionData ? this.currentVersionData.content.home.playerUpdateHistory !== undefined : false;
 
-      this.meta.addTag({name: "description", content: this.getSubtitle()});
+      this.param = {
+        fmYear: this.fmVersion.replace('FM', ''),
+        latestVersion: this.currentVersionData ? this.currentVersionData.content.home.latest.version : "",
+        releaseDate: this.currentVersionData ? this.currentVersionData.content.home.latest.updateDate : ""
+      };
 
       // Twitter用メタタグ
       this.meta.addTag({name: "twitter:card", content: "summary"});
       this.meta.addTag({name: "twitter:site", content: "@karinshiratori"});
-      this.meta.addTag({name: "twitter:title", content: this.getTitle()});
-      this.meta.addTag({name: "twitter:description", content: this.getSubtitle()});
-      this.meta.addTag({name: "twitter:text:description", content: this.getSubtitle()});
     })
   }
 
@@ -56,30 +71,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     if (this.coreSubscription) {
       this.coreSubscription.unsubscribe();
     }
-  }
-
-  getTitle() {
-    return this.currentVersionData ? this.currentVersionData.content.home.title : "";
-  }
-
-  getSubtitle() {
-    return this.currentVersionData ? this.currentVersionData.content.home.subtitle : "";
-  }
-
-  getLatestVersionNo() {
-    return this.currentVersionData ? this.currentVersionData.content.home.latest.version : "";
-  }
-
-  getLatestVersionDate() {
-    return this.currentVersionData ? this.currentVersionData.content.home.latest.updateDate : "";
-  }
-
-  getMainContent() {
-    return this.currentVersionData ? this.currentVersionData.content.home.mainContent : "";
-  }
-
-  getNote() {
-    return this.currentVersionData ? this.currentVersionData.content.home.note : "";
   }
 
   onDownload() {
@@ -92,10 +83,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   onPreReleaseVersion() {
     if (this.currentVersionData) this.openUrl(this.currentVersionData.content.home.betaVersion.url);
-  }
-
-  onBrowseUpdateHistory() {
-    if (this.currentVersionData) this.openUrl(this.currentVersionData.content.home.playerUpdateHistory.url);
   }
 
   // PRIVATE FUNCTIONS

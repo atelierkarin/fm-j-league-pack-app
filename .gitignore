@@ -52,7 +52,7 @@ src/environments/analytics.environment.ts
 src/environments/firebase.environment.ts
 
 # Custom
-src/assets/*
+src/assets/**/*.png
 
 # Secret Keys
 **/fm-j-league-pack-*

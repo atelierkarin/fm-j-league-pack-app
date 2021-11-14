@@ -1,6 +1,8 @@
 import { NgModule } from "@angular/core";
 import { CommonModule } from "@angular/common";
 
+import { TranslateModule } from '@ngx-translate/core';
+
 import {
   NgbAlertModule,
   NgbCollapseModule,
@@ -35,6 +37,7 @@ import { CustomToastComponent } from './custom-toast/custom-toast.component';
   ],
   exports: [
     CommonModule,
+    TranslateModule,
     NgbAlertModule,
     NgbCollapseModule,
     NgbNavModule,
