@@ -36,6 +36,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   };
 
   constructor(private store: Store<fromApp.AppState>, private meta: Meta, private translate: TranslateService) {
+    this.lang = translate.currentLang;
     translate.get('CORE.TITLE', this.param).subscribe((res: string) => {
       this.meta.addTag({name: "twitter:title", content: res});
     });
@@ -44,12 +45,14 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.meta.addTag({name: "twitter:description", content: res});
       this.meta.addTag({name: "twitter:text:description", content: res});
     });
+    this.translate.onLangChange.subscribe((event) => {
+      this.lang = event.lang;
+    });
   }
 
   ngOnInit() {
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
-      this.fmVersion = coreState.fmVersion;      
-      this.lang = coreState.language;
+      this.fmVersion = coreState.fmVersion;
       this.fmVersionDataList = VersionData.fmVersionDataList;
       this.currentVersionData = this.getCurrentVersionData();
       this.isOldVersion = this.currentVersionData ? this.currentVersionData.content.home.otherVersion !== undefined : false;

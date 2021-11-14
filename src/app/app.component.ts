@@ -29,11 +29,10 @@ export class AppComponent implements OnInit, OnDestroy {
     private gaService: GaService,
     private translate: TranslateService
   ) {
-    // this language will be used as a fallback when a translation isn't found in the current language
-    translate.setDefaultLang('jp');
-
-    // the lang to use, if the lang isn't available, it will use the current loader to get them
-    translate.use('jp');
+    let browserLang = translate.getBrowserLang();
+    console.log("BROWSER LANG", browserLang)
+    translate.setDefaultLang('ja');
+    translate.use(browserLang === 'ja' ? 'ja' : 'en');
   }
 
   ngOnInit() {

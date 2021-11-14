@@ -22,5 +22,22 @@
             "FM2017": "This pack is but free to copy and redistribute but <b>commercial use is strictly prohibited</b>."
         },
         "LINKS": ""
+    },
+    "HEADER": {
+        "TITLE": "FM J PACK",
+        "HOME": "Home",
+        "GUIDE": "Guide",
+        "RELEASE_NOTE": "Release Note",
+        "DATABASE": "Player/Staff Info",
+        "UPDATE_HISTORY": "Player Update History",
+        "PLAYER_DATABASE": "Database",
+        "CA_CALC": "Player CA Calculator (In development)",
+        "TOOLS": "Tools",
+        "REMOVE_JAPANESE_WORDS": "Japanese Name Remover",
+        "FACEBOOK_TOOLS": "Face pack transformer",
+        "ADMIN": "Admin",
+        "LOGOUT": "Logout",
+        "BLOG_VERSION": "Old Blog Version",
+        "DISCUSS_BOARD": "Disucss Board"
     }
 }

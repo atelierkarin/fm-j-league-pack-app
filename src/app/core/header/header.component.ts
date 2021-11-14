@@ -52,7 +52,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (!this.currentVersionData) this.router.navigate(['/playerUpdate']);
     })
     this.translate.onLangChange.subscribe((event) => {
-      console.log(event)
       this.lang = event.lang;
     });
   }

@@ -4,7 +4,6 @@ import { ClubData, LeagueData } from '../../shared/database-filetype'
 
 export interface State {
   fmVersion: string
-  language: string
 
   clubs: ClubData[]
   leagues: LeagueData[]
@@ -15,7 +14,6 @@ export interface State {
 
 const initialState: State = {
   fmVersion: "FM2022",
-  language: 'jp',
 
   clubs: [],
   leagues: [],
@@ -33,11 +31,6 @@ export function coreReducer(
       return {
         ...state,
         fmVersion: action.payload
-      };
-    case CoreActions.SET_LANG:
-      return {
-        ...state,
-        language: action.payload
       };
     case CoreActions.LOAD_BASIC_DATA:
       return {

@@ -78,7 +78,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     FormsModule,
     NgSelectModule,
     TranslateModule.forRoot({
-      defaultLanguage: 'jp',
+      defaultLanguage: 'ja',
       loader: {
         provide: TranslateLoader,
         useFactory: HttpLoaderFactory,

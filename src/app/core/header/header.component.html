@@ -1,5 +1,5 @@
 <header class="navbar navbar-dark bg-dark navbar-fixed-top navbar-expand-lg sticky-top">
-  <a class="navbar-brand" routerLink="/">FM Jリーグパック</a>
+  <a class="navbar-brand" routerLink="/">{{ 'HEADER.TITLE' | translate }}</a>
 
   <button class="navbar-toggler navbar-toggler-right" type="button" (click)="isCollapsed = !isCollapsed" [attr.aria-expanded]="!isCollapsed" aria-controls="fmjleagueNavbar" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -8,58 +8,58 @@
   <div class="navbar-collapse" [ngbCollapse]="isCollapsed" id="fmjleagueNavbar">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" *ngIf="currentVersionData">
-        <a class="nav-link" (click)="onResetCollapse()" routerLink="/">ホーム</a>
+        <a class="nav-link" (click)="onResetCollapse()" routerLink="/">{{ 'HEADER.HOME' | translate }}</a>
       </li>
       <li class="nav-item" routerLinkActive="active" *ngIf="currentVersionData">
-        <a class="nav-link" (click)="onResetCollapse()" routerLink="/guide">初心者ガイド</a>
+        <a class="nav-link" (click)="onResetCollapse()" routerLink="/guide">{{ 'HEADER.GUIDE' | translate }}</a>
       </li>
       <li class="nav-item" routerLinkActive="active" *ngIf="currentVersionData">
-        <a class="nav-link" (click)="onResetCollapse()" routerLink="/history">リリースノート</a>
+        <a class="nav-link" (click)="onResetCollapse()" routerLink="/history">{{ 'HEADER.RELEASE_NOTE' | translate }}</a>
       </li>
       <li class="nav-item" ngbDropdown>
         <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="navbarPlayerDropdown" role="button">
-          選手・スタッフ関連の情報
+          {{ 'HEADER.DATABASE' | translate }}
         </a>
         <div ngbDropdownMenu aria-labelledby="navbarPlayerDropdown" class="dropdown-menu">
           <button ngbDropdownItem routerLinkActive="active" routerLink="/playerUpdate" (click)="onResetCollapse()">
-            選手更新履歴
+            {{ 'HEADER.UPDATE_HISTORY' | translate }}
           </button>
           <hr />
           <button ngbDropdownItem routerLinkActive="active" routerLink="/database" (click)="onResetCollapse()">
-            選手データベース（実験中）
+            {{ 'HEADER.PLAYER_DATABASE' | translate }}
           </button>
           <button ngbDropdownItem routerLinkActive="active" routerLink="/calcCa" (click)="onResetCollapse()">
-            選手のCA計算（実験中）
+            {{ 'HEADER.CA_CALC' | translate }}
           </button>
         </div>
       </li>
       <li class="nav-item" ngbDropdown>
         <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="navbarToolDropdown" role="button">
-          ツール
+          {{ 'HEADER.TOOLS' | translate }}
         </a>
         <div ngbDropdownMenu aria-labelledby="navbarPlayerDropdown" class="dropdown-menu">
           <button ngbDropdownItem (click)="onJpNameRemoverTool()">
-            日本語表記削除
+            {{ 'HEADER.REMOVE_JAPANESE_WORDS' | translate }}
           </button>
           <hr />
           <button ngbDropdownItem (click)="onFacepackTool()">
-            フェイスパック変換
+            {{ 'HEADER.FACEBOOK_TOOLS' | translate }}
           </button>
         </div>
       </li>
     </ul>
     <ul class="navbar-nav">
       <li *ngIf="isAdmin" class="nav-item" routerLinkActive="active">
-        <a class="nav-link" (click)="onResetCollapse()" routerLink="/admin">管理ページ</a>
+        <a class="nav-link" (click)="onResetCollapse()" routerLink="/admin">{{ 'HEADER.ADMIN' | translate }}</a>
       </li>
       <li *ngIf="user !== null" class="nav-item" routerLinkActive="active">
-          <a class="nav-link" href="#" (click)="onLogout()">ログアウト</a>
+          <a class="nav-link" href="#" (click)="onLogout()">{{ 'HEADER.LOGOUT' | translate }}</a>
         </li>
       <li class="nav-item" *ngIf="currentVersionData && currentVersionData.fmBlogUrl">
-        <a class="nav-link" (click)="onResetCollapse()" href="#" (click)="onGotoBlog()">ブログバージョン（旧）</a>
+        <a class="nav-link" (click)="onResetCollapse()" href="#" (click)="onGotoBlog()">{{ 'HEADER.BLOG_VERSION' | translate }}</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLinkActive="active" routerLink="/discuss" (click)="onResetCollapse()">掲示板</a>
+        <a class="nav-link" routerLinkActive="active" routerLink="/discuss" (click)="onResetCollapse()">{{ 'HEADER.DISCUSS_BOARD' | translate }}</a>
       </li>
       <li class="nav-item" ngbDropdown>
         <a class="nav-link" style="cursor: pointer" ngbDropdownToggle id="fmVersionDropdown" role="button">
@@ -78,8 +78,8 @@
         <div class="btn-group btn-group-toggle">
           <button
             class="btn"
-            [class]="lang === 'jp' ? 'btn-secondary' : 'btn-outline-secondary'"
-            (click)="onSetLang('jp')">
+            [class]="lang === 'ja' ? 'btn-secondary' : 'btn-outline-secondary'"
+            (click)="onSetLang('ja')">
             JP
           </button>
           <button
