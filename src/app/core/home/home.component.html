@@ -2,26 +2,31 @@
   <div class="background"></div>
   <div class="background-overlay"></div>
   <div class="content">
-    <h1 class="page-title">{{ getTitle() }}</h1>
-    <h5 class="text-secondary page-subtitle">{{ getSubtitle() }}</h5>
+    <h1 class="page-title">{{ 'CORE.TITLE' | translate:param }}</h1>
+    <h5 class="text-secondary page-subtitle">{{ 'CORE.SUBTITLE' | translate:param }}</h5>
     <div class="container">
       <div class="fm-j-league-buttons mt-5">
-        <button type="button" class="btn btn-lg btn-outline-primary m-1" [disabled]="currentVersionData.content.home.latest.url === null" (click)="onDownload()">最新バージョンをダウンロード</button>
-        <h6 class="text-muted mt-2">最新バージョンは{{ getLatestVersionNo() }} ({{ getLatestVersionDate() }})</h6>      
+        <button type="button" class="btn btn-lg btn-outline-primary m-1"
+          [disabled]="currentVersionData.content.home.latest.url === null"
+          (click)="onDownload()">{{ 'CORE.DOWNLOAD_LATEST' | translate }}</button>
+        <h6 class="text-muted mt-2">{{ 'CORE.VERSION_INFO' | translate:param }}</h6>
       </div>
       <div class="fm-j-league-buttons">
-        <button *ngIf="isOldVersion" type="button" class="btn btn-outline-secondary m-1" (click)="onOldVersion()">ほかのバージョン</button>
-        <button *ngIf="isPreReleaseVersion" type="button" class="btn btn-outline-secondary m-1" (click)="onPreReleaseVersion()">製作中バージョン</button>
-        <button *ngIf="isBrowseUpdateHistory" type="button" class="btn btn-outline-secondary m-1" (click)="onBrowseUpdateHistory()">選手更新履歴（旧）</button>
+        <button *ngIf="isEngVersion" type="button" class="btn btn-outline-secondary m-1"
+          (click)="onDiffLangVersion()">{{ 'CORE.DIFF_LANG_VERSION' | translate }}</button>
+        <button *ngIf="isOldVersion" type="button" class="btn btn-outline-secondary m-1"
+          (click)="onOldVersion()">{{ 'CORE.OTHER_VERSION' | translate }}</button>
+        <button *ngIf="isPreReleaseVersion" type="button" class="btn btn-outline-secondary m-1"
+          (click)="onPreReleaseVersion()">{{ 'CORE.MAKING_VERSION' | translate }}</button>
       </div>
     </div>
   </div>
 </div>
 
 <div class="fm-j-league-pack-contents container mt-4">
-  <div class="basic" [innerHTML]="getMainContent()"></div>
+  <div class="basic" [innerHTML]="'CORE.MAIN_CONTENT.' + fmVersion | translate"></div>
   <hr />
-  <div class="note text-secondary small" [innerHTML]="getNote()"></div>
+  <div class="note text-secondary small" [innerHTML]="'CORE.NOTE.' + fmVersion | translate"></div>
+  <hr />
+  <div class="note text-secondary small" [innerHTML]="'CORE.LINKS' | translate"></div>
 </div>
-
-

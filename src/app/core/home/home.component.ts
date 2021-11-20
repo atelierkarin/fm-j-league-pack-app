@@ -2,11 +2,12 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 
+import { TranslateService } from '@ngx-translate/core';
+
 import * as fromApp from '../../store/app.reducer';
 
 import * as VersionData from '../../data/VersionData';
 
-import anime from 'animejs';
 import { Meta } from '@angular/platform-browser';
 
 @Component({
@@ -17,37 +18,57 @@ import { Meta } from '@angular/platform-browser';
 export class HomeComponent implements OnInit, OnDestroy {
 
   public fmVersion: string;
+  public lang: string;
 
   public fmVersionList: string[] = VersionData.fmVersionList;
   public fmVersionDataList: VersionData.VersionData[] = VersionData.fmVersionDataList;  
   public currentVersionData: VersionData.VersionData;
 
   public isOldVersion: boolean = false;
+  public isEngVersion: boolean = false;
   public isPreReleaseVersion: boolean = false;
-  public isBrowseUpdateHistory: boolean = false;
 
   private coreSubscription: Subscription;
 
-  constructor(private store: Store<fromApp.AppState>, private meta: Meta) {}
+  public param = {
+    fmYear: '',
+    latestVersion: '',
+    releaseDate: ''
+  };
+
+  constructor(private store: Store<fromApp.AppState>, private meta: Meta, private translate: TranslateService) {
+    this.lang = translate.currentLang;
+    translate.get('CORE.TITLE', this.param).subscribe((res: string) => {
+      this.meta.addTag({name: "twitter:title", content: res});
+    });
+    translate.get('CORE.SUBTITLE', this.param).subscribe((res: string) => {
+      this.meta.addTag({name: "description", content: res});
+      this.meta.addTag({name: "twitter:description", content: res});
+      this.meta.addTag({name: "twitter:text:description", content: res});
+    });
+    this.translate.onLangChange.subscribe((event) => {
+      this.lang = event.lang;
+    });
+  }
 
   ngOnInit() {
     this.coreSubscription = this.store.select('core').subscribe(coreState => {
-      console.log("CORE CHANGED")
       this.fmVersion = coreState.fmVersion;
-      console.log(this.fmVersion)
+      this.fmVersionDataList = VersionData.fmVersionDataList;
       this.currentVersionData = this.getCurrentVersionData();
       this.isOldVersion = this.currentVersionData ? this.currentVersionData.content.home.otherVersion !== undefined : false;
+      this.isEngVersion = this.currentVersionData ? this.currentVersionData.content.home.engVersion !== undefined : false;
       this.isPreReleaseVersion = this.currentVersionData ? this.currentVersionData.content.home.betaVersion !== undefined : false;
-      this.isBrowseUpdateHistory = this.currentVersionData ? this.currentVersionData.content.home.playerUpdateHistory !== undefined : false;
 
-      this.meta.addTag({name: "description", content: this.getSubtitle()});
+      this.param = {
+        fmYear: this.fmVersion.replace('FM', ''),
+        latestVersion: this.currentVersionData ? this.currentVersionData.content.home.latest.version : "",
+        releaseDate: this.currentVersionData ? this.currentVersionData.content.home.latest.updateDate : ""
+      };
 
       // Twitter用メタタグ
       this.meta.addTag({name: "twitter:card", content: "summary"});
       this.meta.addTag({name: "twitter:site", content: "@karinshiratori"});
-      this.meta.addTag({name: "twitter:title", content: this.getTitle()});
-      this.meta.addTag({name: "twitter:description", content: this.getSubtitle()});
-      this.meta.addTag({name: "twitter:text:description", content: this.getSubtitle()});
     })
   }
 
@@ -57,86 +78,20 @@ export class HomeComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngAfterViewInit(): void {
-    // const textWrapper = document.querySelector('.page-title');
-    // textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
-    // const textWrapper2 = document.querySelector('.page-subtitle');
-    // textWrapper2.innerHTML = textWrapper2.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
-
-    // anime.timeline()
-    //   .add({
-    //     targets: '.page-title .letter',
-    //     scale: [4,1],
-    //     opacity: [0,1],
-    //     translateZ: 0,
-    //     easing: "easeOutExpo",
-    //     duration: 950,
-    //     delay: (el, i) => 40*i
-    //   })
-    //   .add({
-    //     targets: '.page-subtitle .letter',
-    //     scale: [4,1],
-    //     opacity: [0,1],
-    //     translateZ: 0,
-    //     easing: "easeOutExpo",
-    //     duration: 950,
-    //     delay: (el, i) => 40*i
-    //   })
-
-    // anime.timeline({
-    //     easing: 'easeOutExpo',
-    //     duration: 750
-    //   })
-    //   .add({
-    //     targets: '.fm-j-league-pack-contents .basic',
-    //     translateX: [1000, 0],
-    //     opacity: [0, 1]
-    //   })
-    //   .add({
-    //     targets: '.fm-j-league-pack-contents .note',
-    //     translateX: [-1000, 0],
-    //     opacity: [0, 1]
-    //   })
-  }
-
-  getTitle() {
-    return this.currentVersionData ? this.currentVersionData.content.home.title : "";
-  }
-
-  getSubtitle() {
-    return this.currentVersionData ? this.currentVersionData.content.home.subtitle : "";
-  }
-
-  getLatestVersionNo() {
-    return this.currentVersionData ? this.currentVersionData.content.home.latest.version : "";
-  }
-
-  getLatestVersionDate() {
-    return this.currentVersionData ? this.currentVersionData.content.home.latest.updateDate : "";
-  }
-
-  getMainContent() {
-    return this.currentVersionData ? this.currentVersionData.content.home.mainContent : "";
-  }
-
-  getNote() {
-    return this.currentVersionData ? this.currentVersionData.content.home.note : "";
-  }
-
   onDownload() {
-    if (this.currentVersionData) this.openUrl(this.currentVersionData.content.home.latest.url);
+    if (this.currentVersionData) this.openUrl(this.lang === "ja" ? this.currentVersionData.content.home.latest.url : this.currentVersionData.content.home.engVersion.url);
   }
 
   onOldVersion() {
     if (this.currentVersionData) this.openUrl(this.currentVersionData.content.home.otherVersion.url);
   }
 
-  onPreReleaseVersion() {
-    if (this.currentVersionData) this.openUrl(this.currentVersionData.content.home.betaVersion.url);
+  onDiffLangVersion() {
+    if (this.currentVersionData) this.openUrl(this.lang === "ja" ? this.currentVersionData.content.home.engVersion.url : this.currentVersionData.content.home.latest.url);
   }
 
-  onBrowseUpdateHistory() {
-    if (this.currentVersionData) this.openUrl(this.currentVersionData.content.home.playerUpdateHistory.url);
+  onPreReleaseVersion() {
+    if (this.currentVersionData) this.openUrl(this.currentVersionData.content.home.betaVersion.url);
   }
 
   // PRIVATE FUNCTIONS

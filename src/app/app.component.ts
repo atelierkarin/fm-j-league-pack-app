@@ -1,6 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 
+import { TranslateService } from '@ngx-translate/core';
+
 import { Router, NavigationEnd } from '@angular/router';
 import { GaService } from './shared/ga.service';
 
@@ -24,8 +26,14 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(
     private store: Store<fromApp.AppState>,
     private router: Router,
-    private gaService: GaService
-  ) {}
+    private gaService: GaService,
+    private translate: TranslateService
+  ) {
+    let browserLang = translate.getBrowserLang();
+    console.log("BROWSER LANG", browserLang)
+    translate.setDefaultLang('ja');
+    translate.use(browserLang === 'ja' ? 'ja' : 'en');
+  }
 
   ngOnInit() {
     this.loaded = true;

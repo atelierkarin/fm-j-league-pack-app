@@ -1,5 +1,5 @@
 import { BrowserModule } from "@angular/platform-browser";
-import { HttpClientModule } from "@angular/common/http";
+import { HttpClientModule, HttpClient } from "@angular/common/http";
 import { NgModule } from "@angular/core";
 
 import { AppRoutingModule } from "./app-routing.module";
@@ -33,6 +33,9 @@ import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFireAuth } from "@angular/fire/auth";
 import { environment } from "../environments/environment";
 
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
 import * as fromApp from "./store/app.reducer";
 import { CoreEffects } from "./core/store/core.effects";
 import { HistoryEffects } from "./history/store/history.effects";
@@ -47,6 +50,11 @@ import { CalcCaEffects } from "./calc-ca/store/calc-ca.effects";
 let apiDomain = "http://127.0.0.1:4000/";
 if (environment.production) {
   apiDomain = "https://fm-j-league-pack.uc.r.appspot.com";
+}
+
+// AoT requires an exported function for factories
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
 }
 
 @NgModule({
@@ -69,6 +77,14 @@ if (environment.production) {
     NgbModule,
     FormsModule,
     NgSelectModule,
+    TranslateModule.forRoot({
+      defaultLanguage: 'ja',
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    }),
     NgxDaterangepickerMd.forRoot(),
     StoreModule.forRoot(fromApp.appReducer),
     EffectsModule.forRoot([
@@ -101,4 +117,4 @@ if (environment.production) {
   }],
   bootstrap: [AppComponent]
 })
-export class AppModule {}
+export class AppModule { }
