@@ -11,10 +11,10 @@ export interface VersionData {
       otherVersion?: {
         url: string
       },
-      betaVersion?: {
+      engVersion?: {
         url: string
       },
-      playerUpdateHistory?: {
+      betaVersion?: {
         url: string
       }
     }
@@ -39,6 +39,9 @@ export const fmVersionDataList: VersionData[] = [
           url: "https://drive.google.com/file/d/14SrtSO44RJjtzf7FbmQOwpUipt18fPz-/view?usp=sharing",
           version: "v1.0.0",
           updateDate: "2021/11/09",
+        },
+        engVersion: {
+          url: "https://drive.google.com/drive/folders/15SCL8h1R7o4uLkGwzuI_ReGY0YRO3VrA?usp=sharing"
         },
         otherVersion: {
           url: "https://drive.google.com/drive/folders/13KOgMOWKWILdKHCuWNZ3dy63wB7AFHAi?usp=sharing"
@@ -94,9 +97,6 @@ export const fmVersionDataList: VersionData[] = [
         },
         betaVersion: {
           url: "https://drive.google.com/drive/folders/1Cu3yGFKQh4G2pMpMIL1Je_TuRD-nbBnG/"
-        },
-        playerUpdateHistory: {
-          url: "https://drive.google.com/open?id=1UZG2QprBr4UUPPsho1prL_yh2XyNlIsVUz24a35YOss"
         }
       }
     }

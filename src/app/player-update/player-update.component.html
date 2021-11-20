@@ -9,7 +9,7 @@
             bindLabel="clubName"
             bindValue="clubName"
             (change)="onChangeFilters()"
-            placeholder="クラブフィルター"></ng-select>
+            [placeholder]="'UPDATE_HISTORY.CLUB_FILTER' | translate"></ng-select>
         </div>
         <div class="col">
           <input
@@ -17,7 +17,7 @@
             [(ngModel)]="filterPlayerName"
             (input)="onChangeFilters()"
             class="form-control"
-            placeholder="選手・スタッフの名前"
+            [placeholder]="'UPDATE_HISTORY.NAME' | translate"
           />
         </div>
         <div class="col-auto">
@@ -28,7 +28,7 @@
             [(ngModel)]="filterPlayerUpdateType"
             [multiple]="true"
             (change)="onChangeFilters()"
-            placeholder="更新種類フィルター"
+            [placeholder]="'UPDATE_HISTORY.TYPE' | translate"
           >
           </ng-select>
         </div>
@@ -55,7 +55,7 @@
   <ng-template #elseTemplate>
     <div class="d-flex justify-content-center">
       <div class="spinner-border m-5" role="status">
-        <span class="sr-only">データ読み込み中</span>
+        <span class="sr-only">{{ 'LOADING' | translate }}</span>
       </div>
     </div>
   </ng-template>

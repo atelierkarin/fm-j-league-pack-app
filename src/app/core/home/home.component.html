@@ -12,6 +12,8 @@
         <h6 class="text-muted mt-2">{{ 'CORE.VERSION_INFO' | translate:param }}</h6>
       </div>
       <div class="fm-j-league-buttons">
+        <button *ngIf="isEngVersion" type="button" class="btn btn-outline-secondary m-1"
+          (click)="onDiffLangVersion()">{{ 'CORE.DIFF_LANG_VERSION' | translate }}</button>
         <button *ngIf="isOldVersion" type="button" class="btn btn-outline-secondary m-1"
           (click)="onOldVersion()">{{ 'CORE.OTHER_VERSION' | translate }}</button>
         <button *ngIf="isPreReleaseVersion" type="button" class="btn btn-outline-secondary m-1"

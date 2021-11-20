@@ -4,6 +4,7 @@
         "SUBTITLE": "Football Manager {{fmYear}}向け、J1から地域リーグまでのデータパック",
         "DOWNLOAD_LATEST": "最新バージョンをダウンロード",
         "VERSION_INFO": "最新バージョンは {{latestVersion}} ({{releaseDate}})",
+        "DIFF_LANG_VERSION": "ローマ字表記バージョン",
         "OTHER_VERSION": "ほかのバージョン",
         "MAKING_VERSION": "製作中バージョン",
         "MAIN_CONTENT": {
@@ -22,7 +23,7 @@
             "FM2018": "<p>最新バージョンは「ダウンロード」ボタンでダウンロードできます。</p> <p>製作中フォルダは文字通り製作中のものですが、今どこまで出来たのか気になる方はどうぞチェックしてください。こちらは基本不定期更新です。</p> <p>本パックは商業利用ではない限り、使用は基本自由です。</p>",
             "FM2017": "<p>最新バージョンは「ダウンロード」ボタンでダウンロードできます。</p> <p>製作中フォルダは文字通り製作中のものですが、今どこまで出来たのか気になる方はどうぞチェックしてください。こちらは基本不定期更新です。</p> <p>本パックは商業利用ではない限り、使用は基本自由です。</p>"
         },
-        "LINKS": "<p>FM関連リンク</p> <p>ajopya氏：<a target=\"_blank\" href=\"http://fmjp12.blogspot.com/\">週末ジレンマ</a></p> <p>osaru1597氏：<a target=\"_blank\" href=\"http://hw001.spaaqs.ne.jp/osaru1597/\">Underdogs</a></p> <p>dosukoi氏：<a target=\"_blank\" href=\"https://dosukoi.bulog.jp/\">Dosukoi Press</a></p> <p>あまーり氏：<a target=\"_blank\" href=\"https://www.amari-fm.com/\">あまーりのゲーム日記</a></p> <p>EST Touiro氏：<a target=\"_blank\" href=\"http://estouiro.wp.xdomain.jp/2019/12/25/j-league-facepack-footballmanager-2020/\">EST Games （フェイスパック）</a></p>"
+        "LINKS": "<p><b>FM関連リンク</b></p> <p>ajopya氏：<a target=\"_blank\" href=\"http://fmjp12.blogspot.com/\">週末ジレンマ</a></p> <p>osaru1597氏：<a target=\"_blank\" href=\"http://hw001.spaaqs.ne.jp/osaru1597/\">Underdogs</a></p> <p>dosukoi氏：<a target=\"_blank\" href=\"https://dosukoi.bulog.jp/\">Dosukoi Press</a></p> <p>あまーり氏：<a target=\"_blank\" href=\"https://www.amari-fm.com/\">あまーりのゲーム日記</a></p> <hr> <p><b>フェイスパック</b></p> <p><a target=\"_blank\" href=\"https://zawazawa.jp/fm-j-league-pack/topic/19\">FM2022 フェイスパック１</a></p> <p><a target=\"_blank\" href=\"https://daifm2021.livedoor.blog/archives/11836836.html\">FM2022 フェイスパック２</a></p>"
     },
     "HEADER": {
         "TITLE": "FM Jリーグパック",
@@ -40,5 +41,14 @@
         "LOGOUT": "ログアウト",
         "BLOG_VERSION": "ブログバージョン（旧）",
         "DISCUSS_BOARD": "掲示板"
-    }
+    },
+    "GUIDE": {
+        "NO_GUIDE": "すみません、ガイドはありません…"
+    },
+    "UPDATE_HISTORY": {
+        "CLUB_FILTER": "クラブフィルター",
+        "NAME": "選手・スタッフの名前",
+        "TYPE": "更新種類フィルター"
+    },
+    "LOADING": "データ読み込み中"
 }

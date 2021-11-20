@@ -25,6 +25,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public currentVersionData: VersionData.VersionData;
 
   public isOldVersion: boolean = false;
+  public isEngVersion: boolean = false;
   public isPreReleaseVersion: boolean = false;
 
   private coreSubscription: Subscription;
@@ -56,6 +57,7 @@ export class HomeComponent implements OnInit, OnDestroy {
       this.fmVersionDataList = VersionData.fmVersionDataList;
       this.currentVersionData = this.getCurrentVersionData();
       this.isOldVersion = this.currentVersionData ? this.currentVersionData.content.home.otherVersion !== undefined : false;
+      this.isEngVersion = this.currentVersionData ? this.currentVersionData.content.home.engVersion !== undefined : false;
       this.isPreReleaseVersion = this.currentVersionData ? this.currentVersionData.content.home.betaVersion !== undefined : false;
 
       this.param = {
@@ -77,11 +79,15 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   onDownload() {
-    if (this.currentVersionData) this.openUrl(this.currentVersionData.content.home.latest.url);
+    if (this.currentVersionData) this.openUrl(this.lang === "ja" ? this.currentVersionData.content.home.latest.url : this.currentVersionData.content.home.engVersion.url);
   }
 
   onOldVersion() {
     if (this.currentVersionData) this.openUrl(this.currentVersionData.content.home.otherVersion.url);
+  }
+
+  onDiffLangVersion() {
+    if (this.currentVersionData) this.openUrl(this.lang === "ja" ? this.currentVersionData.content.home.engVersion.url : this.currentVersionData.content.home.latest.url);
   }
 
   onPreReleaseVersion() {
