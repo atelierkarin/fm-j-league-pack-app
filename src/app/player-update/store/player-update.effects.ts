@@ -13,6 +13,41 @@ import * as PlayerUpdateActions from './player-update.actions';
 import * as fromApp from '../../store/app.reducer';
 import * as fromPlayerUpdate from './player-update.reducer';
 
+const getPlayerUpdatesNotUpdated = gql`
+query {
+  playerUpdatesNotUpdated {
+    id
+    player {
+      name
+      nameEng
+      playerType
+      nationality
+    }
+    updateType
+    activeDate
+    updateDate
+    club {
+      name
+      nationality
+    }
+    previousClub {
+      name
+      nationality
+    }
+    futureTransfer {
+      club {
+        name
+        nationality
+      }
+      transferDate
+    }
+    filetype
+    previousFiletype
+    remarks
+    dbPlayerId
+  }
+}`;
+
 const getPlayerUpdatesByDate = gql`
 query ($startDate: String!, $endDate: String!) {
   playerUpdatesByDate(startDate: $startDate, endDate: $endDate) {
@@ -36,9 +71,9 @@ query ($startDate: String!, $endDate: String!) {
     }
     futureTransfer {
       club {
-      	name
-      	nationality
-    	}
+        name
+        nationality
+      }
       transferDate
     }
     filetype
@@ -54,6 +89,12 @@ mutation($id: Int!) {
 }
 `
 
+const mutationDeletePlayerUpdate = gql`
+mutation($id: Int!) {
+  deletePlayerUpdate(id: $id)
+}
+`
+
 const mutationAddPlayerUpdate = gql`
 mutation($data: PlayerUpdateInput!) {
   insertPlayerUpdate(data: $data)
@@ -62,6 +103,29 @@ mutation($data: PlayerUpdateInput!) {
 
 @Injectable()
 export class PlayerUpdateEffects {
+
+  fetchPlayerUpdateNU = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PlayerUpdateActions.FETCH_PLAYER_UPDATE_NU),
+      withLatestFrom(this.store$.select('playerUpdate')),
+      switchMap(([action, state]: [PlayerUpdateActions.FetchPlayerUpdateNU, fromPlayerUpdate.State]) => {
+        return this.apollo.query<any>({
+          query: getPlayerUpdatesNotUpdated
+        });
+      }),
+      map((result: ApolloQueryResult<any>) => {
+        let playerUpdates = [];
+        if (result && result.data && result.data.playerUpdatesNotUpdated) {
+          playerUpdates = result.data.playerUpdatesNotUpdated.map(v => v)
+        }
+        return new PlayerUpdateActions.SetPlayerUpdate(playerUpdates);
+      }),
+      catchError((error) => {
+        console.error(error)
+        return of(new PlayerUpdateActions.UpdateFail("SERVER FAIL"))
+      })
+    )
+  );
 
   fetchPlayerUpdate = createEffect(() =>
     this.actions$.pipe(
@@ -132,10 +196,34 @@ export class PlayerUpdateEffects {
           },
           refetchQueries: [
             {
-              query: getPlayerUpdatesByDate,
-              variables: {
-                ...state.displayDate
-              }
+              query: getPlayerUpdatesNotUpdated
+            },
+          ],
+        });
+      }),
+      map(() => {
+        return new PlayerUpdateActions.UpdateSuccess()
+      }),
+      catchError(() => {
+        return of(new PlayerUpdateActions.UpdateFail("SERVER FAIL"))
+      })
+    )
+  );
+
+  deletePlayerUpdate = createEffect(() =>
+    this.actions$.pipe(
+      ofType(PlayerUpdateActions.DELETE_PLAYER_UPDATE),
+      withLatestFrom(this.store$.select('playerUpdate')),
+      switchMap(([action, state]: [PlayerUpdateActions.DeletePlayerHistory, fromPlayerUpdate.State]) => {
+        const id = parseInt(action.payload);
+        return this.apollo.mutate<any>({
+          mutation: mutationDeletePlayerUpdate,
+          variables: {
+            id
+          },
+          refetchQueries: [
+            {
+              query: getPlayerUpdatesNotUpdated
             },
           ],
         });

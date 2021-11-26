@@ -24,7 +24,7 @@
     </ng-template>
   </ng-container>
 
-  <ng-container [ngbNavItem]="3" *ngIf="(admin$ | async)">
+  <ng-container [ngbNavItem]="3">
     <a ngbNavLink>最近の話題選手</a>
     <ng-template ngbNavContent>
       <app-database-recent-commented></app-database-recent-commented>
