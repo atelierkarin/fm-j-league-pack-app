@@ -221,15 +221,13 @@ export class PlayerUpdateEffects {
           variables: {
             id
           },
-          refetchQueries: [
-            {
-              query: getPlayerUpdatesNotUpdated
-            },
-          ],
+          update: async (cache, result) => {
+            await cache.reset();
+          },
         });
       }),
-      map(() => {
-        return new PlayerUpdateActions.UpdateSuccess()
+      switchMap(() => {
+        return of(new PlayerUpdateActions.SetReloadData())
       }),
       catchError(() => {
         return of(new PlayerUpdateActions.UpdateFail("SERVER FAIL"))

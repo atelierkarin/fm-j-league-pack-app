@@ -150,22 +150,29 @@
   <ngx-datatable-column name="更新時間" prop="updateDate" [flexGrow]="1" *ngIf="innerWidth > 768">
     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
       <span class="player-update-record-update-date" *ngIf="value">{{ value }}</span>
-      <button
-        class="btn btn-success"
-        type="submit"
-        *ngIf="getDisplayConfirmUpdateBtn(value, row)"
-        (click)="onConfirmUpdate(row)"
-      >
-        ○
-      </button>
-      <button
-        class="btn btn-danger"
-        type="submit"
-        *ngIf="isAdmin"
-        (click)="onConfirmDelete(row)"
-      >
-        ×
-      </button>
+    </ng-template>
+  </ngx-datatable-column>
+
+  <ngx-datatable-column name="" prop="action" [flexGrow]="1" [sortable]="false" *ngIf="innerWidth > 768">
+    <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
+      <div class="btn-group">
+        <button
+          class="btn btn-success"
+          type="submit"
+          *ngIf="isAdmin"
+          (click)="onConfirmUpdate(row)"
+        >
+          <fa-icon [icon]="faCheck"></fa-icon>
+        </button>
+        <button
+          class="btn btn-danger"
+          type="submit"
+          *ngIf="isAdmin"
+          (click)="onConfirmDelete(row)"
+        >
+          <fa-icon [icon]="faTrash"></fa-icon>
+        </button>
+      </div>
     </ng-template>
   </ngx-datatable-column>
 </ngx-datatable>

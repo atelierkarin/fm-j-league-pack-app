@@ -36,6 +36,8 @@ import { environment } from "../environments/environment";
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+
 import * as fromApp from "./store/app.reducer";
 import { CoreEffects } from "./core/store/core.effects";
 import { HistoryEffects } from "./history/store/history.effects";
@@ -70,6 +72,7 @@ export function HttpLoaderFactory(http: HttpClient) {
   ],
   imports: [
     BrowserModule,
+    FontAwesomeModule,
     HttpClientModule,
     AppRoutingModule,
     SharedModule,
