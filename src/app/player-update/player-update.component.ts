@@ -23,6 +23,9 @@ import { LocaleConfig } from 'ngx-daterangepicker-material';
 })
 export class PlayerUpdateComponent implements OnInit, OnDestroy {
 
+  public isAdmin: boolean;
+  private adminAuthSubscription: Subscription;
+
   public datepickerLocale: LocaleConfig = {
     applyLabel: '確認',
     customRangeLabel: ' - ',
@@ -63,6 +66,10 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
       startDate: moment().subtract(this.defaultDisplayDay, 'days').set('hour', 0).set('minute', 0).set('second', 0),
       endDate: moment().set('hour', 0).set('minute', 0).set('second', 0),
     }
+
+    this.adminAuthSubscription = this.store.select('admin').subscribe(adminState => {
+      this.isAdmin = adminState.isAdmin;
+    });
 
     this.playerUpdateTypeList = Object.keys(PlayerUpdateModel.PlayerUpdateType)
       .map(Number)
@@ -106,6 +113,8 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
       this.coreSubscription.unsubscribe();
     if (this.loadingSubscription)
       this.loadingSubscription.unsubscribe();
+    if (this.adminAuthSubscription) 
+      this.adminAuthSubscription.unsubscribe();
   }
 
   refreshDisplayRecords() {
@@ -123,7 +132,7 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
 
   onReloadPlayerUpdateRecords() {
     this.loadingData = true;
-    this.store.dispatch(new PlayerUpdateActions.FetchPlayerUpdate({
+    this.store.dispatch(this.isAdmin ? new PlayerUpdateActions.FetchPlayerUpdateNU() : new PlayerUpdateActions.FetchPlayerUpdate({
       startDate: this.dateSelected.startDate.format("YYYY-MM-DD"),
       endDate: this.dateSelected.endDate.format("YYYY-MM-DD"),
     })); 

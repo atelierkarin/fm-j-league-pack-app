@@ -156,7 +156,15 @@
         *ngIf="getDisplayConfirmUpdateBtn(value, row)"
         (click)="onConfirmUpdate(row)"
       >
-        確定更新
+        ○
+      </button>
+      <button
+        class="btn btn-alert"
+        type="submit"
+        *ngIf="isAdmin"
+        (click)="onConfirmDelete(row)"
+      >
+        ×
       </button>
     </ng-template>
   </ngx-datatable-column>
