@@ -153,7 +153,7 @@
     </ng-template>
   </ngx-datatable-column>
 
-  <ngx-datatable-column name="" prop="action" [flexGrow]="1" [sortable]="false" *ngIf="innerWidth > 768">
+  <ngx-datatable-column name="" prop="action" [flexGrow]="1" [sortable]="false" *ngIf="innerWidth > 768 && isAdmin">
     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
       <div class="btn-group">
         <button
