@@ -61,6 +61,7 @@ export class RecordTableComponent implements OnInit, OnDestroy {
   onConfirmDelete(targetRecord: PlayerUpdateModel.PlayerUpdate) {
     if (targetRecord && targetRecord.id && this.isAdmin) {
       this.store.dispatch(new PlayerUpdateActions.DeletePlayerHistory(targetRecord.id));
+      this.data = this.data.filter(d => d.id !== targetRecord.id);
     }
   }
 
