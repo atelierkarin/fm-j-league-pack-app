@@ -56,6 +56,7 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
   private coreSubscription: Subscription;
   private playerUpdateSubscription: Subscription;
   private loadingSubscription: Subscription;
+  private reloadSubscription: Subscription;
 
   constructor(private store: Store<fromApp.AppState>) {}
 
@@ -104,6 +105,14 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
       .subscribe((loading: boolean) => {
         this.loadingData = loading;
       });
+    this.reloadSubscription = this.store
+      .select('playerUpdate')
+      .pipe(map(playerUpdateState => playerUpdateState.reloadData))
+      .subscribe((flagReloadData: boolean) => {
+        if (flagReloadData) {
+          this.onReloadPlayerUpdateRecords();
+        }
+      });
   }
 
   ngOnDestroy() {
@@ -115,6 +124,8 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
       this.loadingSubscription.unsubscribe();
     if (this.adminAuthSubscription) 
       this.adminAuthSubscription.unsubscribe();
+    if (this.reloadSubscription) 
+      this.reloadSubscription.unsubscribe();
   }
 
   refreshDisplayRecords() {
@@ -130,12 +141,13 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
     })
   }
 
-  onReloadPlayerUpdateRecords() {
+  async onReloadPlayerUpdateRecords() {
+    await this.store.dispatch(new PlayerUpdateActions.ClearReloadData());
     this.loadingData = true;
-    this.store.dispatch(this.isAdmin ? new PlayerUpdateActions.FetchPlayerUpdateNU() : new PlayerUpdateActions.FetchPlayerUpdate({
+    await this.store.dispatch(this.isAdmin ? new PlayerUpdateActions.FetchPlayerUpdateNU() : new PlayerUpdateActions.FetchPlayerUpdate({
       startDate: this.dateSelected.startDate.format("YYYY-MM-DD"),
       endDate: this.dateSelected.endDate.format("YYYY-MM-DD"),
-    })); 
+    }));
   }
 
   onChangeDate() {

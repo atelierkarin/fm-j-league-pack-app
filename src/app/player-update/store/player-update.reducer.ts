@@ -9,13 +9,15 @@ export interface State {
   };
   updateError: string;
   loading: boolean;
+  reloadData: boolean;
 }
 
 const initialState: State = {
   playerUpdateRecords: [],
   displayDate: null,
   updateError: null,
-  loading: false
+  loading: false,
+  reloadData: false
 };
 
 export function playerUpdateReducer(
@@ -45,7 +47,8 @@ export function playerUpdateReducer(
         ...state,
         displayDate: {...action.payload},
         updateError: null,
-        loading: true
+        loading: true,
+        reloadData: false
       };
     case PlayerUpdateActions.UPDATE_SUCCESS:
       return {
@@ -58,6 +61,16 @@ export function playerUpdateReducer(
         ...state,
         updateError: action.payload,
         loading: false
+      };
+    case PlayerUpdateActions.SET_RELOAD_DATA:
+      return {
+        ...state,
+        reloadData: true
+      };
+    case PlayerUpdateActions.CLEAR_RELOAD_DATA:
+      return {
+        ...state,
+        reloadData: false
       };
     default:
       return state;

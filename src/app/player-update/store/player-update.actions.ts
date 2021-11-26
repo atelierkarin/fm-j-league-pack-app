@@ -9,6 +9,9 @@ export const ADD_PLAYER_UPDATE = '[Player Update] Add Player Update';
 export const CONFIRM_PLAYER_UPDATE = '[Player Update] Confirm Player Update';
 export const DELETE_PLAYER_UPDATE = '[Player Update] Delete Player Update';
 
+export const SET_RELOAD_DATA = '[History] Set Reload Data';
+export const CLEAR_RELOAD_DATA = '[History] Clear Reload Data';
+
 export const UPDATE_SUCCESS = '[History] Update Success';
 export const UPDATE_FAIL = '[History] Update Fail';
 
@@ -48,6 +51,14 @@ export class DeletePlayerHistory implements Action {
   constructor(public payload: string) {}
 }
 
+export class SetReloadData implements Action {
+  readonly type = SET_RELOAD_DATA;
+}
+
+export class ClearReloadData implements Action {
+  readonly type = CLEAR_RELOAD_DATA;
+}
+
 export class UpdateSuccess implements Action {
   readonly type = UPDATE_SUCCESS;
 }
@@ -64,4 +75,6 @@ export type PlayerUpdateActions =
   | AddPlayerHistory
   | ConfirmPlayerHistory
   | UpdateSuccess
-  | UpdateFail;
+  | UpdateFail
+  | SetReloadData
+  | ClearReloadData;

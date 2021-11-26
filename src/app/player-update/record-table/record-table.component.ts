@@ -10,6 +10,8 @@ import * as PlayerUpdateModel from '../player-update.model';
 import * as fromApp from '../../store/app.reducer';
 import * as PlayerUpdateActions from '../store/player-update.actions';
 
+import { faCheck, faTrash } from '@fortawesome/free-solid-svg-icons';
+
 @Component({
   selector: 'app-record-table',
   templateUrl: './record-table.component.html',
@@ -30,6 +32,9 @@ export class RecordTableComponent implements OnInit, OnDestroy {
     emptyMessage: '記録がありません',
     totalMessage: '選手を見つかりました'
   }
+
+  public faCheck = faCheck;
+  public faTrash = faTrash;
 
   constructor(private store: Store<fromApp.AppState>) { }
 
@@ -61,7 +66,6 @@ export class RecordTableComponent implements OnInit, OnDestroy {
   onConfirmDelete(targetRecord: PlayerUpdateModel.PlayerUpdate) {
     if (targetRecord && targetRecord.id && this.isAdmin) {
       this.store.dispatch(new PlayerUpdateActions.DeletePlayerHistory(targetRecord.id));
-      this.data = this.data.filter(d => d.id !== targetRecord.id);
     }
   }
 
