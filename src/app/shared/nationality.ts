@@ -125,7 +125,7 @@ export const nationality: {
   { name: "マダガスカル", code: "MAD" },
   { name: "モロッコ", code: "MAR", iso: "ma" },
   { name: "マレーシア", code: "MAS", iso: "my" },
-  { name: "モルドバ", code: "MDA" },
+  { name: "モルドバ", code: "MDA", iso: "md" },
   { name: "モルディブ", code: "MDV" },
   { name: "メキシコ", code: "MEX", iso: "mx" },
   { name: "モンゴル", code: "MGL", iso: "mn" },
