@@ -1,8 +1,9 @@
 .j-league-pack-toast {
   z-index: 1000;
   position: fixed;
-  bottom: 10px;
-  right: 10px;
+  top: 100px;
+  left: 50%;
+  transform: translateY(-50%);
 }
 
 .j-league-pack-toast.success {

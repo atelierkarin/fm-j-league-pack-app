@@ -27,35 +27,46 @@
       </div>
 
       <div *ngIf="loadData">
-        <hr />
-        <input type="number" [(ngModel)]="updateId" class="form-control" placeholder="更新ID" />
-        <hr />
-        <div class="row">
-          <div class="col-4">
-            <div class="input-group">
-              <ng-select
-                class="filter-club-droplist"
-                [items]="clubList"
-                bindLabel="clubName"
-                bindValue="id"
-                aria-placeholder="クラブ"
-                [(ngModel)]="filterClub"
-                (change)="updateFilter($event)"
-              ></ng-select>
+        <div class="alert show alert-secondary m-1">   
+          <div class="row">       
+            <div class="col-2">
+              <div class="input-group">
+                <ng-select
+                  class="filter-club-droplist"
+                  [items]="clubList"
+                  bindLabel="clubName"
+                  bindValue="id"
+                  aria-placeholder="クラブ"
+                  [(ngModel)]="filterClub"
+                  (change)="updateFilter($event)"
+                ></ng-select>
+              </div>
+            </div>
+            <div class="col-3">
+              <input type="number" [(ngModel)]="updateId" class="form-control" placeholder="更新ID" />
+            </div>
+            <div class="col-3">
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="filterValue"
+                (keyup)="updateFilter($event)"
+                placeholder="名前"
+              />
+            </div>
+            <div class="col-2">
+              <div class="form-group form-check p-2">
+                <input type="checkbox" class="form-check-limit-to-recent" id="limitToRecentCheck" [(ngModel)]="filterLimitToRecent" (change)="updateFilter($event)">
+                <label class="form-check-limit-to-recent-label" for="limitToRecentCheck">最近の記録のみ</label>
+              </div>
             </div>
           </div>
-          <div class="col-6">
-            <input
-              type="text"
-              class="form-control"
-              [(ngModel)]="filterValue"
-              (keyup)="updateFilter($event)"
-            />
-          </div>
-          <div class="col-2">
-            <div class="form-group form-check p-2">
-              <input type="checkbox" class="form-check-limit-to-recent" id="limitToRecentCheck" [(ngModel)]="filterLimitToRecent" (change)="updateFilter($event)">
-              <label class="form-check-limit-to-recent-label" for="limitToRecentCheck">最近の記録のみ</label>
+          <div class="row">       
+            <div class="custom-file m-2">
+              <input type="file" class="custom-file-input" id="nameFilterFile"
+              #namefl
+              (change)="onUploadNameFilters(namefl.files)">
+              <label class="custom-file-label" for="nameFilterFile">名前のリストをアップロード</label>
             </div>
           </div>
         </div>

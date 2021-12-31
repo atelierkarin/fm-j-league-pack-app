@@ -95,8 +95,37 @@ export class AdminCsvImportComponent implements OnInit, OnDestroy {
     })
   }
 
+  onUploadNameFilters(files: any) {
+    if (files.length <= 0) { return; }
+    let f = files[0];
+    const limit = this.filterLimitToRecent;
+    const filterClub = this.filterClub;
+
+    this.readFile(f).then((data) => {
+      var filters = data.split(/\r?\n/).filter(x => x).map(x => x.trim().toLowerCase());
+      
+      // filter our data
+      const displayData = this.loadData.filter(function (d) {
+        let club_filter = filterClub > 0 ? parseInt(d.club) === filterClub : true;
+        let extra_filter = true;
+        if (limit) {
+          const clubDateRenewedMonth = moment().diff(moment(moment(d.clubDateRenewed)), 'month');
+          extra_filter = clubDateRenewedMonth < 6;
+          if (d.loanDateStart != "") {
+            const loanDateStartMonth = moment().diff(moment(moment(d.loanDateStart)), 'month');
+            extra_filter = clubDateRenewedMonth < 6 || loanDateStartMonth < 6;
+          }
+        }
+        return filters.includes(d.common_name.toLowerCase()) && club_filter && extra_filter
+      });
+
+      // update the rows
+      this.displayData = displayData;
+    })
+  }
+
   updateFilter(event) {
-    const val = this.filterValue.toLowerCase();
+    const val = this.filterValue.trim().toLowerCase();
     const limit = this.filterLimitToRecent;
     const filterClub = this.filterClub;
 
