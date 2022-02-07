@@ -42,6 +42,16 @@ nationality[1653] = 'COL'
 nationality[1655] = 'PAR'
 nationality[1656] = 'PER'
 nationality[1657] = 'URU'
+nationality[145] = 'VIE'
+nationality[782] = 'MLT'
+nationality[783] = 'MDA'
+nationality[764] = 'DEN'
+nationality[111] = 'HKG'
+nationality[217945] = 'KVX'
+nationality[795] = 'SVN'
+nationality[760] = 'BUL'
+nationality[798] = 'SUI'
+nationality[799] = 'TUR'
 
 export default (id) => {
   if (id in nationality) {
