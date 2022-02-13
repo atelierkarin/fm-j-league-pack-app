@@ -53,6 +53,11 @@ nationality[795] = 'SVN'
 nationality[760] = 'BUL'
 nationality[798] = 'SUI'
 nationality[799] = 'TUR'
+nationality[791] = 'RUS'
+nationality[30] = 'MWI' 
+nationality[113] = 'IDN'
+nationality[41] = 'SEN'
+nationality[364] = 'CAN'
 
 export default (id) => {
   if (id in nationality) {
