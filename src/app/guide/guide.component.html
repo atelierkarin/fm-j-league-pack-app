@@ -1,12 +1,15 @@
-<div class="fm-j-league-pack-guide container-fluid p-2">  
-  <ul ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeId" *ngIf="currentGuide; else elseTemplate">
-    <li [ngbNavItem]="i" *ngFor="let guideContent of currentGuide; let i = index">
-      <a ngbNavLink>{{ guideContent.title }}</a>
-      <ng-template ngbNavContent>
-        <div class="p-2" [innerHTML]="guideContent.content"></div>
-      </ng-template>
-    </li>
-  </ul>
+<div class="fm-j-league-pack-guide container-fluid p-2">
+  <div *ngIf="currentGuide; else elseTemplate">
+    <ul ngbNav #nav="ngbNav" class="nav-tabs" [(activeId)]="activeId">
+      <li [ngbNavItem]="i" *ngFor="let guideContent of currentGuide; let i = index">
+        <a ngbNavLink>{{ guideContent.title }}</a>
+        <ng-template ngbNavContent>
+          <div class="p-2" [innerHTML]="guideContent.content"></div>
+        </ng-template>
+      </li>
+    </ul>
+    <div [ngbNavOutlet]="nav" class="mt-2"></div>
+  </div>
   <ng-template #elseTemplate>
     <div class="fm-j-league-pack-no-guide text-center">
       <h1>(·.·)</h1>
