@@ -20,6 +20,8 @@ export class GuideComponent implements OnInit, OnDestroy {
 
   private coreSubscription: Subscription;
 
+  public activeId = 1;
+
   constructor(private store: Store<fromApp.AppState>) { }
 
   ngOnInit() {
