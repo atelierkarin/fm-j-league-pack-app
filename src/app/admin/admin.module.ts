@@ -5,7 +5,7 @@ import { RouterModule } from '@angular/router';
 
 import { NgSelectModule } from '@ng-select/ng-select';
 
-import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 
 import { AdminComponent } from './admin.component';
 import { SharedModule } from '../shared/shared.module';
