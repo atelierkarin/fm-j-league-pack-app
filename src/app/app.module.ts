@@ -26,11 +26,11 @@ import { PlayerUpdateCardComponent } from "./player-update/player-update-card/pl
 import { RecordTableComponent } from "./player-update/record-table/record-table.component";
 import { DiscussBoardComponent } from './discuss-board/discuss-board.component';
 
-import { AngularFireModule } from "@angular/fire";
-import { AngularFirestoreModule } from "@angular/fire/firestore";
-import { AngularFirestore } from "@angular/fire/firestore";
-import { AngularFireAuthModule } from "@angular/fire/auth";
-import { AngularFireAuth } from "@angular/fire/auth";
+import { AngularFireModule } from "@angular/fire/compat";
+import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
+import { AngularFirestore } from "@angular/fire/compat/firestore";
+import { AngularFireAuthModule } from "@angular/fire/compat/auth";
+import { AngularFireAuth } from "@angular/fire/compat/auth";
 import { environment } from "../environments/environment";
 
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core';

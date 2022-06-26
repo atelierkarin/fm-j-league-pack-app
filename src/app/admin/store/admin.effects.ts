@@ -4,8 +4,8 @@ import { Router } from '@angular/router';
 
 import { User } from '../user.model';
 
-import firebase from 'firebase/app';
-import { AngularFireAuth } from '@angular/fire/auth';
+import firebase from 'firebase/compat/app';
+import { AngularFireAuth } from '@angular/fire/compat/auth';
 
 import * as AdminActions from './admin.actions';
 import { from, of } from "rxjs";

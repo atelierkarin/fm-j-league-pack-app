@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from "@angular/core";
 import { Subscription } from "rxjs";
 import { Store } from "@ngrx/store";
-import { FormGroup, FormControl } from "@angular/forms";
+import { UntypedFormGroup, UntypedFormControl } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 
 import diff from "deep-diff";
@@ -46,149 +46,149 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
   }[];
   public searchPlayerId: string;
 
-  public basicInfoFormGroup = new FormGroup({
-    name: new FormControl(""),
-    nameEng: new FormControl(""),
-    dob: new FormControl(null),
-    nationality: new FormControl(""),
-    secondNationality: new FormControl(null),
-    isPlayer: new FormControl(true),
-    isNonPlayer: new FormControl(false),
-    file: new FormControl(DatapackFiletype["新規選手.fmf"]),
-    jleagueId: new FormControl(null),
+  public basicInfoFormGroup = new UntypedFormGroup({
+    name: new UntypedFormControl(""),
+    nameEng: new UntypedFormControl(""),
+    dob: new UntypedFormControl(null),
+    nationality: new UntypedFormControl(""),
+    secondNationality: new UntypedFormControl(null),
+    isPlayer: new UntypedFormControl(true),
+    isNonPlayer: new UntypedFormControl(false),
+    file: new UntypedFormControl(DatapackFiletype["新規選手.fmf"]),
+    jleagueId: new UntypedFormControl(null),
   });
-  public clubInfoFormGroup = new FormGroup({
-    id: new FormControl(null),
-    dateJoined: new FormControl(null),
-    dateRenew: new FormControl(null),
-    job: new FormControl([PlayerType.選手]),
-    squadNumber: new FormControl(null),
+  public clubInfoFormGroup = new UntypedFormGroup({
+    id: new UntypedFormControl(null),
+    dateJoined: new UntypedFormControl(null),
+    dateRenew: new UntypedFormControl(null),
+    job: new UntypedFormControl([PlayerType.選手]),
+    squadNumber: new UntypedFormControl(null),
   });
-  public loanInfoFormGroup = new FormGroup({
-    id: new FormControl(null),
-    dateStart: new FormControl(""),
-    dateEnd: new FormControl(""),
-    squadNumber: new FormControl(null),
+  public loanInfoFormGroup = new UntypedFormGroup({
+    id: new UntypedFormControl(null),
+    dateStart: new UntypedFormControl(""),
+    dateEnd: new UntypedFormControl(""),
+    squadNumber: new UntypedFormControl(null),
   });
-  public personalDataFormGroup = new FormGroup({
-    adaptability: new FormControl(null),
-    ambition: new FormControl(null),
-    controversy: new FormControl(null),
-    loyalty: new FormControl(null),
-    perssure: new FormControl(null),
-    professionalism: new FormControl(null),
-    sportsmanship: new FormControl(null),
-    temperament: new FormControl(null),
+  public personalDataFormGroup = new UntypedFormGroup({
+    adaptability: new UntypedFormControl(null),
+    ambition: new UntypedFormControl(null),
+    controversy: new UntypedFormControl(null),
+    loyalty: new UntypedFormControl(null),
+    perssure: new UntypedFormControl(null),
+    professionalism: new UntypedFormControl(null),
+    sportsmanship: new UntypedFormControl(null),
+    temperament: new UntypedFormControl(null),
   });
-  public jobReferencesFormGroup = new FormGroup({
-    headCoach: new FormControl(null),
-    assistantCoach: new FormControl(null),
-    coach: new FormControl(null),
-    fitnessCoach: new FormControl(null),
-    goalkeepingCoach: new FormControl(null),
-    physio: new FormControl(null),
-    scout: new FormControl(null),
-    chiefDataAnalyst: new FormControl(null),
-    headOfSportsScience: new FormControl(null),
-    generalManager: new FormControl(null),
-    headOfYouthDevelopment: new FormControl(null),
-    chairman: new FormControl(null),
-  });
-
-  public playerDataGeneralFormGroup = new FormGroup({
-    ca: new FormControl(0),
-    pa: new FormControl(0),
-    currentReputation: new FormControl(null),
-    homeReputation: new FormControl(null),
-    worldReputation: new FormControl(null),
-    height: new FormControl(null),
-    weight: new FormControl(null),
-    leftFoot: new FormControl(null),
-    rightFoot: new FormControl(null),
+  public jobReferencesFormGroup = new UntypedFormGroup({
+    headCoach: new UntypedFormControl(null),
+    assistantCoach: new UntypedFormControl(null),
+    coach: new UntypedFormControl(null),
+    fitnessCoach: new UntypedFormControl(null),
+    goalkeepingCoach: new UntypedFormControl(null),
+    physio: new UntypedFormControl(null),
+    scout: new UntypedFormControl(null),
+    chiefDataAnalyst: new UntypedFormControl(null),
+    headOfSportsScience: new UntypedFormControl(null),
+    generalManager: new UntypedFormControl(null),
+    headOfYouthDevelopment: new UntypedFormControl(null),
+    chairman: new UntypedFormControl(null),
   });
 
-  public playerDataPositionFormGroup = new FormGroup({
-    goalkeeper: new FormControl(null),
-    defenderLeft: new FormControl(null),
-    defenderCentral: new FormControl(null),
-    defenderRight: new FormControl(null),
-    defensiveMidfielder: new FormControl(null),
-    wingBackLeft: new FormControl(null),
-    wingBackRight: new FormControl(null),
-    midfielderLeft: new FormControl(null),
-    midfielderCentral: new FormControl(null),
-    midfielderRight: new FormControl(null),
-    attackingMidfielderLeft: new FormControl(null),
-    attackingMidfielderCentral: new FormControl(null),
-    attackingMidfielderRight: new FormControl(null),
-    striker: new FormControl(null),
+  public playerDataGeneralFormGroup = new UntypedFormGroup({
+    ca: new UntypedFormControl(0),
+    pa: new UntypedFormControl(0),
+    currentReputation: new UntypedFormControl(null),
+    homeReputation: new UntypedFormControl(null),
+    worldReputation: new UntypedFormControl(null),
+    height: new UntypedFormControl(null),
+    weight: new UntypedFormControl(null),
+    leftFoot: new UntypedFormControl(null),
+    rightFoot: new UntypedFormControl(null),
   });
 
-  public playerDataMentalFormGroup = new FormGroup({
-    aggression: new FormControl(null),
-    anticipation: new FormControl(null),
-    bravery: new FormControl(null),
-    composure: new FormControl(null),
-    concentration: new FormControl(null),
-    consistency: new FormControl(null),
-    decisions: new FormControl(null),
-    determination: new FormControl(null),
-    dirtiness: new FormControl(null),
-    flair: new FormControl(null),
-    importantMatches: new FormControl(null),
-    leadership: new FormControl(null),
-    movement: new FormControl(null),
-    positioning: new FormControl(null),
-    teamWork: new FormControl(null),
-    vision: new FormControl(null),
-    workRate: new FormControl(null),
+  public playerDataPositionFormGroup = new UntypedFormGroup({
+    goalkeeper: new UntypedFormControl(null),
+    defenderLeft: new UntypedFormControl(null),
+    defenderCentral: new UntypedFormControl(null),
+    defenderRight: new UntypedFormControl(null),
+    defensiveMidfielder: new UntypedFormControl(null),
+    wingBackLeft: new UntypedFormControl(null),
+    wingBackRight: new UntypedFormControl(null),
+    midfielderLeft: new UntypedFormControl(null),
+    midfielderCentral: new UntypedFormControl(null),
+    midfielderRight: new UntypedFormControl(null),
+    attackingMidfielderLeft: new UntypedFormControl(null),
+    attackingMidfielderCentral: new UntypedFormControl(null),
+    attackingMidfielderRight: new UntypedFormControl(null),
+    striker: new UntypedFormControl(null),
   });
 
-  public playerDataPhysicalFormGroup = new FormGroup({
-    acceleration: new FormControl(null),
-    agility: new FormControl(null),
-    balance: new FormControl(null),
-    injuryProneness: new FormControl(null),
-    jumpingReach: new FormControl(null),
-    naturalFitness: new FormControl(null),
-    pace: new FormControl(null),
-    stamina: new FormControl(null),
-    strength: new FormControl(null),
+  public playerDataMentalFormGroup = new UntypedFormGroup({
+    aggression: new UntypedFormControl(null),
+    anticipation: new UntypedFormControl(null),
+    bravery: new UntypedFormControl(null),
+    composure: new UntypedFormControl(null),
+    concentration: new UntypedFormControl(null),
+    consistency: new UntypedFormControl(null),
+    decisions: new UntypedFormControl(null),
+    determination: new UntypedFormControl(null),
+    dirtiness: new UntypedFormControl(null),
+    flair: new UntypedFormControl(null),
+    importantMatches: new UntypedFormControl(null),
+    leadership: new UntypedFormControl(null),
+    movement: new UntypedFormControl(null),
+    positioning: new UntypedFormControl(null),
+    teamWork: new UntypedFormControl(null),
+    vision: new UntypedFormControl(null),
+    workRate: new UntypedFormControl(null),
   });
 
-  public playerDataTechnicalFormGroup = new FormGroup({
-    corners: new FormControl(null),
-    crossing: new FormControl(null),
-    dribbling: new FormControl(null),
-    finishing: new FormControl(null),
-    firstTouch: new FormControl(null),
-    freeKicks: new FormControl(null),
-    heading: new FormControl(null),
-    longShots: new FormControl(null),
-    longThrows: new FormControl(null),
-    marking: new FormControl(null),
-    passing: new FormControl(null),
-    penaltyTaking: new FormControl(null),
-    tackling: new FormControl(null),
-    technique: new FormControl(null),
-    versatility: new FormControl(null),
+  public playerDataPhysicalFormGroup = new UntypedFormGroup({
+    acceleration: new UntypedFormControl(null),
+    agility: new UntypedFormControl(null),
+    balance: new UntypedFormControl(null),
+    injuryProneness: new UntypedFormControl(null),
+    jumpingReach: new UntypedFormControl(null),
+    naturalFitness: new UntypedFormControl(null),
+    pace: new UntypedFormControl(null),
+    stamina: new UntypedFormControl(null),
+    strength: new UntypedFormControl(null),
   });
 
-  public playerDataGoalkeepingFormGroup = new FormGroup({
-    aerialAbility: new FormControl(null),
-    commandOfArea: new FormControl(null),
-    communication: new FormControl(null),
-    eccentricity: new FormControl(null),
-    handling: new FormControl(null),
-    kicking: new FormControl(null),
-    oneOnOnes: new FormControl(null),
-    reflexes: new FormControl(null),
-    rushingOut: new FormControl(null),
-    tendencyToPunch: new FormControl(null),
-    throwing: new FormControl(null),
+  public playerDataTechnicalFormGroup = new UntypedFormGroup({
+    corners: new UntypedFormControl(null),
+    crossing: new UntypedFormControl(null),
+    dribbling: new UntypedFormControl(null),
+    finishing: new UntypedFormControl(null),
+    firstTouch: new UntypedFormControl(null),
+    freeKicks: new UntypedFormControl(null),
+    heading: new UntypedFormControl(null),
+    longShots: new UntypedFormControl(null),
+    longThrows: new UntypedFormControl(null),
+    marking: new UntypedFormControl(null),
+    passing: new UntypedFormControl(null),
+    penaltyTaking: new UntypedFormControl(null),
+    tackling: new UntypedFormControl(null),
+    technique: new UntypedFormControl(null),
+    versatility: new UntypedFormControl(null),
   });
 
-  public playerDataFormGroup = new FormGroup({
+  public playerDataGoalkeepingFormGroup = new UntypedFormGroup({
+    aerialAbility: new UntypedFormControl(null),
+    commandOfArea: new UntypedFormControl(null),
+    communication: new UntypedFormControl(null),
+    eccentricity: new UntypedFormControl(null),
+    handling: new UntypedFormControl(null),
+    kicking: new UntypedFormControl(null),
+    oneOnOnes: new UntypedFormControl(null),
+    reflexes: new UntypedFormControl(null),
+    rushingOut: new UntypedFormControl(null),
+    tendencyToPunch: new UntypedFormControl(null),
+    throwing: new UntypedFormControl(null),
+  });
+
+  public playerDataFormGroup = new UntypedFormGroup({
     general: this.playerDataGeneralFormGroup,
     positions: this.playerDataPositionFormGroup,
     mental: this.playerDataMentalFormGroup,
@@ -197,16 +197,16 @@ export class AdminPlayerDbComponent implements OnInit, OnDestroy {
     goalkeeping: this.playerDataGoalkeepingFormGroup,
   });
 
-  public nonPlayerDataFormGroup = new FormGroup({
-    ca: new FormControl(0),
-    pa: new FormControl(0),
-    currentReputation: new FormControl(null),
-    homeReputation: new FormControl(null),
-    worldReputation: new FormControl(null),
+  public nonPlayerDataFormGroup = new UntypedFormGroup({
+    ca: new UntypedFormControl(0),
+    pa: new UntypedFormControl(0),
+    currentReputation: new UntypedFormControl(null),
+    homeReputation: new UntypedFormControl(null),
+    worldReputation: new UntypedFormControl(null),
   });
 
-  public playerForm = new FormGroup({
-    id: new FormControl(null),
+  public playerForm = new UntypedFormGroup({
+    id: new UntypedFormControl(null),
     basicInfo: this.basicInfoFormGroup,
     clubInfo: this.clubInfoFormGroup,
     loanInfo: this.loanInfoFormGroup,
