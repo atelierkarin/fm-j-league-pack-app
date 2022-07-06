@@ -8,8 +8,6 @@ import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
 
-import { v4 as uuidv4 } from "uuid";
-
 import * as PlayerUpdateActions from './player-update.actions';
 
 import * as fromApp from '../../store/app.reducer';
