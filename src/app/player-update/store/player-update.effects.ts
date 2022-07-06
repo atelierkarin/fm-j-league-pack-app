@@ -111,7 +111,7 @@ export class PlayerUpdateEffects {
       switchMap(([action, state]: [PlayerUpdateActions.FetchPlayerUpdateNU, fromPlayerUpdate.State]) => {
         return this.apollo.query<any>({
           query: getPlayerUpdatesNotUpdated
-        });
+        })
       }),
       map((result: ApolloQueryResult<any>) => {
         let playerUpdates = [];
@@ -193,11 +193,11 @@ export class PlayerUpdateEffects {
           mutation: mutationConfirmPlayerUpdate,
           variables: {
             id
-          },
-          update: async (cache, result) => {
-            await cache.reset();
-          },
+          }
         });
+      }),
+      switchMap(() => {
+        return this.apollo.client.cache.reset();
       }),
       switchMap(() => {
         return of(new PlayerUpdateActions.SetReloadData())
