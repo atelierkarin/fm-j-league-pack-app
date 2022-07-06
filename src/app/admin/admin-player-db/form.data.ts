@@ -26,7 +26,7 @@ export const jobReferencesForm = [
 
 export const playerDataGeneralForm = [
   {key: 'ca', name: '現在能力', nameEng: 'CA', max: 200},
-  {key: 'pa', name: '潜在能力', nameEng: 'PA', max: 200},
+  {key: 'pa', name: '潜在能力', nameEng: 'PA', min: -10, max: 200},
   {key: 'currentReputation', name: '現在の知名度', nameEng: 'Current Reputation', max: 200},
   {key: 'homeReputation', name: 'ホームでの知名度', nameEng: 'Home Reputation', max: 200},
   {key: 'worldReputation', name: '世界での知名度', nameEng: 'World Reputation', max: 200},

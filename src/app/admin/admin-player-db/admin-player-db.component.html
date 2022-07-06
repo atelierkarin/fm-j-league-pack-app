@@ -299,7 +299,7 @@
                   [id]="'playerDataGeneral-' + formData.key"
                   [formControlName]="formData.key"
                   [max]="formData.max"
-                  min="0"
+                  [min]="formData.min ? formData.min : 0"
                   [placeholder]="formData.name"
                 />
               </span>

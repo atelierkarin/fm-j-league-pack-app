@@ -103,6 +103,7 @@ export class PlayerUpdateComponent implements OnInit, OnDestroy {
       .select('playerUpdate')
       .pipe(map(playerUpdateState => playerUpdateState.loading))
       .subscribe((loading: boolean) => {
+        console.log("LOADING", loading);
         this.loadingData = loading;
       });
     this.reloadSubscription = this.store

@@ -8,6 +8,8 @@ import { Apollo } from 'apollo-angular';
 import { ApolloQueryResult } from 'apollo-client';
 import gql from 'graphql-tag';
 
+import { v4 as uuidv4 } from "uuid";
+
 import * as PlayerUpdateActions from './player-update.actions';
 
 import * as fromApp from '../../store/app.reducer';
@@ -111,7 +113,7 @@ export class PlayerUpdateEffects {
       switchMap(([action, state]: [PlayerUpdateActions.FetchPlayerUpdateNU, fromPlayerUpdate.State]) => {
         return this.apollo.query<any>({
           query: getPlayerUpdatesNotUpdated
-        });
+        })
       }),
       map((result: ApolloQueryResult<any>) => {
         let playerUpdates = [];
@@ -193,11 +195,11 @@ export class PlayerUpdateEffects {
           mutation: mutationConfirmPlayerUpdate,
           variables: {
             id
-          },
-          update: async (cache, result) => {
-            await cache.reset();
-          },
+          }
         });
+      }),
+      switchMap(() => {
+        return this.apollo.client.cache.reset();
       }),
       switchMap(() => {
         return of(new PlayerUpdateActions.SetReloadData())
