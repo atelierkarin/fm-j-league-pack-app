@@ -1,4 +1,5 @@
 let nationality = {}
+nationality[11] = 'CMR'
 nationality[21] = 'GHA'
 nationality[23] = 'GNB'
 nationality[25] = 'KEN'
@@ -58,6 +59,7 @@ nationality[30] = 'MWI'
 nationality[113] = 'IDN'
 nationality[41] = 'SEN'
 nationality[364] = 'CAN'
+nationality[62002127] = 'MNE'
 
 export default (id) => {
   if (id in nationality) {
