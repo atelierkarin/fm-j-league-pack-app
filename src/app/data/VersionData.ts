@@ -22,6 +22,7 @@ export interface VersionData {
 }
 
 export const fmVersionList: string[] = [
+  "FM2023",
   "FM2022",
   "FM2021",
   "FM2020",
@@ -31,6 +32,18 @@ export const fmVersionList: string[] = [
 ];
 
 export const fmVersionDataList: VersionData[] = [
+  {
+    fmVersion: "FM2023",
+    content: {
+      home: {
+        latest: {
+          url: null,
+          version: null,
+          updateDate: null,
+        },
+      }
+    }
+  },
   {
     fmVersion: "FM2022",
     content: {
