@@ -22,7 +22,14 @@
             "FM2018": "This pack is but free to copy and redistribute but <b>commercial use is strictly prohibited</b>.",
             "FM2017": "This pack is but free to copy and redistribute but <b>commercial use is strictly prohibited</b>."
         },
-        "LINKS": "<p><b>Facepack</b></p> <p><a target=\"_blank\" href=\"https://zawazawa.jp/fm-j-league-pack/topic/19\">FM2022 Facepack 1</a></p> <p><a target=\"_blank\" href=\"https://daifm2021.livedoor.blog/archives/11836836.html\">FM2022 Facepack 2</a></p>"
+        "LINKS": {
+            "FM2022": "<p><b>Facepack</b></p> <p><a target=\"_blank\" href=\"https://zawazawa.jp/fm-j-league-pack/topic/19\">FM2022 Facepack 1</a></p> <p><a target=\"_blank\" href=\"https://daifm2021.livedoor.blog/archives/11836836.html\">FM2022 Facepack 2</a></p>",
+            "FM2021": "",
+            "FM2020": "",
+            "FM2019": "",
+            "FM2018": "",
+            "FM2017": ""
+        }
     },
     "HEADER": {
         "TITLE": "FM J PACK",

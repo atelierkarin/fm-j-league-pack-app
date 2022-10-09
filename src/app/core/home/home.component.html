@@ -9,7 +9,7 @@
         <button type="button" class="btn btn-lg btn-outline-primary m-1"
           [disabled]="currentVersionData.content.home.latest.url === null"
           (click)="onDownload()">{{ 'CORE.DOWNLOAD_LATEST' | translate }}</button>
-        <h6 class="text-muted mt-2">{{ 'CORE.VERSION_INFO' | translate:param }}</h6>
+        <h6 class="text-muted mt-2" *ngIf="param.latestVersion !== null && param.latestVersion !== ''">{{ 'CORE.VERSION_INFO' | translate:param }}</h6>
       </div>
       <div class="fm-j-league-buttons">
         <button *ngIf="isEngVersion" type="button" class="btn btn-outline-secondary m-1"
@@ -28,5 +28,5 @@
   <hr />
   <div class="note text-secondary small" [innerHTML]="'CORE.NOTE.' + fmVersion | translate"></div>
   <hr />
-  <div class="note text-secondary small" [innerHTML]="'CORE.LINKS' | translate"></div>
+  <div class="note text-secondary small" [innerHTML]="'CORE.LINKS.' + fmVersion | translate"></div>
 </div>
