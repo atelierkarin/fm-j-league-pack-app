@@ -8,6 +8,7 @@
         "OTHER_VERSION": "Other Versions",
         "MAKING_VERSION": "Developing versions",
         "MAIN_CONTENT": {
+            "FM2023": "<p>Mainly focus on players and staff data, with something extra related to Japanese Football League.</p><p>v1.0.x is just a transform version from FM2021, normally an updated version (v2.0.x) will be released after official winter update is released (since author of the pack will focus on certificate examination, so probably release date will be delayed), which will focus on season 2023 with updated data.</p>",
             "FM2022": "<p>Mainly focus on players and staff data, with something extra related to Japanese Football League.</p><p>v1.0.x is just a transform version from FM2021, normally an updated version (v2.0.x) will be released after official winter update is released, which will focus on season 2022 with updated data.</p>",
             "FM2021": "<p>Mainly focus on players and staff data, with something extra related to Japanese Football League.</p><p>v1.0.x is just a transform version from pervious year, only work for original database. v2.0.x is an updated version work with official winter update.</p>",
             "FM2019": "<p>Mainly focus on players and staff data, with something extra related to Japanese Football League.</p><p>v1.0.x is just a transform version from pervious year, only work for original database. v2.0.x is an updated version work with official winter update.</p>",
@@ -15,6 +16,7 @@
             "FM2017": "<p>Mainly focus on players and staff data, with something extra related to Japanese Football League.</p><p>v1.0.x is just a transform version from pervious year, only work for original database. v2.0.x is an updated version work with official winter update.</p>"
         },
         "NOTE": {
+            "FM2023": "This pack is but free to copy and redistribute but <b>commercial use is strictly prohibited</b>.",
             "FM2022": "This pack is but free to copy and redistribute but <b>commercial use is strictly prohibited</b>.",
             "FM2021": "This pack is but free to copy and redistribute but <b>commercial use is strictly prohibited</b>.",
             "FM2020": "This pack is but free to copy and redistribute but <b>commercial use is strictly prohibited</b>.",
@@ -23,6 +25,7 @@
             "FM2017": "This pack is but free to copy and redistribute but <b>commercial use is strictly prohibited</b>."
         },
         "LINKS": {
+            "FM2023": "",
             "FM2022": "<p><b>Facepack</b></p> <p><a target=\"_blank\" href=\"https://zawazawa.jp/fm-j-league-pack/topic/19\">FM2022 Facepack 1</a></p> <p><a target=\"_blank\" href=\"https://daifm2021.livedoor.blog/archives/11836836.html\">FM2022 Facepack 2</a></p>",
             "FM2021": "",
             "FM2020": "",
