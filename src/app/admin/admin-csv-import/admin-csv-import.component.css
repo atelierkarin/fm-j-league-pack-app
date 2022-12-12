@@ -1,3 +1,11 @@
 .filter-club-droplist {
     flex: 1 1 auto;
 }
+
+/deep/ .update-success {
+    background-color: lightseagreen !important;
+}
+
+/deep/ .update-failure {
+    background-color: lightcoral !important;
+}

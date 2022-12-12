@@ -77,7 +77,8 @@
           [columnMode]="'flex'"
           [rowHeight]="'auto'"
           [footerHeight]="50"
-          [limit]="10"
+          [rowClass]="getRowClass"
+          [limit]="20"
           [sorts]="[
             {
               prop: 'common_name',

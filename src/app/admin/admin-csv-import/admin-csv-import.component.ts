@@ -40,7 +40,13 @@ export class AdminCsvImportComponent implements OnInit, OnDestroy {
   public filterLimitToRecent: boolean = false;
 
   private coreSubscription: Subscription;
-  private databaseSubscription: Subscription;  
+  private databaseSubscription: Subscription;
+
+  public successList: string[] = [];
+  public failureList: string[] = [];
+  public updatingRecord: string = null;
+
+  public getRowClass;
 
   constructor(private modal$: NgbModal, private store$: Store<fromApp.AppState>) { }
 
@@ -60,6 +66,13 @@ export class AdminCsvImportComponent implements OnInit, OnDestroy {
           const loading = databaseState.loading;
           if (!loading) {
             this.isUpdating = false;
+
+            if (this.updatingRecord !== null) {
+              this.failureList.filter(item => item !== this.updatingRecord);
+              this.successList.push(this.updatingRecord);
+              this.updatingRecord = null;
+            }
+
             this.store$.dispatch(new SharedActions.SetToastContent({
               content: "レコードを更新しました",
               style: "success"
@@ -67,12 +80,26 @@ export class AdminCsvImportComponent implements OnInit, OnDestroy {
           }
         }
         if (databaseState.errMsg) {
+          if (this.updatingRecord !== null) {
+            this.successList.filter(item => item !== this.updatingRecord);
+            this.failureList.push(this.updatingRecord);
+            this.updatingRecord = null;
+          }
+
           this.store$.dispatch(new SharedActions.SetToastContent({
             content: databaseState.errMsg,
             style: "danger"
           }));
         }
-      });
+      });    
+
+    this.getRowClass = (row) => {
+      const id = row[""];
+      return {
+        'update-success': this.successList.includes(id),
+        'update-failure': this.failureList.includes(id),
+      };
+    }
   }
 
   ngOnDestroy() {
@@ -155,6 +182,7 @@ export class AdminCsvImportComponent implements OnInit, OnDestroy {
     modalRef.componentInstance.updateId = this.updateId;
     modalRef.componentInstance.directUpdate = directUpdate;
     modalRef.componentInstance.directCreate = directCreate;
+    this.updatingRecord = data[""];
     modalRef.result.then((result) => {
       this.isUpdating = true;
       this.store$.dispatch(new DatabaseActions.UpdatePlayer(result));
