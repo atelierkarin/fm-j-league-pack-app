@@ -78,17 +78,8 @@
     <ng-template let-row="row" let-value="value" ngx-datatable-cell-template>
       <h6>
         <span [class]="getFlag(row.player.nationality)"></span>&nbsp;
-        <ng-container *ngIf="row.dbPlayerId > 0; else elseTemplate">
-          <a
-            [routerLink]="['/database/player/' + row.dbPlayerId]"
-            >{{ row.player.name }}</a
-          >
-        </ng-container>
-        <ng-template #elseTemplate>
-          {{ row.player.name }}
-        </ng-template>
+        {{ row.player.name }}
       </h6>
-      <small *ngIf="row.player.nameEng">{{ row.player.nameEng }}</small>
     </ng-template>
   </ngx-datatable-column>
   <ngx-datatable-column name="役職" prop="updateType" [flexGrow]="1">
