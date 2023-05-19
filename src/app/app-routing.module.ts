@@ -18,8 +18,7 @@ const appRoutes: Routes = [
   { path: 'playerUpdate', component: PlayerUpdateComponent },
   { path: 'discuss', component: DiscussBoardComponent},
   { path: 'calcCa', loadChildren: () => import('./calc-ca/calc-ca.module').then(m => m.CalcCaModule) },
-  { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) },
-  { path: 'database', loadChildren: () => import('./database/database.module').then(m => m.DatabaseModule) }
+  { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) }
 ];
 
 @NgModule({
