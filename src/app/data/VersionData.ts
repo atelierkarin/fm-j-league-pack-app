@@ -37,12 +37,12 @@ export const fmVersionDataList: VersionData[] = [
     content: {
       home: {
         latest: {
-          url: "https://drive.google.com/file/d/17QEJ2LjTTAqCXtWXCKNa2TCzCiezQs59/view?usp=sharing",
-          version: "v2.0.1",
-          updateDate: "2023/05/27",
+          url: "https://drive.google.com/file/d/1Ba1EkOk3SJ9PkqAs6UvKXarjfEm0yYyy/view?usp=sharing",
+          version: "v2.1.0",
+          updateDate: "2023/08/19",
         },
         engVersion: {
-          url: "https://drive.google.com/file/d/17QFuLNjlE0GneSR5mGagg3coaRdED6sg/view?usp=sharing"
+          url: "https://drive.google.com/file/d/1BaadG7gM6nVH-88XuNgAGb76nkJrMoe5/view?usp=sharing"
         },
         otherVersion: {
           url: "https://drive.google.com/drive/folders/1DRLRYcQvBRwvTAXufYyTXVavkRP1KSTI?usp=sharing"
