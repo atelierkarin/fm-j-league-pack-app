@@ -49,11 +49,6 @@ import { ChangelogEffects } from "./database/database-player/changelog/store/cha
 import { CalcCaEffects } from "./calc-ca/store/calc-ca.effects";
 
 
-let apiDomain = "http://127.0.0.1:4000/";
-if (environment.production) {
-  apiDomain = "https://fm-j-league-pack.uc.r.appspot.com";
-}
-
 // AoT requires an exported function for factories
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -110,9 +105,6 @@ export function HttpLoaderFactory(http: HttpClient) {
       return {
         cache: new InMemoryCache({
           addTypename: false
-        }),
-        link: httpLink.create({
-          uri: apiDomain,
         }),
       };
     },

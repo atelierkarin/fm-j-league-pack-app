@@ -48,41 +48,41 @@ query queryLeagues($season: Int!) {
 @Injectable()
 export class CoreEffects {
 
-  loadBasicData = createEffect(() =>
-    this.actions$.pipe(
-      ofType(CoreActions.LOAD_BASIC_DATA),
-      switchMap((action: CoreActions.LoadBasicData) => {
-        return this.apollo.query<any>({
-          query: queryAllClubs
-        });
-      }),
-      switchMap((result: ApolloQueryResult<any>) => {
-        if (result && result.data && result.data.clubs) {
-          this.store.dispatch(new CoreActions.SetClubs(result.data.clubs));
-          return this.apollo.query<any>({
-            query: queryLeagues,
-            variables: {
-              season: currentSeason
-            }
-          });
-        } else {
-          throw 'QUERY_EXECUTE_FAILURE';
-        }
-      }),
-      switchMap((result: ApolloQueryResult<any>) => {
-        if (result && result.data && result.data.leaguesBySeason) {
-          return [new CoreActions.SetLeagues(result.data.leaguesBySeason), new CoreActions.ApiSuccess()]
-        } else {
-          throw 'QUERY_EXECUTE_FAILURE';
-        }
-      }),
-      catchError((err, caught) => {
-        console.error(err);
-        this.store.dispatch(new CoreActions.ApiFail(err));
-        return caught;
-      })
-    )
-  );
+  // loadBasicData = createEffect(() =>
+  //   this.actions$.pipe(
+  //     ofType(CoreActions.LOAD_BASIC_DATA),
+  //     switchMap((action: CoreActions.LoadBasicData) => {
+  //       return this.apollo.query<any>({
+  //         query: queryAllClubs
+  //       });
+  //     }),
+  //     switchMap((result: ApolloQueryResult<any>) => {
+  //       if (result && result.data && result.data.clubs) {
+  //         this.store.dispatch(new CoreActions.SetClubs(result.data.clubs));
+  //         return this.apollo.query<any>({
+  //           query: queryLeagues,
+  //           variables: {
+  //             season: currentSeason
+  //           }
+  //         });
+  //       } else {
+  //         throw 'QUERY_EXECUTE_FAILURE';
+  //       }
+  //     }),
+  //     switchMap((result: ApolloQueryResult<any>) => {
+  //       if (result && result.data && result.data.leaguesBySeason) {
+  //         return [new CoreActions.SetLeagues(result.data.leaguesBySeason), new CoreActions.ApiSuccess()]
+  //       } else {
+  //         throw 'QUERY_EXECUTE_FAILURE';
+  //       }
+  //     }),
+  //     catchError((err, caught) => {
+  //       console.error(err);
+  //       this.store.dispatch(new CoreActions.ApiFail(err));
+  //       return caught;
+  //     })
+  //   )
+  // );
   
   constructor(
     private store: Store,
