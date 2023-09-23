@@ -12,12 +12,12 @@ import { AdminPlayerHistoryComponent } from './admin-player-history/admin-player
 
 const adminRoutes: Routes = [
   { path: '', component: AdminMainComponent, canActivate: [AdminGuard], children: [
-    { path: 'history', component: AdminHistoryComponent },
-    { path: 'playerUpdate', component: AdminPlayerUpdateComponent },
-    { path: 'playerDb', component: AdminPlayerDbComponent },
-    { path: 'playerDb/:id', component: AdminPlayerDbComponent },
-    { path: 'import', component: AdminCsvImportComponent },
-    { path: 'playerHistory', component: AdminPlayerHistoryComponent },
+    // { path: 'history', component: AdminHistoryComponent },
+    // { path: 'playerUpdate', component: AdminPlayerUpdateComponent },
+    // { path: 'playerDb', component: AdminPlayerDbComponent },
+    // { path: 'playerDb/:id', component: AdminPlayerDbComponent },
+    // { path: 'import', component: AdminCsvImportComponent },
+    // { path: 'playerHistory', component: AdminPlayerHistoryComponent },
   ] },
   { path: 'login', component: AdminLoginComponent },  
 ];
