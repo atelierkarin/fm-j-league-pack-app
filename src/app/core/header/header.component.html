@@ -13,12 +13,6 @@
       <li class="nav-item" routerLinkActive="active" *ngIf="currentVersionData">
         <a class="nav-link" (click)="onResetCollapse()" routerLink="/guide">{{ 'HEADER.GUIDE' | translate }}</a>
       </li>
-      <li class="nav-item" routerLinkActive="active" *ngIf="currentVersionData">
-        <a class="nav-link" (click)="onResetCollapse()" routerLink="/history">{{ 'HEADER.RELEASE_NOTE' | translate }}</a>
-      </li>
-      <li class="nav-item" routerLinkActive="active" *ngIf="currentVersionData">
-        <a class="nav-link" (click)="onResetCollapse()" routerLink="/playerUpdate">{{ 'HEADER.UPDATE_HISTORY' | translate }}</a>
-      </li>
     </ul>
     <ul class="navbar-nav">
       <li *ngIf="isAdmin" class="nav-item" routerLinkActive="active">

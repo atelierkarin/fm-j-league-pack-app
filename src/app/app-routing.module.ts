@@ -13,12 +13,12 @@ import { FmVersionGuard } from './shared/fm-version-guard.service';
 
 const appRoutes: Routes = [
   { path: '', component: HomeComponent, canActivate: [FmVersionGuard] },
-  { path: 'history', component: HistoryComponent, canActivate: [FmVersionGuard] },
+  // { path: 'history', component: HistoryComponent, canActivate: [FmVersionGuard] },
   { path: 'guide', component: GuideComponent, resolve: [HistoryResolverService], canActivate: [FmVersionGuard] },
-  { path: 'playerUpdate', component: PlayerUpdateComponent },
+  // { path: 'playerUpdate', component: PlayerUpdateComponent },
   { path: 'discuss', component: DiscussBoardComponent},
-  { path: 'calcCa', loadChildren: () => import('./calc-ca/calc-ca.module').then(m => m.CalcCaModule) },
-  { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) }
+  // { path: 'calcCa', loadChildren: () => import('./calc-ca/calc-ca.module').then(m => m.CalcCaModule) },
+  // { path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) }
 ];
 
 @NgModule({
